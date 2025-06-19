@@ -14,6 +14,7 @@ import numpy as np
 from collections import defaultdict
 from multiprocessing import Process, Value
 
+# python legged_gym/legged_gym/scripts/play.py --task CAS02_ground --checkpoint_path /home/casbot/ZHZ_ws/HoST/legged_gym/logs/CAS02_ground/Jun19_09-42-37_test_00/model_4000.pt
 
 def play(args):
     env_cfg, train_cfg = task_registry.get_cfgs(name=args.task)

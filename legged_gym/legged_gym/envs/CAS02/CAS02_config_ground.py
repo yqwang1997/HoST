@@ -69,16 +69,16 @@ class CAS02Cfg( LeggedRobotCfg ):
     class control( LeggedRobotCfg.control ):
         # PD Drive parameters:
         control_type = 'P'
-        stiffness = {'pelvic': 350,
-                     'knee': 350,
-                     'ankle': 120,
-                     'shoulder': 350,
-                     'elbow': 350,
-                     'waist': 200,
-                     'wrist': 100,
+        stiffness = {'pelvic': 250,
+                     'knee': 250,
+                     'ankle': 100,
+                     'shoulder': 250,
+                     'elbow': 250,
+                     'waist': 150,
+                     'wrist': 70,
                      }  # [N*m/rad]
         damping = {  'pelvic': 4,
-                     'knee': 4,
+                     'knee': 6,
                      'ankle': 2,
                      'shoulder': 4,
                      'elbow': 4,

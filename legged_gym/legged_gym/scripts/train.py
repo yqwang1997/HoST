@@ -8,6 +8,10 @@ from legged_gym.envs import *
 from legged_gym.utils import get_args, task_registry
 import torch
 
+
+# python legged_gym/legged_gym/scripts/train.py --task CAS02_ground --headless
+
+
 def train(args):
     env, env_cfg = task_registry.make_env(name=args.task, args=args)
     ppo_runner, train_cfg = task_registry.make_alg_runner(env=env, env_cfg=env_cfg, name=args.task, args=args)
