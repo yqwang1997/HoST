@@ -69,16 +69,16 @@ class CAS02Cfg( LeggedRobotCfg ):
     class control( LeggedRobotCfg.control ):
         # PD Drive parameters:
         control_type = 'P'
-        stiffness = {'pelvic': 250,
-                     'knee': 250,
-                     'ankle': 100,
-                     'shoulder': 250,
-                     'elbow': 250,
-                     'waist': 150,
+        stiffness = {'pelvic': 350,
+                     'knee': 350,
+                     'ankle': 120,
+                     'shoulder': 350,
+                     'elbow': 300,
+                     'waist': 200,
                      'wrist': 70,
                      }  # [N*m/rad]
         damping = {  'pelvic': 4,
-                     'knee': 6,
+                     'knee': 5,
                      'ankle': 2,
                      'shoulder': 4,
                      'elbow': 4,
@@ -201,7 +201,7 @@ class CAS02Cfg( LeggedRobotCfg ):
 
     class constraints( LeggedRobotCfg.rewards ):
         is_gaussian = True
-        target_head_height = 1.2
+        target_head_height = 1.5
         target_head_margin = 1
         orientation_height_threshold = 0.9
         target_base_height = 0.55
@@ -210,7 +210,7 @@ class CAS02Cfg( LeggedRobotCfg ):
         right_foot_displacement_sigma = -2
         hip_yaw_var_sigma = -2
         target_dof_pos_sigma = -0.1
-        post_task = False
+        post_task = True
         
         class scales:
             # regularization reward
@@ -238,8 +238,8 @@ class CAS02Cfg( LeggedRobotCfg ):
             style_style_ang_vel_xy = 1
 
             # post-task reward
-            target_ang_vel_xy = 10
-            target_lin_vel_xy = 10
+            target_ang_vel_xy = 15
+            target_lin_vel_xy = 15
             target_feet_height_var = 2.5
             target_target_upper_dof_pos = 10
             target_target_orientation = 10
