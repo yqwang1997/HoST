@@ -1,0 +1,24 @@
+Thu Jun 26 17:14:43 2025
+WARNING: mju_openResource: unknown file '/home/jfc/wyq/HoST/legged_gym/resources/robots/Mrobot_13dof/mjcf/CASBOT_02_complete.xml'
+
+Thu Jun 26 17:23:27 2025
+WARNING: mju_openResource: unknown file '/home/jfc/wyq/HoST/legged_gym/resources/robots/Mrobot_13dof/mjcf/CASBOT_02_complete.xml'
+
+Thu Jun 26 17:23:42 2025
+WARNING: mju_openResource: unknown file '/home/jfc/wyq/HoST/legged_gym/resources/robots/Mrobot_13dof/mjcf/CASBOT_02_complete.xml'
+
+Thu Jun 26 20:21:55 2025
+WARNING: Nan, Inf or huge value in QACC at DOF 12. The simulation is unstable. Time = 0.0950.
+
+Thu Jun 26 21:33:25 2025
+WARNING: Nan, Inf or huge value in QACC at DOF 0. The simulation is unstable. Time = 3.4150.
+
+Thu Jun 26 21:34:12 2025
+WARNING: Nan, Inf or huge value in QACC at DOF 8. The simulation is unstable. Time = 3.2450.
+
+Thu Jun 26 21:35:01 2025
+WARNING: Nan, Inf or huge value in QACC at DOF 15. The simulation is unstable. Time = 7.6450.
+
+Thu Jun 26 21:36:08 2025
+WARNING: Nan, Inf or huge value in QACC at DOF 0. The simulation is unstable. Time = 4.8100.
+

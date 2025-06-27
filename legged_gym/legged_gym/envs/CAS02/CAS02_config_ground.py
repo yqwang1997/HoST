@@ -233,7 +233,7 @@ class CAS02Cfg( LeggedRobotCfg ):
             style_right_foot_displacement = 2.5
             style_knee_deviation = -0.25
             style_shank_orientation = 10
-            style_ground_parallel = 20
+            style_ground_parallel = 30
             style_feet_distance = -10
             style_style_ang_vel_xy = 1
 
