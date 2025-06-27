@@ -127,7 +127,7 @@ class CAS02Cfg( LeggedRobotCfg ):
         right_knee_name = 'right_leg_knee'
         foot_name = "ankle_roll"
         penalize_contacts_on = ["elbow", 'shoulder', 'waist', 'knee', 'pelvic']
-        terminate_after_contacts_on = []    # 'torse'
+        terminate_after_contacts_on = []    #'torse'
 
         left_shoulder_name = "left_shoulder"
         right_shoulder_name = "right_shoulder"
@@ -184,7 +184,7 @@ class CAS02Cfg( LeggedRobotCfg ):
         only_positive_rewards = False # if true negative total rewards are clipped at zero (avoids early termination problems)
         orientation_sigma = 1
         is_gaussian = True
-        target_head_height = 1.35
+        target_head_height = 1.3
         target_head_margin = 1.1
         target_base_height_phase1 = 0.55
         target_base_height_phase2 = 0.55
@@ -205,7 +205,7 @@ class CAS02Cfg( LeggedRobotCfg ):
 
     class constraints( LeggedRobotCfg.rewards ):
         is_gaussian = True
-        target_head_height = 1.35
+        target_head_height = 1.3
         target_head_margin = 1.1
         orientation_height_threshold = 0.9
         target_base_height = 0.92
@@ -235,7 +235,7 @@ class CAS02Cfg( LeggedRobotCfg ):
             style_shoulder_roll_deviation = -2.5
             style_left_foot_displacement = 3 # 2.5
             style_right_foot_displacement = 3 # 2.5
-            # style_feet_parallel_alignment = 0 # 新加入的引导左右脚相对平行的reward, 暂不使用
+            # style_feet_parallel_alignment = 0 #  新加入的引导左右脚相对平行的reward, 暂不使用
             style_knee_deviation = -0.5 # -0.25
             style_shank_orientation = 10 # 10
             style_ground_parallel = 20 # 20

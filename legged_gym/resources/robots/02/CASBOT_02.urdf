@@ -104,7 +104,7 @@
     <limit
       lower="-1.9199"
       upper="1.5708"
-      effort="250"
+      effort="150"
       velocity="14" />
   </joint>
   <link
@@ -162,7 +162,7 @@
     <limit
       lower="-0.17453"
       upper="1.5708"
-      effort="120"
+      effort="150"
       velocity="14" />
   </joint>
   <link
@@ -220,7 +220,7 @@
     <limit
       lower="-1.5708"
       upper="1.5708"
-      effort="120"
+      effort="60"
       velocity="14" />
   </joint>
   <link
@@ -290,7 +290,7 @@
     <limit
       lower="0"
       upper="2.5307"
-      effort="250"
+      effort="150"
       velocity="14" />
   </joint>
   <link
@@ -537,7 +537,7 @@
     <limit
       lower="-1.9199"
       upper="1.5708"
-      effort="250"
+      effort="150"
       velocity="14" />
   </joint>
   <link
@@ -595,7 +595,7 @@
     <limit
       lower="-1.5708"
       upper="0.17453"
-      effort="120"
+      effort="150"
       velocity="14" />
   </joint>
   <link
@@ -653,7 +653,7 @@
     <limit
       lower="-1.5708"
       upper="1.5708"
-      effort="120"
+      effort="60"
       velocity="14" />
   </joint>
   <link
@@ -723,7 +723,7 @@
     <limit
       lower="0"
       upper="2.5307"
-      effort="250"
+      effort="150"
       velocity="14" />
   </joint>
   <link
@@ -970,7 +970,7 @@
     <limit
       lower="-1.5708"
       upper="1.5708"
-      effort="120"
+      effort="60"
       velocity="14" />
   </joint>
   <link
