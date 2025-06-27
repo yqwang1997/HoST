@@ -104,7 +104,7 @@
     <limit
       lower="-1.9199"
       upper="1.5708"
-      effort="150"
+      effort="250"
       velocity="14" />
   </joint>
   <link
@@ -162,7 +162,7 @@
     <limit
       lower="-0.17453"
       upper="1.5708"
-      effort="150"
+      effort="120"
       velocity="14" />
   </joint>
   <link
@@ -218,9 +218,9 @@
     <axis
       xyz="0 0 1" />
     <limit
-      lower="-0.5"
+      lower="-1.5708"
       upper="1.5708"
-      effort="60"
+      effort="120"
       velocity="14" />
   </joint>
   <link
@@ -290,7 +290,7 @@
     <limit
       lower="0"
       upper="2.5307"
-      effort="150"
+      effort="250"
       velocity="14" />
   </joint>
   <link
@@ -482,8 +482,6 @@
       effort="60"
       velocity="14" />
   </joint>
-
-  <!-- <Right Leg> -->
   <link
     name="right_leg_pelvic_pitch_link">
     <inertial>
@@ -539,7 +537,7 @@
     <limit
       lower="-1.9199"
       upper="1.5708"
-      effort="150"
+      effort="250"
       velocity="14" />
   </joint>
   <link
@@ -597,7 +595,7 @@
     <limit
       lower="-1.5708"
       upper="0.17453"
-      effort="150"
+      effort="120"
       velocity="14" />
   </joint>
   <link
@@ -654,8 +652,8 @@
       xyz="0 0 1" />
     <limit
       lower="-1.5708"
-      upper="0.5"
-      effort="60"
+      upper="1.5708"
+      effort="120"
       velocity="14" />
   </joint>
   <link
@@ -725,7 +723,7 @@
     <limit
       lower="0"
       upper="2.5307"
-      effort="150"
+      effort="250"
       velocity="14" />
   </joint>
   <link
@@ -972,11 +970,9 @@
     <limit
       lower="-1.5708"
       upper="1.5708"
-      effort="60"
+      effort="120"
       velocity="14" />
   </joint>
-
-  <!-- <Left Arm> -->
   <link
     name="left_shoulder_pitch_link">
     <inertial>
@@ -1007,7 +1003,7 @@
           rgba="0.792156862745098 0.819607843137255 0.933333333333333 1" />
       </material>
     </visual>
-    <!-- <collision>
+    <collision>
       <origin
         xyz="0 0 0"
         rpy="0 0 0" />
@@ -1015,7 +1011,7 @@
         <mesh
           filename="meshes/left_shoulder_pitch_link.STL" />
       </geometry>
-    </collision> -->
+    </collision>
   </link>
   <joint
     name="left_shoulder_pitch_joint"
@@ -1268,7 +1264,6 @@
       velocity="13.6" />
   </joint>
 
-  <!-- <Right Arm> -->
   <link
     name="right_shoulder_pitch_link">
     <inertial>
@@ -1299,7 +1294,7 @@
           rgba="0.79216 0.81961 0.93333 1" />
       </material>
     </visual>
-    <!-- <collision>
+    <collision>
       <origin
         xyz="0 0 0"
         rpy="0 0 0" />
@@ -1307,7 +1302,7 @@
         <mesh
           filename="meshes/right_shoulder_pitch_link.STL" />
       </geometry>
-    </collision> -->
+    </collision>
   </link>
   <joint
     name="right_shoulder_pitch_joint"

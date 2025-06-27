@@ -69,21 +69,25 @@ class CAS02Cfg( LeggedRobotCfg ):
     class control( LeggedRobotCfg.control ):
         # PD Drive parameters:
         control_type = 'P'
-        stiffness = {'pelvic': 350,
-                     'knee': 350,
-                     'ankle': 120,
+        stiffness = {'leg_pelvic_pitch': 250, # 350
+                     'leg_pelvic_roll':250, # 350
+                     'leg_pelvic_yaw':250, # 350
+                     'knee': 300, # 350 
+                     'ankle': 60, # 120
                      'shoulder': 350,
                      'elbow': 350,
                      'waist': 200,
                      'wrist': 100,
                      }  # [N*m/rad]
-        damping = {  'pelvic': 4,
-                     'knee': 4,
-                     'ankle': 2,
-                     'shoulder': 4,
-                     'elbow': 4,
-                     'waist': 4,
-                     'wrist': 4,
+        damping = {  'leg_pelvic_pitch': 6, # 4
+                     'leg_pelvic_roll': 6,
+                     'leg_pelvic_yaw': 6,
+                     'knee': 8, # 4
+                     'ankle': 5, # 2
+                     'shoulder': 5,
+                     'elbow': 5,
+                     'waist': 5,
+                     'wrist': 5,
                      }  # [N*m/rad]  # [N*m*s/rad]
         # action scale: target angle = actionRescale * action + cur_dof_pos
         action_scale = 1
@@ -123,7 +127,7 @@ class CAS02Cfg( LeggedRobotCfg ):
         right_knee_name = 'right_leg_knee'
         foot_name = "ankle_roll"
         penalize_contacts_on = ["elbow", 'shoulder', 'waist', 'knee', 'pelvic']
-        terminate_after_contacts_on = []    #'torse'
+        terminate_after_contacts_on = []    # 'torse'
 
         left_shoulder_name = "left_shoulder"
         right_shoulder_name = "right_shoulder"
@@ -176,16 +180,16 @@ class CAS02Cfg( LeggedRobotCfg ):
     class rewards( LeggedRobotCfg.rewards ):
         soft_dof_pos_limit = 0.9
         soft_dof_vel_limit = 0.9
-        base_height_target = 0.9
+        base_height_target = 0.92
         only_positive_rewards = False # if true negative total rewards are clipped at zero (avoids early termination problems)
         orientation_sigma = 1
         is_gaussian = True
-        target_head_height = 1.2
-        target_head_margin = 1
+        target_head_height = 1.35
+        target_head_margin = 1.1
         target_base_height_phase1 = 0.55
         target_base_height_phase2 = 0.55
         target_base_height_phase3 = 0.8
-        orientation_threshold = 0.99
+        orientation_threshold = 0.9
         left_foot_displacement_sigma = -2
         right_foot_displacement_sigma = -2
         target_dof_pos_sigma = -0.1
@@ -201,10 +205,10 @@ class CAS02Cfg( LeggedRobotCfg ):
 
     class constraints( LeggedRobotCfg.rewards ):
         is_gaussian = True
-        target_head_height = 1.2
-        target_head_margin = 1
+        target_head_height = 1.35
+        target_head_margin = 1.1
         orientation_height_threshold = 0.9
-        target_base_height = 0.55
+        target_base_height = 0.92
 
         left_foot_displacement_sigma = -2
         right_foot_displacement_sigma = -2
@@ -226,22 +230,23 @@ class CAS02Cfg( LeggedRobotCfg ):
 
             # style reward
             style_waist_deviation = -10
-            style_hip_yaw_deviation = -10
-            style_hip_roll_deviation = -10
+            style_hip_yaw_deviation = -10  # -10
+            style_hip_roll_deviation = -10 # -10
             style_shoulder_roll_deviation = -2.5
-            style_left_foot_displacement = 2.5
-            style_right_foot_displacement = 2.5
-            style_knee_deviation = -0.25
-            style_shank_orientation = 10
-            style_ground_parallel = 30
-            style_feet_distance = -10
-            style_style_ang_vel_xy = 1
+            style_left_foot_displacement = 3 # 2.5
+            style_right_foot_displacement = 3 # 2.5
+            # style_feet_parallel_alignment = 0 # 新加入的引导左右脚相对平行的reward, 暂不使用
+            style_knee_deviation = -0.5 # -0.25
+            style_shank_orientation = 10 # 10
+            style_ground_parallel = 20 # 20
+            style_feet_distance = -10 # -10
+            style_style_ang_vel_xy = 1.3 # 1
 
             # post-task reward
             target_ang_vel_xy = 10
             target_lin_vel_xy = 10
             target_feet_height_var = 2.5
-            target_target_upper_dof_pos = 10
+            target_target_upper_dof_pos = 8 # 10
             target_target_orientation = 10
             target_target_base_height = 10
 
@@ -291,7 +296,7 @@ class CAS02Cfg( LeggedRobotCfg ):
         force = 300 # 100*2=200 is the actuatl force because of a extra keyframe torso link
         dof_vel_limit = 300
         base_vel_limit = 20
-        threshold_height = 0.9
+        threshold_height = 0.94
         no_orientation = False
 
     class sim:
@@ -333,4 +338,4 @@ class CAS02CfgPPO( LeggedRobotCfgPPO ):
         experiment_name = 'CAS02_ground'
         algorithm_class_name = 'PPO'
         init_at_random_ep_len = True
-        max_iterations = 12000 # number of policy updates
+        max_iterations = 16000 # number of policy updates
