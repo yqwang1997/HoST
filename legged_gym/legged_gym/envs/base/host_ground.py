@@ -595,7 +595,9 @@ class LeggedRobot(BaseTask):
         self.target_dof_pos = torch.zeros(self.num_envs, self.num_dof, dtype=torch.float, device=self.device, requires_grad=False)
         for i in range(self.num_dofs):
             name = self.dof_names[i]
+            print("Name of joint is: ", name)
             angle = self.cfg.init_state.default_joint_angles[name]
+            print("Angle for each joint is: ", angle)
             self.default_dof_pos[i] = angle
             self.target_dof_pos[:, i] = self.cfg.init_state.target_joint_angles[name]
             found = False
@@ -1106,17 +1108,17 @@ class LeggedRobot(BaseTask):
     #-----------------------------style rewards-----------------------------
     def _reward_waist_deviation(self):
         wrist_dof = self.dof_pos[:, self.waist_joint_indices]
-        reward = (torch.abs(wrist_dof) > 1.4).float()
+        reward = (torch.abs(wrist_dof) > 0.8).float()
         return reward.squeeze(1)
 
     def _reward_hip_yaw_deviation(self):
         hip_yaw_dof = self.dof_pos[:, self.hip_joint_indices]
-        reward = (torch.max(torch.abs(self.dof_pos[:, self.hip_joint_indices]), dim=-1)[0] > 1.4) | (torch.min(torch.abs(self.dof_pos[:, self.hip_joint_indices]), dim=-1)[0] > 0.9)
+        reward = (torch.max(torch.abs(self.dof_pos[:, self.hip_joint_indices]), dim=-1)[0] > 1.0) | (torch.min(torch.abs(self.dof_pos[:, self.hip_joint_indices]), dim=-1)[0] > 0.5)
         return reward
 
     def _reward_hip_roll_deviation(self):
         hip_roll_dof = self.dof_pos[:, self.hip_roll_joint_indices]
-        reward = (torch.max(torch.abs(self.dof_pos[:, self.hip_roll_joint_indices]), dim=-1)[0] >  1.4) | (torch.min(torch.abs(self.dof_pos[:, self.hip_roll_joint_indices]), dim=-1)[0] > 0.9)
+        reward = (torch.max(torch.abs(self.dof_pos[:, self.hip_roll_joint_indices]), dim=-1)[0] >  1.0) | (torch.min(torch.abs(self.dof_pos[:, self.hip_roll_joint_indices]), dim=-1)[0] > 0.5)
         return reward
 
     def _reward_shoulder_roll_deviation(self):
@@ -1144,7 +1146,7 @@ class LeggedRobot(BaseTask):
 
     def _reward_knee_deviation(self):
         hip_roll_dof = self.dof_pos[:, self.knee_joint_indices]
-        reward = (torch.max(torch.abs(self.dof_pos[:, self.knee_joint_indices]), dim=-1)[0] > 2.85) | (torch.min(self.dof_pos[:, self.knee_joint_indices], dim=-1)[0] < -0.06)
+        reward = (torch.max(torch.abs(self.dof_pos[:, self.knee_joint_indices]), dim=-1)[0] > 2.4) | (torch.min(self.dof_pos[:, self.knee_joint_indices], dim=-1)[0] < 0.1)
         return reward
 
     def _reward_shank_orientation(self):
@@ -1171,7 +1173,7 @@ class LeggedRobot(BaseTask):
         right_ankle_pos = self.rigid_body_states[:, self.right_ankle_indices, 2].clone() * 10
         var = left_ankle_pos.var(1) + right_ankle_pos.var(1)
         var = torch.mean(torch.concat([left_ankle_pos.var(1).view(-1, 1), right_ankle_pos.var(1).view(-1, 1)], dim=-1), dim=-1)
-        reward = var < 0.05
+        reward = var < 0.03
 
         if self.cfg.constraints.post_task:
             standup  = self.root_states[:, 2] > self.cfg.rewards.target_base_height_phase3

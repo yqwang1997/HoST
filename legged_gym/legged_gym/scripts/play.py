@@ -41,6 +41,10 @@ def play(args):
         export_policy_as_jit(ppo_runner.alg.actor_critic, path)
         print('Exported policy as jit script to: ', path)
     
+    path = os.path.join(LEGGED_GYM_ROOT_DIR, 'logs', train_cfg.runner.experiment_name, 'exported', 'policies')
+    export_policy_as_jit(ppo_runner.alg.actor_critic, path)
+    print('Exported policy as jit script to: ', path)
+    
     logger = Logger(env.dt)
     for i in range(10*int(env.max_episode_length)):
 
