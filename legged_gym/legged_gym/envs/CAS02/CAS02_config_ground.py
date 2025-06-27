@@ -180,7 +180,7 @@ class CAS02Cfg( LeggedRobotCfg ):
         only_positive_rewards = False # if true negative total rewards are clipped at zero (avoids early termination problems)
         orientation_sigma = 1
         is_gaussian = True
-        target_head_height = 1.2
+        target_head_height = 1.5
         target_head_margin = 1
         target_base_height_phase1 = 0.55
         target_base_height_phase2 = 0.55
