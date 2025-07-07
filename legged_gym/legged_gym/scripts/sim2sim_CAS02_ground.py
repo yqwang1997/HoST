@@ -1,9 +1,8 @@
 import math
+import isaacgym
 import numpy as np
 import mujoco
 from mujoco import viewer  # 直接从 mujoco 导入
-print("viewer 的类型:", type(viewer))
-print("viewer 的方法:", dir(viewer))
 from collections import deque
 from scipy.spatial.transform import Rotation as R
 from legged_gym.envs.CAS02.CAS02_config_ground import CAS02Cfg as CAS02CfgGround

@@ -10,6 +10,8 @@ import torch
 
 
 # python legged_gym/legged_gym/scripts/train.py --task CAS02_ground --headless
+# tensorboard --logdir=/home/casbot/ZHZ_ws/HoST/legged/home/casbot/ZHZ_ws/HoST/legged_gym/logs
+
 
 
 def train(args):

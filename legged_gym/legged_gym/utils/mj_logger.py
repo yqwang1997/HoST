@@ -64,10 +64,10 @@ class MjLogger:
         # self.plot_process.start()
         self._plot()
 
-    def _plot(self):
-        nb_rows = 6
-        nb_cols = 7
-        fig, axs = plt.subplots(nb_rows, nb_cols)
+    def _plot(self,save_path = None):
+        nb_rows = 5
+        nb_cols = 10
+        fig, axs = plt.subplots(nb_rows, nb_cols, figsize=(30, 10))
         for key, value in self.state_log.items():
             time = np.linspace(0, len(value)*self.dt, len(value))
             break
@@ -78,78 +78,81 @@ class MjLogger:
         if log["dof_pos"]: 
             log["dof_pos"] = np.array(log["dof_pos"])
             log["dof_pos_target"] = np.array(log["dof_pos_target"])
-            for i in range(12):
-                if i < 6:
-                    a = axs[i, 0]
-                else:
-                    a = axs[i-6, 1]
+            for i in range(23):
+                col = (i + 23) // nb_rows  
+                row = (i + 23) % nb_rows   
+                
+                # 选择对应的子图
+                a = axs[row, col]  
                         
-                a.plot(time, log["dof_pos["+str(i)+"]"], label='measured')
+                # a.plot(time, log["dof_pos["+str(i)+"]"], label='measured')
     
             
                 a.plot(time, log["dof_pos_target["+str(i)+"]"], label='target')
                 a.set(xlabel='time [s]', ylabel='Position [rad]', title='DOF Position '+ str(i))
                 a.legend()
 
-        # plot joint velocity
-        if log["dof_vel"]: 
-            log["dof_vel"] = np.array(log["dof_vel"])
-            for i in range(12):
-                if i < 6:
-                    a = axs[i, 2]
-                else:
-                    a = axs[i-6, 3]
-                a.plot(time, log["dof_vel["+str(i)+"]"], label='dof_vel')
-                a.set(xlabel='time [s]', ylabel='Velocity [rad/s]', title='Joint Velocity '+ str(i))
-                a.legend()
+        # # plot joint velocity
+        # if log["dof_vel"]: 
+        #     log["dof_vel"] = np.array(log["dof_vel"])
+        #     for i in range(12):
+        #         if i < 6:
+        #             a = axs[i, 2]
+        #         else:
+        #             a = axs[i-6, 3]
+        #         a.plot(time, log["dof_vel["+str(i)+"]"], label='dof_vel')
+        #         a.set(xlabel='time [s]', ylabel='Velocity [rad/s]', title='Joint Velocity '+ str(i))
+        #         a.legend()
 
         # plot torques
         if log["dof_torque"]: 
             log["dof_torque"] = np.array(log["dof_torque"])
-            for i in range(12):
-                if i < 6:
-                    a = axs[i, 4]
-                else:
-                    a = axs[i-6, 5]
+            for i in range(23):
+                col = i // nb_rows  # 决定在第几列（0, 1, 2...）
+                row = i % nb_rows   # 决定在列内的第几行（0~5）
+                
+                # 选择对应的子图
+                a = axs[row, col]  # axs 需要是 (6, 足够多列) 的形状
                 a.plot(time, log["dof_torque["+str(i)+"]"], label='dof_torque')
-                a.set(xlabel='time [s]', ylabel='Joint Torque [Nm]', title='Torque '+ str(i))
+                # a.set(xlabel='time [s]', ylabel='Joint Torque [Nm]', title='Torque '+ str(i))
+                a.set(title='Torque '+ str(i))
                 a.legend()   
 
-        # plot base vel x
-        a = axs[0, 6]
-        if log["base_vel_x"]: a.plot(time, log["base_vel_x"], label='measured')
-        if log["command_x"]: a.plot(time, log["command_x"], label='commanded')
-        a.set(xlabel='time [s]', ylabel='base lin vel [m/s]', title='Base velocity x')
-        a.legend()
+        # # plot base vel x
+        # a = axs[0, 6]
+        # if log["base_vel_x"]: a.plot(time, log["base_vel_x"], label='measured')
+        # if log["command_x"]: a.plot(time, log["command_x"], label='commanded')
+        # a.set(xlabel='time [s]', ylabel='base lin vel [m/s]', title='Base velocity x')
+        # a.legend()
 
-        # plot base vel y
-        a = axs[1, 6]
-        if log["base_vel_y"]: a.plot(time, log["base_vel_y"], label='measured')
-        if log["command_y"]: a.plot(time, log["command_y"], label='commanded')
-        a.set(xlabel='time [s]', ylabel='base lin vel [m/s]', title='Base velocity y')
-        a.legend()
+        # # plot base vel y
+        # a = axs[1, 6]
+        # if log["base_vel_y"]: a.plot(time, log["base_vel_y"], label='measured')
+        # if log["command_y"]: a.plot(time, log["command_y"], label='commanded')
+        # a.set(xlabel='time [s]', ylabel='base lin vel [m/s]', title='Base velocity y')
+        # a.legend()
 
-        # plot base vel yaw
-        a = axs[2, 6]
-        if log["base_vel_yaw"]: a.plot(time, log["base_vel_yaw"], label='measured')
-        if log["command_yaw"]: a.plot(time, log["command_yaw"], label='commanded')
-        a.set(xlabel='time [s]', ylabel='base ang vel [rad/s]', title='Base velocity yaw')
-        a.legend()
+        # # plot base vel yaw
+        # a = axs[2, 6]
+        # if log["base_vel_yaw"]: a.plot(time, log["base_vel_yaw"], label='measured')
+        # if log["command_yaw"]: a.plot(time, log["command_yaw"], label='commanded')
+        # a.set(xlabel='time [s]', ylabel='base ang vel [rad/s]', title='Base velocity yaw')
+        # a.legend()
 
-        # plot base vel z
-        a = axs[3, 6]
-        if log["base_vel_z"]: a.plot(time, log["base_vel_z"], label='measured')
-        a.set(xlabel='time [s]', ylabel='base lin vel [m/s]', title='Base velocity z')
-        a.legend()
+        # # plot base vel z
+        # a = axs[3, 6]
+        # if log["base_vel_z"]: a.plot(time, log["base_vel_z"], label='measured')
+        # a.set(xlabel='time [s]', ylabel='base lin vel [m/s]', title='Base velocity z')
+        # a.legend()
 
-        # plot contact forces
-        a = axs[4, 6]
-        if log["contact_forces_z"]:
-            forces = np.array(log["contact_forces_z"])
-            for i in range(forces.shape[1]):
-                a.plot(time, forces[:, i], label=f'force {i}')
-        a.set(xlabel='time [s]', ylabel='Forces z [N]', title='Vertical Contact forces')
-        a.legend()
+        # # plot contact forces
+        # a = axs[4, 6]
+        # if log["contact_forces_z"]:
+        #     forces = np.array(log["contact_forces_z"])
+        #     for i in range(forces.shape[1]):
+        #         a.plot(time, forces[:, i], label=f'force {i}')
+        # a.set(xlabel='time [s]', ylabel='Forces z [N]', title='Vertical Contact forces')
+        # a.legend()
 
         # plot imu
         # a = axs[4, 6]
@@ -158,13 +161,18 @@ class MjLogger:
         #     a.plot(time, pitch, label=f'pitch ')
         # a.set(xlabel='time [s]', ylabel='Imu P [Rad]', title='IMU pitch')
         # a.legend()
-        a = axs[5, 6]
-        if log["imu_r"]:
-            roll = np.array(log["imu_r"])
-            a.plot(time, roll, label=f'roll ')
-        a.set(xlabel='time [s]', ylabel='Imu R [Rad]', title='IMU Roll')
-        a.legend()
-
+        # a = axs[5, 6]
+        # if log["imu_r"]:
+        #     roll = np.array(log["imu_r"])
+        #     a.plot(time, roll, label=f'roll ')
+        # a.set(xlabel='time [s]', ylabel='Imu R [Rad]', title='IMU Roll')
+        # a.legend()
+        if save_path:
+            try:
+                plt.savefig(save_path, dpi=300, bbox_inches='tight')
+                # print(f"Plot saved successfully to {save_path}")
+            except Exception as e:
+                print(f"Error saving plot: {str(e)}")
 
         plt.show()
 

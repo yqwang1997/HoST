@@ -31,6 +31,7 @@
 import math
 import isaacgym
 import numpy as np
+import mujoco
 import mujoco, mujoco_viewer
 from tqdm import tqdm
 from collections import deque
@@ -43,9 +44,11 @@ import torch
 from datetime import datetime
 import time
 import csv
-import pygame
+# import pygame
 from threading import Thread
 
+
+# python legged_gym/legged_gym/scripts/sim2sim.py --load_model /home/casbot/ZHZ_ws/HoST/legged_gym/logs/CAS02_ground/1_exported/policies/policy_1.pt
 joystick_use = True
 joystick_opened = False
 
@@ -55,46 +58,46 @@ class cmd:
     vy = 0.0
     dyaw = 0.0
 
-if joystick_use:
+# if joystick_use:
 
-    pygame.init()
+#     pygame.init()
 
-    try:
-        # 获取手柄
-        joystick = pygame.joystick.Joystick(0)
-        joystick.init()
-        joystick_opened = True
-    except Exception as e:
-        print(f"无法打开手柄：{e}")
+#     try:
+#         # 获取手柄
+#         joystick = pygame.joystick.Joystick(0)
+#         joystick.init()
+#         joystick_opened = True
+#     except Exception as e:
+#         print(f"无法打开手柄：{e}")
 
-    # 用于控制线程退出的标志
-    exit_flag = False
+#     # 用于控制线程退出的标志
+#     exit_flag = False
 
 
-    # 处理手柄输入的线程
-    def handle_joystick_input():
-        global exit_flag, cmd
+#     # 处理手柄输入的线程
+#     def handle_joystick_input():
+#         global exit_flag, cmd
         
         
-        while not exit_flag:
-            # 获取手柄输入
-            pygame.event.get()
+#         while not exit_flag:
+#             # 获取手柄输入
+#             pygame.event.get()
 
-            # 更新机器人命令
-            cmd.vx = -joystick.get_axis(1) * 1.
-            cmd.vy = -joystick.get_axis(0) * 0.
-            cmd.dyaw = -joystick.get_axis(3) * 0.5
+#             # 更新机器人命令
+#             cmd.vx = -joystick.get_axis(1) * 1.
+#             cmd.vy = -joystick.get_axis(0) * 0.
+#             cmd.dyaw = -joystick.get_axis(3) * 0.5
 
-            print(cmd.vx, cmd.vy , cmd.dyaw)
+#             print(cmd.vx, cmd.vy , cmd.dyaw)
 
-            # 等待一小段时间，可以根据实际情况调整
-            pygame.time.delay(100)
+#             # 等待一小段时间，可以根据实际情况调整
+#             pygame.time.delay(100)
 
-        # 启动线程
+#         # 启动线程
 
-    if joystick_opened and joystick_use:
-        joystick_thread = Thread(target=handle_joystick_input)
-        joystick_thread.start()
+#     if joystick_opened and joystick_use:
+#         joystick_thread = Thread(target=handle_joystick_input)
+#         joystick_thread.start()
 
 def quaternion_to_euler_array(quat):
     # Ensure quaternion is in the correct format [x, y, z, w]
@@ -156,104 +159,7 @@ root_states_buffer = []
 euler_xyz_buffer = []
 action_buffer = []
 ts_buffer = []
-
-def recordObs(file_name, ts_buffer,dof_pos_buffer,dof_vel_buffer):
-
-      # csv
-    csv_title = []
-    # for name_ in env.dof_names:
-    #     csv_title.append(name_)
-    # for name_ in env.dof_names:
-    #     csv_title.append(name_+'_obs')
-    # for name_ in env.dof_names:
-    #     csv_title.append(name_+'_vel')
-
-    # csv_title.append('root_pos_x')
-    # csv_title.append('root_pos_y')
-    # csv_title.append('root_pos_z')
-
-    # csv_title.append('root_rot_x')
-    # csv_title.append('root_rot_y')
-    # csv_title.append('root_rot_z')
-
-    # csv_title.append('root_linvel_x')
-    # csv_title.append('root_linvel_y')
-    # csv_title.append('root_linvel_z')
-
-    # csv_title.append('root_angvel_x')
-    # csv_title.append('root_angvel_y')
-    # csv_title.append('root_angvel_z')
-
-    with open('ref_pos/'+file_name[:-5]+'.csv', mode='w', newline='') as csvfile:
-        writer = csv.writer(csvfile)
-
-        # writer.writerow(csv_title)
-
-        for i in range(len(dof_pos_buffer)):
-
-            row_data = list(dof_pos_buffer[i])  # +  \
-                   # list(dof_vel_buffer[i]) + list( ts_buffer[i])    #\
-                    # + list(root_states_buffer[i][0:3])    \
-                    # + list(euler_xyz_buffer[i][0:3])    \
-                    # + list(root_states_buffer[i][7:10])    \
-                    # + list(root_states_buffer[i][10:13])
-
-            writer.writerow(row_data)
-
-    return
-
-
-def recordActions(file_name, ts_buffer, action_buffer ):
-
-      # csv
-    csv_title = []
- 
-
-    with open('ref_pos/'+file_name[:-5]+'.csv', mode='w', newline='') as csvfile:
-        writer = csv.writer(csvfile)
-
-        # writer.writerow(csv_title)
-
-        for i in range(len(action_buffer)):
-
-            row_data = list(action_buffer[i]) 
-
-            writer.writerow(row_data)
-
-    return
-
 target_pos = np.zeros((12), dtype=np.double)
-
-def my_controller(model, data):
-    target_dq = np.zeros((12), dtype=np.double)
-    kp = np.array([105, 105, 105, 105, 15, 15, 105, 105, 105, 105, 15, 15], dtype=np.double)
-    kd = np.array([10, 10, 10, 10, 1, 1, 10, 10, 10, 10, 1, 1], dtype=np.double)
-    tau_limit = 105. * np.ones(12, dtype=np.double)
-    
-    q, dq, quat, v, omega, gvec,base_pos, foot_positions, foot_forces = get_obs(data,model)
-    q = q[-12:]
-    dq = dq[-12:]
-    # # Generate PD control
-    tau =  (target_pos - q) * kp + (target_dq - dq) * kd
-
-    # tau = np.clip(tau, -tau_limit, tau_limit) # Clamp torques
-    # data.ctrl = tau
-
-    if (startRecordFlag):
-        now = time.time()
-        ts_diff = now-start_ts
-        ts_diff_ms = int( ts_diff * 1000)
-        t=[]
-        t.append(ts_diff_ms)
-        ts_buffer.append(t)
-        # action_buffer.append(actions[0,:].detach().cpu().numpy())
-        dof_pos_buffer.append(q)
-        dof_vel_buffer.append(dq)
-        # root_states_buffer.append(root_states[0].cpu().numpy())
-        # euler_xyz_buffer.append(root_rpy[0].cpu().numpy())
-
-    
-    return
 
 
 def run_mujoco(policy, cfg):
@@ -274,7 +180,8 @@ def run_mujoco(policy, cfg):
 
     # mujoco.set_mjcb_control(my_controller)
     
-    viewer = mujoco_viewer.MujocoViewer(model, data)
+    viewer = mujoco_viewer.MujocoViewer(model, data, panel_num=1)
+    #viewer.launch(model, data) 
 
     target_q = np.zeros((cfg.env.num_actions), dtype=np.double)
     action = np.zeros((cfg.env.num_actions), dtype=np.double)
@@ -282,7 +189,7 @@ def run_mujoco(policy, cfg):
     last_action = np.zeros((cfg.env.num_actions), dtype=np.double)
     action_rescale = cfg.control.action_scale
 
-    rpy = np.zeros(3, dtype=np.double)
+    rpy = np.zeros(3, dtype=np.double) # roll pitch yaw
 
     hist_obs = deque()
     for _ in range(cfg.env.num_actor_history):
@@ -291,8 +198,6 @@ def run_mujoco(policy, cfg):
     count_lowlevel = 0
     count_phase = 0
 
-    # default_dof_pos = np.array([-0.24, 0.0, 0.0, 0.47, -0.23,  0.0,  \
-    #                             -0.24, 0.0, 0.0, 0.47, -0.23,  0.0])
     default_dof_pos = np.array([-0.185, 0.0, 0.0, 0.36, -0.175,  0.0,  \
                                 -0.185, 0.0, 0.0, 0.36, -0.175,  0.0,
                                 0.0,
@@ -301,8 +206,6 @@ def run_mujoco(policy, cfg):
 
 
     render_index =0 
-    
-    # upperbody_npz = dict(np.load('ref_pos/L12_ZhanLi_ShangZhiRaoDong_QianHouJiao_1000HZ.npz', allow_pickle=True))
 
     global startRecordFlag
     global target_pos
@@ -342,13 +245,11 @@ def run_mujoco(policy, cfg):
             rand = np.random.rand()
             # print(rand)
             # obs[0, 75] = action_rescale + (rand - 0.5) * 0.05 #might have problem to fix later
-            obs[0, 75] = 0.25
+            obs[0, 75] = 0.25 
             # obs *= count_lowlevel > 30
             # print(obs)
 
             rpy[0:2] = eu_ang[:2] 
-
-            # obs[0, 45:46] -= 0.06 #pitch +0.02
 
             obs = np.clip(obs, -cfg.normalization.clip_observations, cfg.normalization.clip_observations)
 
@@ -359,13 +260,11 @@ def run_mujoco(policy, cfg):
             for i in range(cfg.env.num_actor_history):
                 policy_input[0, i * cfg.env.num_one_step_observations : (i + 1) * cfg.env.num_one_step_observations] = hist_obs[i][0, :]
             action[:cfg.env.num_actions] = policy(torch.tensor(policy_input))[0].detach().numpy()
-            # action[17:] = upperbody_npz["dof_pos"][count_lowlevel%upperbody_npz["dof_pos"].shape[0]][17:] / cfg.control.action_scale
             action = np.clip(action, -cfg.normalization.clip_actions, cfg.normalization.clip_actions)
             if count_lowlevel < 500:
                 target_q *= 0
             else:
                 target_q = action * action_rescale
-            # target_q = default_dof_pos #np.zeros((cfg.env.num_actions), dtype=np.double)
             target_pos = target_q + default_dof_pos
 
             action_buffer.append(target_pos)
@@ -418,18 +317,29 @@ def run_mujoco(policy, cfg):
                 'cmd_dof_torque': tau[idx],
                 'imu_p': rpy[0].item(),
                 'imu_r': rpy[1].item(),
-                'dof_pos_target[0]':  target_pos[0].item() ,
-                'dof_pos_target[1]':  target_pos[1].item() ,
-                'dof_pos_target[2]': target_pos[2].item()  ,
-                'dof_pos_target[3]': target_pos[3].item()  ,
-                'dof_pos_target[4]': target_pos[4].item()  ,
-                'dof_pos_target[5]': target_pos[5].item()  ,
-                'dof_pos_target[6]': target_pos[6].item()  ,
-                'dof_pos_target[7]': target_pos[7].item()  ,
-                'dof_pos_target[8]': target_pos[8].item()  ,
-                'dof_pos_target[9]': target_pos[9].item()  ,
-                'dof_pos_target[10]': target_pos[10].item() ,
-                'dof_pos_target[11]': target_pos[11].item() ,
+                'dof_pos_target[0]':  target_pos[0].item(),
+                'dof_pos_target[1]':  target_pos[1].item(),
+                'dof_pos_target[2]': target_pos[2].item(),
+                'dof_pos_target[3]': target_pos[3].item(),
+                'dof_pos_target[4]': target_pos[4].item(),
+                'dof_pos_target[5]': target_pos[5].item(),
+                'dof_pos_target[6]': target_pos[6].item(),
+                'dof_pos_target[7]': target_pos[7].item(),
+                'dof_pos_target[8]': target_pos[8].item(),
+                'dof_pos_target[9]': target_pos[9].item(),
+                'dof_pos_target[10]': target_pos[10].item(),
+                'dof_pos_target[11]': target_pos[11].item(),
+                'dof_pos_target[12]': target_pos[12].item(),
+                'dof_pos_target[13]': target_pos[13].item(),
+                'dof_pos_target[14]': target_pos[14].item(),
+                'dof_pos_target[15]': target_pos[15].item(),
+                'dof_pos_target[16]': target_pos[16].item(),
+                'dof_pos_target[17]': target_pos[17].item(),
+                'dof_pos_target[18]': target_pos[18].item(),
+                'dof_pos_target[19]': target_pos[19].item(),
+                'dof_pos_target[20]': target_pos[20].item(),
+                'dof_pos_target[21]': target_pos[21].item(),
+                'dof_pos_target[22]': target_pos[22].item(),
                 'dof_pos':    q[0].item(),
                 'dof_pos[0]': q[0].item(),
                 'dof_pos[1]': q[1].item(),
@@ -443,6 +353,17 @@ def run_mujoco(policy, cfg):
                 'dof_pos[9]': q[9].item(),
                 'dof_pos[10]': q[10].item(),
                 'dof_pos[11]': q[11].item(),
+                'dof_pos[12]': q[12].item(),
+                'dof_pos[13]': q[13].item(),
+                'dof_pos[14]': q[14].item(),
+                'dof_pos[15]': q[15].item(),
+                'dof_pos[16]': q[16].item(),
+                'dof_pos[17]': q[17].item(),
+                'dof_pos[18]': q[18].item(),
+                'dof_pos[19]': q[19].item(),
+                'dof_pos[20]': q[20].item(),
+                'dof_pos[21]': q[21].item(),
+                'dof_pos[22]': q[22].item(),
                 'dof_torque': applied_tau[0].item(),
                 'dof_torque[0]': applied_tau[0].item(),
                 'dof_torque[1]': applied_tau[1].item(),
@@ -456,6 +377,17 @@ def run_mujoco(policy, cfg):
                 'dof_torque[9]': applied_tau[9].item(),
                 'dof_torque[10]': applied_tau[10].item(),
                 'dof_torque[11]': applied_tau[11].item(),
+                'dof_torque[12]': applied_tau[12].item(),
+                'dof_torque[13]': applied_tau[13].item(),
+                'dof_torque[14]': applied_tau[14].item(),
+                'dof_torque[15]': applied_tau[15].item(),
+                'dof_torque[16]': applied_tau[16].item(),
+                'dof_torque[17]': applied_tau[17].item(),
+                'dof_torque[18]': applied_tau[18].item(),
+                'dof_torque[19]': applied_tau[19].item(),
+                'dof_torque[20]': applied_tau[20].item(),
+                'dof_torque[21]': applied_tau[21].item(),
+                'dof_torque[22]': applied_tau[22].item(),
                 'dof_vel': dq[0].item(),
                 'dof_vel[0]': dq[0].item(),
                 'dof_vel[1]': dq[1].item(),
@@ -469,10 +401,21 @@ def run_mujoco(policy, cfg):
                 'dof_vel[9]': dq[9].item(),
                 'dof_vel[10]': dq[10].item(),
                 'dof_vel[11]': dq[11].item(),
+                'dof_vel[12]': dq[12].item(),
+                'dof_vel[13]': dq[13].item(),
+                'dof_vel[14]': dq[14].item(),
+                'dof_vel[15]': dq[15].item(),
+                'dof_vel[16]': dq[16].item(),
+                'dof_vel[17]': dq[17].item(),
+                'dof_vel[18]': dq[18].item(),
+                'dof_vel[19]': dq[19].item(),
+                'dof_vel[20]': dq[20].item(),
+                'dof_vel[21]': dq[21].item(),
+                'dof_vel[22]': dq[22].item(),
             }
             )
         else:
-            logger.plot_states()
+            logger._plot(save_path="/home/casbot/ZHZ_ws/HoST/legged_gym/legged_gym/plots/fig3.png")
 
         if(render_index % 2 ==0):
             viewer.render()
@@ -491,9 +434,6 @@ def run_mujoco(policy, cfg):
     now = time.time()
     ts_diff = now-start_ts  
     print("total time (ms) ", ts_diff*1000)
-
-    recordObs("l1_rl_obs.data",ts_buffer,dof_pos_buffer,dof_vel_buffer)
-    recordActions("l1_rl_actions.data",ts_buffer,action_buffer)
 
     viewer.close()
 
@@ -514,38 +454,30 @@ if __name__ == '__main__':
                 mujoco_model_path = f'{LEGGED_GYM_ROOT_DIR}/resources/robots/Mrobot/mjcf/mjmodel_terrain.xml'
             else:
                 mujoco_model_path = f'{LEGGED_GYM_ROOT_DIR}/resources/robots/02/mjmodel02fb.xml'
-            sim_duration = 150.0
+            sim_duration = 20.0
             # low level control frequency (In sim 200Hz, in real robot 500Hz)
             dt = 0.005
             # policy inference frequency 50Hz
             decimation = 4
 
         class robot_config:
-            # kps = np.array([500, 500, 400, 500, 120, 100, \
-            #                 500, 500, 400, 500, 120, 100], dtype=np.double)
-            # kds = np.array([5, 5, 5, 5, 5, 5,  \
-            #                 5, 5, 5, 5, 5, 5], dtype=np.double)
             kps = np.array([350, 350, 350, 350, 120, 120, \
                             350, 350, 350, 350, 120, 120,
                             200,
-                            200, 200, 200, 200, 100,
-                            200, 200, 200, 200, 100], dtype=np.double)
+                            200, 200, 0, 200, 0,
+                            200, 200, 0, 200, 0], dtype=np.double)
             kds = np.array([4.0, 4.0, 4.0, 4.0, 2.0, 2.0,  \
                             4.0, 4.0, 4.0, 4.0, 2.0, 2.0,
-                            4.0,
-                            4.0, 4.0, 4.0, 4.0, 4.0,
-                            4.0, 4.0, 4.0, 4.0, 4.0], dtype=np.double)
+                            5.0,
+                            4.0, 4.0, .5, 4.0, 0.0,
+                            4.0, 4.0, .5, 4.0, 0.0], dtype=np.double)
         
             # tau_limit = np.array([120., 120., 120., 120.,  90.,  64.,   \
             #                       120., 120., 120., 120.,  90.,  64.], dtype=np.double)
-            tau_limit = np.array([144., 144., 65., 144.,  65.,  65.,   \
-                                  144., 144., 65., 144.,  65.,  65.,
-                                  65,
-                                  60., 60., 60., 60., 60.,
-                                  60., 60., 60., 60., 60.], dtype=np.double)
-            
-            # tau_limit = 200. * np.ones(18, dtype=np.double)
-            # tau_limit[4:6] = 24
-            # tau_limit[10:12] =24
+            tau_limit = np.array([150., 150., 70., 150.,  70.,  70.,   \
+                                  150., 150., 70., 150.,  70.,  70.,
+                                  70,
+                                  65., 65., 16., 65., 16.,
+                                  65., 65., 16., 65., 16.], dtype=np.double)
     policy = torch.jit.load(args.load_model)
     run_mujoco(policy, Sim2simCfg())

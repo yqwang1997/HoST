@@ -40,3 +40,4 @@ task_registry.register( "h1_ground", LeggedRobotGround, H1CfgGround(), H1CfgPPOG
 
 task_registry.register( "pi_ground", LeggedRobot_Pi, PiCfgGround(), PiCfgPPOGround())
 task_registry.register( "CAS02_ground", LeggedRobotGround, CAS02CfgGround(), CAS02CfgPPOGround())
+task_registry.register( "CAS02_wall", LeggedRobotWall, CAS02CfgGround(), CAS02CfgPPOGround())
