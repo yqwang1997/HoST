@@ -72,18 +72,24 @@ class CAS02Cfg( LeggedRobotCfg ):
         stiffness = {'pelvic': 350,
                      'knee': 350,
                      'ankle': 120,
-                     'shoulder': 350,
-                     'elbow': 300,
-                     'waist': 200,
-                     'wrist': 70,
+                     #'shoulder': 350,
+                     'elbow': 120,
+                     'waist': 120,
+                     'wrist': 0,
+                     'shoulder_pitch':350,
+                     'shoulder_roll':350,
+                     'shoulder_yaw':0,
                      }  # [N*m/rad]
-        damping = {  'pelvic': 4,
-                     'knee': 5,
-                     'ankle': 2,
-                     'shoulder': 4,
+        damping = {  'pelvic': 6,
+                     'knee': 6,
+                     'ankle': 4,
+                     #'shoulder': 4,
+                     'shoulder_pitch':4,
+                     'shoulder_roll':4,
+                     'shoulder_yaw':1,
                      'elbow': 4,
                      'waist': 4,
-                     'wrist': 4,
+                     'wrist': 1,
                      }  # [N*m/rad]  # [N*m*s/rad]
         # action scale: target angle = actionRescale * action + cur_dof_pos
         action_scale = 1
@@ -180,12 +186,12 @@ class CAS02Cfg( LeggedRobotCfg ):
         only_positive_rewards = False # if true negative total rewards are clipped at zero (avoids early termination problems)
         orientation_sigma = 1
         is_gaussian = True
-        target_head_height = 1.5
+        target_head_height = 1.4
         target_head_margin = 1
         target_base_height_phase1 = 0.55
         target_base_height_phase2 = 0.55
         target_base_height_phase3 = 0.8
-        orientation_threshold = 0.99
+        orientation_threshold = 0.9
         left_foot_displacement_sigma = -2
         right_foot_displacement_sigma = -2
         target_dof_pos_sigma = -0.1
@@ -201,10 +207,10 @@ class CAS02Cfg( LeggedRobotCfg ):
 
     class constraints( LeggedRobotCfg.rewards ):
         is_gaussian = True
-        target_head_height = 1.5
+        target_head_height = 1.4
         target_head_margin = 1
         orientation_height_threshold = 0.9
-        target_base_height = 0.55
+        target_base_height = 0.92
 
         left_foot_displacement_sigma = -2
         right_foot_displacement_sigma = -2
@@ -225,21 +231,21 @@ class CAS02Cfg( LeggedRobotCfg ):
             regu_dof_vel_limits = -1 
 
             # style reward
-            style_waist_deviation = -14
+            style_waist_deviation = -10
             style_hip_yaw_deviation = -10
             style_hip_roll_deviation = -10
             style_shoulder_roll_deviation = -2.5
-            style_left_foot_displacement = 2.5
-            style_right_foot_displacement = 2.5
+            style_left_foot_displacement = 3.0
+            style_right_foot_displacement = 3.0
             style_knee_deviation = -0.25
             style_shank_orientation = 10
-            style_ground_parallel = 30
+            style_ground_parallel = 20
             style_feet_distance = -10
             style_style_ang_vel_xy = 1
 
             # post-task reward
-            target_ang_vel_xy = 15
-            target_lin_vel_xy = 15
+            target_ang_vel_xy = 13
+            target_lin_vel_xy = 13
             target_feet_height_var = 2.5
             target_target_upper_dof_pos = 10
             target_target_orientation = 10
