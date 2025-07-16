@@ -180,7 +180,7 @@ def run_mujoco(policy, cfg):
 
     # mujoco.set_mjcb_control(my_controller)
     
-    viewer = mujoco_viewer.MujocoViewer(model, data, panel_num=1)
+    viewer = mujoco_viewer.MujocoViewer(model, data)
     #viewer.launch(model, data) 
 
     target_q = np.zeros((cfg.env.num_actions), dtype=np.double)
@@ -282,11 +282,6 @@ def run_mujoco(policy, cfg):
         # else:
         #     target_q_filter = action * cfg.control.action_scale
 
-        # # Generate PD control
-        # target_q_filter[12] = -target_q_filter[9] * 0.5 + 0.2
-        # target_q_filter[15] = -0.26175
-        # target_q_filter[17] = -target_q_filter[3] * 0.5 + 0.2 
-        # target_q_filter[20] = -0.26175
         tau = pd_control(target_q + q, q, cfg.robot_config.kps,
                         target_dq, dq, cfg.robot_config.kds)  # Calc torques
 
@@ -415,7 +410,7 @@ def run_mujoco(policy, cfg):
             }
             )
         else:
-            logger._plot(save_path="/home/casbot/ZHZ_ws/HoST/legged_gym/legged_gym/plots/fig3.png")
+            logger._plot(save_path="/home/casbot/ZHZ_ws/HoST/legged_gym/legged_gym/plots/fig4.png")
 
         if(render_index % 2 ==0):
             viewer.render()
@@ -454,28 +449,28 @@ if __name__ == '__main__':
                 mujoco_model_path = f'{LEGGED_GYM_ROOT_DIR}/resources/robots/Mrobot/mjcf/mjmodel_terrain.xml'
             else:
                 mujoco_model_path = f'{LEGGED_GYM_ROOT_DIR}/resources/robots/02/mjmodel02fb.xml'
-            sim_duration = 20.0
+            sim_duration = 25.0
             # low level control frequency (In sim 200Hz, in real robot 500Hz)
             dt = 0.005
             # policy inference frequency 50Hz
             decimation = 4
 
         class robot_config:
-            kps = np.array([350, 350, 350, 350, 120, 120, \
-                            350, 350, 350, 350, 120, 120,
+            kps = np.array([360, 350, 350, 350, 110, 110, \
+                            360, 350, 350, 350, 110, 110,
                             200,
                             200, 200, 0, 200, 0,
                             200, 200, 0, 200, 0], dtype=np.double)
-            kds = np.array([4.0, 4.0, 4.0, 4.0, 2.0, 2.0,  \
-                            4.0, 4.0, 4.0, 4.0, 2.0, 2.0,
+            kds = np.array([4.0, 4.0, 4.0, 4.0, 1.9, 1.9,  \
+                            4.0, 4.0, 4.0, 4.0, 1.9, 1.9,
                             5.0,
                             4.0, 4.0, .5, 4.0, 0.0,
                             4.0, 4.0, .5, 4.0, 0.0], dtype=np.double)
         
             # tau_limit = np.array([120., 120., 120., 120.,  90.,  64.,   \
             #                       120., 120., 120., 120.,  90.,  64.], dtype=np.double)
-            tau_limit = np.array([150., 150., 70., 150.,  70.,  70.,   \
-                                  150., 150., 70., 150.,  70.,  70.,
+            tau_limit = np.array([150., 150., 150., 250.,  70.,  70.,   \
+                                  150., 150., 150., 250.,  70.,  70.,
                                   70,
                                   65., 65., 16., 65., 16.,
                                   65., 65., 16., 65., 16.], dtype=np.double)

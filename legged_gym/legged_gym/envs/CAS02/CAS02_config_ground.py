@@ -216,7 +216,7 @@ class CAS02Cfg( LeggedRobotCfg ):
         right_foot_displacement_sigma = -2
         hip_yaw_var_sigma = -2
         target_dof_pos_sigma = -0.1
-        post_task = True
+        post_task = False
         
         class scales:
             # regularization reward
@@ -237,15 +237,15 @@ class CAS02Cfg( LeggedRobotCfg ):
             style_shoulder_roll_deviation = -2.5
             style_left_foot_displacement = 3.0
             style_right_foot_displacement = 3.0
-            style_knee_deviation = -0.25
+            style_knee_deviation = -0.5
             style_shank_orientation = 10
             style_ground_parallel = 20
             style_feet_distance = -10
             style_style_ang_vel_xy = 1
 
             # post-task reward
-            target_ang_vel_xy = 13
-            target_lin_vel_xy = 13
+            target_ang_vel_xy = 13.0
+            target_lin_vel_xy = 13.0
             target_feet_height_var = 2.5
             target_target_upper_dof_pos = 10
             target_target_orientation = 10

@@ -7,16 +7,18 @@ import isaacgym
 from legged_gym.envs import *
 from legged_gym.utils import get_args, task_registry
 import torch
+from record_config import record_config
 
 
 # python legged_gym/legged_gym/scripts/train.py --task CAS02_ground --headless
-# tensorboard --logdir=/home/casbot/ZHZ_ws/HoST/legged/home/casbot/ZHZ_ws/HoST/legged_gym/logs
+# tensorboard --logdir /home/casbot/ZHZ_ws/HoST/legged_gym/logs
 
 
 
 def train(args):
     env, env_cfg = task_registry.make_env(name=args.task, args=args)
-    ppo_runner, train_cfg = task_registry.make_alg_runner(env=env, env_cfg=env_cfg, name=args.task, args=args)
+    ppo_runner, train_cfg, log_dir = task_registry.make_alg_runner(env=env, env_cfg=env_cfg, name=args.task, args=args)
+    record_config(log_root=log_dir, name=args.task)
     ppo_runner.learn(num_learning_iterations=train_cfg.runner.max_iterations, init_at_random_ep_len=train_cfg.runner.init_at_random_ep_len)
 
 if __name__ == '__main__':
