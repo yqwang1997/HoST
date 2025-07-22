@@ -1,70 +1,65 @@
 from legged_gym.envs.base.legged_robot_config import LeggedRobotCfg, LeggedRobotCfgPPO
 
 
-class G1Cfg( LeggedRobotCfg ):
+class CAS02Cfg( LeggedRobotCfg ):
     class init_state( LeggedRobotCfg.init_state ):
         pos = [0.0, 0.0, 0.5] # x,y,z [m]
         rot = [0.0, 1, 0, 1.0] # x,y,z,w [quat]
         target_joint_angles = { # = target angles [rad] when action = 0.0
-           'left_hip_yaw_joint' : 0. ,   
-           'left_hip_roll_joint' : 0,               
-           'left_hip_pitch_joint' : -0.1,#-0.1,         
-           'left_knee_joint' : 0.3, #0.3,       
-           'left_ankle_pitch_joint' : -0.2,#-0.2,     
-           'left_ankle_roll_joint' : 0,
-           'left_wrist_roll_joint' : 0,         
-           'right_hip_yaw_joint' : 0., 
-           'right_hip_roll_joint' : 0, 
-           'right_hip_pitch_joint' : -0.1, #-0.1,                                       
-           'right_knee_joint' : 0.3, #0.3,                                             
-           'right_ankle_pitch_joint': -0.2,#-0.2,                              
-           'right_ankle_roll_joint' : 0,     
-           'right_wrist_roll_joint' : 0,
-            'waist_yaw_joint' : 0.0, 
-            'waist_pitch_joint' : 0.0, 
-            'waist_roll_joint' : 0.0, 
-            'left_shoulder_pitch_joint' : 0.0,
-            'left_shoulder_roll_joint' : 0.3, 
-            'left_shoulder_yaw_joint' : 0.0,
-            'left_elbow_joint' : 0,
-            'right_shoulder_pitch_joint' : 0,
-            'right_shoulder_roll_joint' : -0.3,
-            'right_shoulder_yaw_joint' : 0.0,
-            'right_elbow_joint' : 0,
+           'left_leg_pelvic_pitch_joint' : -0.185,   
+           'left_leg_pelvic_roll_joint' : 0,               
+           'left_leg_pelvic_yaw_joint' : 0,         
+           'left_leg_knee_pitch_joint' : 0.36,       
+           'left_leg_ankle_pitch_joint' : -0.175,
+           'left_leg_ankle_roll_joint' : 0,          
+           'right_leg_pelvic_pitch_joint' : -0.185, 
+           'right_leg_pelvic_roll_joint' : 0, 
+           'right_leg_pelvic_yaw_joint' : 0,                                       
+           'right_leg_knee_pitch_joint' : 0.36,                                             
+           'right_leg_ankle_pitch_joint' : -0.175,   
+           'right_leg_ankle_roll_joint' : 0,                                                                       
+           'waist_yaw_joint' : 0., 
+           'left_shoulder_pitch_joint' : 0.08725, 
+           'left_shoulder_roll_joint' : 0., 
+           'left_shoulder_yaw_joint' : 0.,
+           'left_elbow_pitch_joint'  : -0.26175,
+           'left_wrist_yaw_joint' : 0.,
+           'right_shoulder_pitch_joint' : 0.08725,
+           'right_shoulder_roll_joint' : 0.,
+           'right_shoulder_yaw_joint' : 0.,
+           'right_elbow_pitch_joint' : -0.26175,
+           'right_wrist_yaw_joint' : 0.,
         }
 
-
-        default_joint_angles = { # = target angles [rad] when action = 0.0
-           'left_hip_yaw_joint' : 0. ,   
-           'left_hip_roll_joint' : 0,               
-           'left_hip_pitch_joint' : -0.1,#-0.1,         
-           'left_knee_joint' : 0.3, #0.3,       
-           'left_ankle_pitch_joint' : -0.2,#-0.2,     
-           'left_ankle_roll_joint' : 0,     
-            'left_wrist_roll_joint' : 0,    
-           'right_hip_yaw_joint' : 0., 
-           'right_hip_roll_joint' : 0, 
-           'right_hip_pitch_joint' : -0.1, #-0.1,                                       
-           'right_knee_joint' : 0.3, #0.3,                                             
-           'right_ankle_pitch_joint': -0.2,#-0.2,                              
-           'right_ankle_roll_joint' : 0,       
-           'right_wrist_roll_joint' : 0,
-            'waist_yaw_joint' : 0.0, 
-            'waist_pitch_joint' : 0.0, 
-            'waist_roll_joint' : 0.0, 
-            'left_shoulder_pitch_joint' : 0,
-            'left_shoulder_roll_joint' : 0.0,
-            'left_shoulder_yaw_joint' : 0.0,
-            'left_elbow_joint' : 0.8,
-            'right_shoulder_pitch_joint' : 0,
-            'right_shoulder_roll_joint' : 0.0,
-            'right_shoulder_yaw_joint' : 0.0,
-            'right_elbow_joint' : 0.8,
+        default_joint_angles = { 
+           'left_leg_pelvic_pitch_joint' : -0.185,   
+           'left_leg_pelvic_roll_joint' : 0,               
+           'left_leg_pelvic_yaw_joint' : 0,         
+           'left_leg_knee_pitch_joint' : 0.36,       
+           'left_leg_ankle_pitch_joint' : -0.175,
+           'left_leg_ankle_roll_joint' : 0,          
+           'right_leg_pelvic_pitch_joint' : -0.185, 
+           'right_leg_pelvic_roll_joint' : 0, 
+           'right_leg_pelvic_yaw_joint' : 0,                                       
+           'right_leg_knee_pitch_joint' : 0.36,                                             
+           'right_leg_ankle_pitch_joint' : -0.175,   
+           'right_leg_ankle_roll_joint' : 0,                                                                       
+           'waist_yaw_joint' : 0., 
+           'left_shoulder_pitch_joint' : 0., 
+           'left_shoulder_roll_joint' : 0., 
+           'left_shoulder_yaw_joint' : 0.,
+           'left_elbow_pitch_joint'  : -0.,
+           'left_wrist_yaw_joint' : 0.,
+           'right_shoulder_pitch_joint' : 0.,
+           'right_shoulder_roll_joint' : 0.,
+           'right_shoulder_yaw_joint' : 0.,
+           'right_elbow_pitch_joint' : -0.,
+           'right_wrist_yaw_joint' : 0.,
         }
 
     class env(LeggedRobotCfg.env):
-        num_one_step_observations=  76 #+ 3 * 2#+ 3 * 11  # +3*11 actions / -3 commands  i
-        num_actions = 23#+ 2# + 11
+        num_one_step_observations= 76
+        num_actions = 23
         num_dofs = 23
         num_actor_history = 6
         num_observations = num_actor_history * num_one_step_observations
@@ -74,23 +69,29 @@ class G1Cfg( LeggedRobotCfg ):
     class control( LeggedRobotCfg.control ):
         # PD Drive parameters:
         control_type = 'P'
-        stiffness = {'hip': 150,
-                     'knee': 200,
-                     'ankle': 40,
-                     'shoulder': 100,
-                     'elbow': 100,
-                     'waist': 100,
-                     'wrist': 100,
+        stiffness = {'pelvic': 350,
+                     'knee': 350,
+                     'ankle': 150,
+                     #'shoulder': 350,
+                     'elbow': 120,
+                     'waist': 120,
+                     'wrist': 0,
+                     'shoulder_pitch':200,
+                     'shoulder_roll':200,
+                     'shoulder_yaw':200,
                      }  # [N*m/rad]
-        damping = {  'hip': 4,
+        damping = {  'pelvic': 6,
                      'knee': 6,
-                     'ankle': 2,
-                     'shoulder': 4,
+                     'ankle': 4,
+                     #'shoulder': 4,
+                     'shoulder_pitch':4,
+                     'shoulder_roll':4,
+                     'shoulder_yaw':4,
                      'elbow': 4,
                      'waist': 4,
-                     'wrist': 4,
+                     'wrist': 1,
                      }  # [N*m/rad]  # [N*m*s/rad]
-        # action scale: target angle = actionScale * action + defaultAngle
+        # action scale: target angle = actionRescale * action + cur_dof_pos
         action_scale = 1
         # decimation: Number of control action updates @ sim DT per policy DT
         decimation = 4
@@ -115,68 +116,58 @@ class G1Cfg( LeggedRobotCfg ):
         terrain_width = 8.
         num_rows = 1 # number of terrain rows (levels)
         num_cols = 20 # number of terrain cols (types)
-        # terrain types: [smooth slope, rough slope, stairs up, stairs down, discrete]
         terrain_proportions = [1, 0., 0, 0, 0]
         # trimesh only:
         slope_treshold = 0.75 # slopes above this threshold will be corrected to vertical surfaces
 
     class asset( LeggedRobotCfg.asset ):
-        file = '{LEGGED_GYM_ROOT_DIR}/resources/robots/g1/g1_23dof.urdf'
-        name = "g1"
-        left_foot_name = "left_ankle_pitch"
-        right_foot_name = "right_ankle_pitch"
-        left_knee_name = 'left_knee'
-        right_knee_name = 'right_knee'
-        left_thigh_name = 'left_hip_pitch'
-        right_thigh_name = 'right_hip_pitch'
+        file = '{LEGGED_GYM_ROOT_DIR}/resources/robots/02/CASBOT_02.urdf'
+        name = "CASBOT"
+        left_foot_name = "left_leg_ankle_pitch"
+        right_foot_name = "right_leg_ankle_pitch"
+        left_knee_name = 'left_leg_knee'
+        right_knee_name = 'right_leg_knee'
         foot_name = "ankle_roll"
-        penalize_contacts_on = ["elbow", 'shoulder', 'waist', 'knee', 'hip']
+        penalize_contacts_on = ["elbow", 'shoulder', 'waist', 'knee', 'pelvic']
         terminate_after_contacts_on = []    #'torse'
-        self_collisions = 0 # 1 to disable, 0 to enable...bitwise filter
-        flip_visual_attachments = False
 
         left_shoulder_name = "left_shoulder"
         right_shoulder_name = "right_shoulder"
 
-        left_leg_joints = ['left_hip_yaw_joint', 'left_hip_roll_joint', 'left_hip_pitch_joint', 'left_knee_joint', 'left_ankle_pitch_joint', 'left_ankle_roll_joint']
-        right_leg_joints = ['right_hip_yaw_joint', 'right_hip_roll_joint', 'right_hip_pitch_joint', 'right_knee_joint', 'right_ankle_pitch_joint', 'right_ankle_roll_joint']
-        left_hip_joints = ['left_hip_yaw_joint']
-        right_hip_joints = ['right_hip_yaw_joint']
-
-        left_hip_roll_joints = ['left_hip_roll_joint']
-        right_hip_roll_joints = ['right_hip_roll_joint']    
-
-        left_hip_pitch_joints = ['left_hip_pitch_joint']
-        right_hip_pitch_joints = ['right_hip_pitch_joint']    
+        left_leg_joints = ['left_leg_pelvic_pitch_joint', 'left_leg_pelvic_roll_joint', 'left_leg_pelvic_yaw_joint', 'left_leg_knee_pitch_joint', 'left_leg_ankle_pitch_joint', 'left_leg_ankle_roll_joint']
+        right_leg_joints = ['right_leg_pelvic_pitch_joint', 'right_leg_pelvic_roll_joint', 'right_leg_pelvic_yaw_joint', 'right_leg_knee_pitch_joint', 'right_leg_ankle_pitch_joint', 'right_leg_ankle_roll_joint']
+        left_hip_joints = ['left_leg_pelvic_yaw_joint']
+        right_hip_joints = ['right_leg_pelvic_yaw_joint']
+        left_hip_roll_joints = ['left_leg_pelvic_roll_joint']
+        right_hip_roll_joints = ['right_leg_pelvic_roll_joint']    
+        left_hip_pitch_joints = ['left_leg_pelvic_pitch_joint']
+        right_hip_pitch_joints = ['right_leg_pelvic_pitch_joint']    
 
         left_shoulder_roll_joints = ['left_shoulder_roll_joint']
         right_shoulder_roll_joints = ['right_shoulder_roll_joint']    
 
+        left_knee_joints = ['left_leg_knee_pitch_joint']
+        right_knee_joints = ['right_leg_knee_pitch_joint']    
 
-        left_knee_joints = ['left_knee_joint']
-        right_knee_joints = ['right_knee_joint']    
-
-        left_arm_joints = ['left_shoulder_pitch_joint', 'left_shoulder_roll_joint', 'left_shoulder_yaw_joint', 'left_elbow_joint', 'left_wrist_roll_joint']
-        right_arm_joints = ['right_shoulder_pitch_joint', 'right_shoulder_roll_joint', 'right_shoulder_yaw_joint', 'right_elbow_joint', 'right_wrist_roll_joint']
+        left_arm_joints = ['left_shoulder_pitch_joint', 'left_shoulder_roll_joint', 'left_shoulder_yaw_joint', 'left_elbow_pitch_joint', 'left_wrist_yaw_joint']
+        right_arm_joints = ['right_shoulder_pitch_joint', 'right_shoulder_roll_joint', 'right_shoulder_yaw_joint', 'right_elbow_pitch_joint', 'right_wrist_yaw_joint']
         waist_joints = ["waist_yaw_joint"]
-        knee_joints = ['left_knee_joint', 'right_knee_joint']
-        ankle_joints = [ 'left_ankle_pitch_joint', 'left_ankle_roll_joint', 'right_ankle_pitch_joint', 'right_ankle_roll_joint']
+        knee_joints = ['left_leg_knee_pitch_joint', 'right_leg_knee_pitch_joint']
+        ankle_joints = [ 'left_leg_ankle_pitch_joint', 'left_leg_ankle_roll_joint', 'right_leg_ankle_pitch_joint', 'right_leg_ankle_roll_joint']
 
         keyframe_name = "keyframe"
         head_name = 'keyframe_head'
-        armature = 0.01
 
-        trunk_names = ["pelvis", "torso"]
-        base_name = 'torso_link'
-        tracking_body_names =  ['pelvis']
+        trunk_names = ["base", "waist_yaw"]
+        base_name = 'waist_yaw_link'
 
         left_upper_body_names = ['left_shoulder_pitch', 'left_elbow']
         right_upper_body_names = ['right_shoulder_pitch', 'right_elbow']
-        left_lower_body_names = ['left_hip_pitch', 'left_ankle_roll', 'left_knee']
-        right_lower_body_names = ['right_hip_pitch', 'right_ankle_roll', 'right_knee']
+        left_lower_body_names = ['left_leg_pelvic_pitch', 'left_leg_ankle_roll', 'left_leg_knee']
+        right_lower_body_names = ['right_leg_pelvic_pitch', 'right_leg_ankle_roll', 'right_leg_knee']
 
-        left_ankle_names = ['left_ankle_roll']
-        right_ankle_names = ['right_ankle_roll']
+        left_ankle_names = ['left_leg_ankle_roll']
+        right_ankle_names = ['right_leg_ankle_roll']
 
         density = 0.001
         angular_damping = 0.01
@@ -185,22 +176,24 @@ class G1Cfg( LeggedRobotCfg ):
         max_linear_velocity = 1000.
         armature = 0.01
         thickness = 0.01
+        self_collisions = 0 # 1 to disable, 0 to enable...bitwise filter
+        flip_visual_attachments = False
 
     class rewards( LeggedRobotCfg.rewards ):
         soft_dof_pos_limit = 0.9
         soft_dof_vel_limit = 0.9
-        base_height_target = 0.75
-        #base_height_sigma = 0.25
+        base_height_target = 0.9
         tracking_dof_sigma = 0.25
+
         only_positive_rewards = False # if true negative total rewards are clipped at zero (avoids early termination problems)
         orientation_sigma = 1
         is_gaussian = True
-        target_head_height = 1
+        target_head_height = 1.4
         target_head_margin = 1
-        target_base_height_phase1 = 0.45
-        target_base_height_phase2 = 0.45
-        target_base_height_phase3 = 0.65
-        orientation_threshold = 0.99
+        target_base_height_phase1 = 0.55
+        target_base_height_phase2 = 0.55
+        target_base_height_phase3 = 0.8
+        orientation_threshold = 0.9
         left_foot_displacement_sigma = -2
         right_foot_displacement_sigma = -2
         target_dof_pos_sigma = -0.1
@@ -208,7 +201,7 @@ class G1Cfg( LeggedRobotCfg ):
 
         reward_groups = ['task', 'regu', 'style', 'target']
         num_reward_groups = len(reward_groups)
-        reward_group_weights = [1, 0.1, 1, 1]
+        reward_group_weights = [2.5, 0.1, 1, 1]
 
         class scales:
             task_orientation = 1
@@ -216,10 +209,10 @@ class G1Cfg( LeggedRobotCfg ):
 
     class constraints( LeggedRobotCfg.rewards ):
         is_gaussian = True
-        target_head_height = 1
+        target_head_height = 1.4
         target_head_margin = 1
         orientation_height_threshold = 0.9
-        target_base_height = 0.45
+        target_base_height = 0.9
 
         left_foot_displacement_sigma = -2
         right_foot_displacement_sigma = -2
@@ -237,30 +230,28 @@ class G1Cfg( LeggedRobotCfg ):
             regu_dof_vel = -1e-3
             regu_joint_tracking_error = -0.00025
             regu_dof_pos_limits = -100.0
-            regu_dof_vel_limits = -1 #0.0
+            regu_dof_vel_limits = -1 
 
             # style reward
             style_waist_deviation = -10
             style_hip_yaw_deviation = -10
             style_hip_roll_deviation = -10
-            style_hip_pitch_deviation = -10
             style_shoulder_roll_deviation = -2.5
-            style_left_foot_displacement = 2.5
-            style_right_foot_displacement = 2.5
-            style_knee_deviation = -0.25
-            style_thigh_ori = 10
+            style_left_foot_displacement = 3.0
+            style_right_foot_displacement = 3.0
+            style_knee_deviation = -0.5
+            style_shank_orientation = 15
+            style_ground_parallel = 25
             style_feet_distance = -10
-            style_style_ang_vel_xy = 25
+            style_style_ang_vel_xy = 1
 
             # post-task reward
-            target_ang_vel_xy = 10
-            target_lin_vel_xy = 10
+            target_ang_vel_xy = 13.0
+            target_lin_vel_xy = 13.0
             target_feet_height_var = 2.5
             target_target_upper_dof_pos = 10
-            target_lower_body_deviation = 10
             target_target_orientation = 10
             target_target_base_height = 10
-
 
     class domain_rand:
         use_random = True
@@ -287,10 +278,10 @@ class G1Cfg( LeggedRobotCfg ):
         restitution_range = [0.0, 1.0]
         
         randomize_kp = use_random
-        kp_range = [0.85, 1.25]
+        kp_range = [0.85, 1.15]
         
         randomize_kd = use_random
-        kd_range = [0.85, 1.25]
+        kd_range = [0.85, 1.15]
         
         randomize_initial_joint_pos = True
         initial_joint_pos_scale = [0.9, 1.1]
@@ -302,10 +293,10 @@ class G1Cfg( LeggedRobotCfg ):
 
         delay = use_random
         max_delay_timesteps = 5
-
+    
     class curriculum:
         pull_force = True
-        force = 100 # 100*2=200 is the actuatl force because of a extra keyframe torso link
+        force = 300 # 100*2=200 is the actuatl force because of a extra keyframe torso link
         dof_vel_limit = 300
         base_vel_limit = 20
         threshold_height = 0.9
@@ -331,7 +322,7 @@ class G1Cfg( LeggedRobotCfg ):
             contact_collection = 2 # 0: never, 1: last sub-step, 2: all sub-steps (default=2)
 
 
-class G1CfgPPO( LeggedRobotCfgPPO ):
+class CAS02CfgPPO( LeggedRobotCfgPPO ):
     runner_class_name = 'OnPolicyRunner'
     class policy:
         init_noise_std = 0.8
@@ -347,7 +338,7 @@ class G1CfgPPO( LeggedRobotCfgPPO ):
     class runner( LeggedRobotCfgPPO.runner ):
         run_name = ''
         save_interval = 500 # check for potential saves every this many iterations
-        experiment_name = 'g1_ground_prone'
+        experiment_name = 'CAS02_ground'
         algorithm_class_name = 'PPO'
         init_at_random_ep_len = True
         max_iterations = 12000 # number of policy updates

@@ -261,7 +261,7 @@ def run_mujoco(policy, cfg):
                 policy_input[0, i * cfg.env.num_one_step_observations : (i + 1) * cfg.env.num_one_step_observations] = hist_obs[i][0, :]
             action[:cfg.env.num_actions] = policy(torch.tensor(policy_input))[0].detach().numpy()
             action = np.clip(action, -cfg.normalization.clip_actions, cfg.normalization.clip_actions)
-            if count_lowlevel < 500:
+            if count_lowlevel < 750:
                 target_q *= 0
             else:
                 target_q = action * action_rescale
@@ -449,20 +449,20 @@ if __name__ == '__main__':
                 mujoco_model_path = f'{LEGGED_GYM_ROOT_DIR}/resources/robots/Mrobot/mjcf/mjmodel_terrain.xml'
             else:
                 mujoco_model_path = f'{LEGGED_GYM_ROOT_DIR}/resources/robots/02/mjmodel02fb.xml'
-            sim_duration = 25.0
+            sim_duration = 30.0
             # low level control frequency (In sim 200Hz, in real robot 500Hz)
             dt = 0.005
             # policy inference frequency 50Hz
             decimation = 4
 
         class robot_config:
-            kps = np.array([360, 350, 350, 350, 110, 110, \
-                            360, 350, 350, 350, 110, 110,
+            kps = np.array([360, 350, 350, 350, 100, 100, \
+                            360, 350, 350, 350, 100, 100,
                             200,
                             200, 200, 0, 200, 0,
                             200, 200, 0, 200, 0], dtype=np.double)
-            kds = np.array([4.0, 4.0, 4.0, 4.0, 1.9, 1.9,  \
-                            4.0, 4.0, 4.0, 4.0, 1.9, 1.9,
+            kds = np.array([4.0, 4.0, 4.0, 4.0, 2.0, 1.8,  \
+                            4.0, 4.0, 4.0, 4.0, 2.0, 1.8,
                             5.0,
                             4.0, 4.0, .5, 4.0, 0.0,
                             4.0, 4.0, .5, 4.0, 0.0], dtype=np.double)

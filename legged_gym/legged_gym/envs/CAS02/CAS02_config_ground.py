@@ -71,7 +71,7 @@ class CAS02Cfg( LeggedRobotCfg ):
         control_type = 'P'
         stiffness = {'pelvic': 350,
                      'knee': 350,
-                     'ankle': 120,
+                     'ankle': 150,
                      #'shoulder': 350,
                      'elbow': 120,
                      'waist': 120,
@@ -238,8 +238,8 @@ class CAS02Cfg( LeggedRobotCfg ):
             style_left_foot_displacement = 3.0
             style_right_foot_displacement = 3.0
             style_knee_deviation = -0.5
-            style_shank_orientation = 10
-            style_ground_parallel = 20
+            style_shank_orientation = 15
+            style_ground_parallel = 25
             style_feet_distance = -10
             style_style_ang_vel_xy = 1
 

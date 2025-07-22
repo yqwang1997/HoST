@@ -595,9 +595,9 @@ class LeggedRobot(BaseTask):
         self.target_dof_pos = torch.zeros(self.num_envs, self.num_dof, dtype=torch.float, device=self.device, requires_grad=False)
         for i in range(self.num_dofs):
             name = self.dof_names[i]
-            print("Name of joint is: ", name)
+            # print("Name of joint is: ", name)
             angle = self.cfg.init_state.default_joint_angles[name]
-            print("Angle for each joint is: ", angle)
+            # print("Angle for each joint is: ", angle)
             self.default_dof_pos[i] = angle
             self.target_dof_pos[:, i] = self.cfg.init_state.target_joint_angles[name]
             found = False
@@ -632,9 +632,10 @@ class LeggedRobot(BaseTask):
             self.payload = torch_rand_float(self.cfg.domain_rand.payload_mass_range[0], self.cfg.domain_rand.payload_mass_range[1], (self.num_envs, 1), device=self.device)
         if self.cfg.domain_rand.randomize_com_displacement:
             self.com_displacement = torch_rand_float(self.cfg.domain_rand.com_displacement_range[0], self.cfg.domain_rand.com_displacement_range[1], (self.num_envs, 3), device=self.device)
-            self.com_displacement[:, 0] = self.com_displacement[:, 0] * 4
+            self.com_displacement[:, 0] = self.com_displacement[:, 0] * 4 - 0.4
             self.com_displacement[:, 1] = self.com_displacement[:, 1] * 4
             self.com_displacement[:, 2] = self.com_displacement[:, 2] * 2
+            print("质心",self.com_displacement)
         if self.cfg.domain_rand.delay:
             self.delay_idx = torch.randint(low=0, high=self.cfg.domain_rand.max_delay_timesteps, size=(self.num_envs,), device=self.device)
 
@@ -967,6 +968,7 @@ class LeggedRobot(BaseTask):
         self.left_ankle_names = left_ankle_names
         for i, name in enumerate(left_ankle_names):
             self.left_ankle_indices[i] = self.gym.find_actor_rigid_body_handle(self.envs[0], self.actor_handles[0], name)
+        print("left ankle are",self.left_ankle_names)
 
         right_ankle_names = []
         for target_name in self.cfg.asset.right_ankle_names:
@@ -977,6 +979,7 @@ class LeggedRobot(BaseTask):
         self.right_ankle_names = right_ankle_names
         for i, name in enumerate(right_ankle_names):
             self.right_ankle_indices[i] = self.gym.find_actor_rigid_body_handle(self.envs[0], self.actor_handles[0], name)
+        print("right ankle are",right_ankle_names)
 
     def _get_env_origins(self):
         """ Sets environment origins. On rough terrain the origins are defined by the terrain platforms.
@@ -1161,7 +1164,7 @@ class LeggedRobot(BaseTask):
         feet_orientation = torch.mean(torch.concat([left_feet_orientation, right_feet_orientation], dim=-1), dim=-1)
 
         base_height = self.root_states[:, 2] > self.cfg.rewards.target_base_height_phase1
-        reward = tolerance(feet_orientation, [0.8, np.inf], 1, 0.1) * base_height#.unsqueeze(1) 
+        reward = tolerance(feet_orientation, [0.8, np.inf], 1, 0.1) #* base_height#.unsqueeze(1) 
 
         if self.cfg.constraints.post_task:
             standup  = self.root_states[:, 2] > self.cfg.rewards.target_base_height_phase3
@@ -1173,7 +1176,7 @@ class LeggedRobot(BaseTask):
         right_ankle_pos = self.rigid_body_states[:, self.right_ankle_indices, 2].clone() * 10
         var = left_ankle_pos.var(1) + right_ankle_pos.var(1)
         var = torch.mean(torch.concat([left_ankle_pos.var(1).view(-1, 1), right_ankle_pos.var(1).view(-1, 1)], dim=-1), dim=-1)
-        reward = var < 0.03
+        reward = var < 0.06
 
         if self.cfg.constraints.post_task:
             standup  = self.root_states[:, 2] > self.cfg.rewards.target_base_height_phase3

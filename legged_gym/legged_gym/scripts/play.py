@@ -14,7 +14,7 @@ import numpy as np
 from collections import defaultdict
 from multiprocessing import Process, Value
 
-# python legged_gym/legged_gym/scripts/play.py --task CAS02_ground --checkpoint_path /home/casbot/ZHZ_ws/HoST/legged_gym/logs/CAS02_ground/Jun19_09-42-37_test_00/model_4000.pt
+# python legged_gym/legged_gym/scripts/play.py --task CAS02_ground --checkpoint_path /home/casbot/ZHZ_ws/HoST/legged_gym/logs/CAS02_ground/Jul15_16-05-39_/model_12000.pt
 
 def play(args):
     env_cfg, train_cfg = task_registry.get_cfgs(name=args.task)
@@ -37,7 +37,7 @@ def play(args):
 
     # export policy as a jit module (used to run it from C++)
     if EXPORT_POLICY:
-        path = os.path.join(LEGGED_GYM_ROOT_DIR, 'logs', train_cfg.runner.experiment_name, '2_exported', 'policies')
+        path = os.path.join(LEGGED_GYM_ROOT_DIR, 'logs', train_cfg.runner.experiment_name, 'test', 'policies')
         export_policy_as_jit(ppo_runner.alg.actor_critic, path)
         print('Exported policy as jit script to: ', path)
     
