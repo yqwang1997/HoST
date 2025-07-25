@@ -785,7 +785,7 @@ class LeggedRobot(BaseTask):
         start_pose.p = gymapi.Vec3(*self.base_init_state[:3])
 
         self.default_rigid_body_mass = torch.zeros(self.num_bodies, dtype=torch.float, device=self.device, requires_grad=False)
-        self.torso_link_index = body_names.index("torso_link")
+        self.torso_link_index = body_names.index("waist_yaw_link")
 
         self._get_env_origins()
         env_lower = gymapi.Vec3(0., 0., 0.)
@@ -874,16 +874,16 @@ class LeggedRobot(BaseTask):
         # import ipdb; ipdb.set_trace()
 
 
-        # import ipdb; ipdb.set_trace()
-        left_thigh_names = [s for s in body_names if self.cfg.asset.left_thigh_name in s and 'keyframe' not in s]
-        right_thigh_names = [s for s in body_names if self.cfg.asset.right_thigh_name in s and 'keyframe' not in s]
-        self.left_thigh_indices = torch.zeros(len(left_thigh_names), dtype=torch.long, device=self.device, requires_grad=False)
-        for i in range(len(left_thigh_names)):
-            self.left_thigh_indices[i] = self.gym.find_actor_rigid_body_handle(self.envs[0], self.actor_handles[0], left_thigh_names[i])
-        self.right_thigh_indices = torch.zeros(len(right_thigh_names), dtype=torch.long, device=self.device, requires_grad=False)
-        for i in range(len(right_thigh_names)):
-            self.right_thigh_indices[i] = self.gym.find_actor_rigid_body_handle(self.envs[0], self.actor_handles[0], right_thigh_names[i])
-        # import ipdb; ipdb.set_trace()
+        # # import ipdb; ipdb.set_trace()
+        # left_thigh_names = [s for s in body_names if self.cfg.asset.left_thigh_name in s and 'keyframe' not in s]
+        # right_thigh_names = [s for s in body_names if self.cfg.asset.right_thigh_name in s and 'keyframe' not in s]
+        # self.left_thigh_indices = torch.zeros(len(left_thigh_names), dtype=torch.long, device=self.device, requires_grad=False)
+        # for i in range(len(left_thigh_names)):
+        #     self.left_thigh_indices[i] = self.gym.find_actor_rigid_body_handle(self.envs[0], self.actor_handles[0], left_thigh_names[i])
+        # self.right_thigh_indices = torch.zeros(len(right_thigh_names), dtype=torch.long, device=self.device, requires_grad=False)
+        # for i in range(len(right_thigh_names)):
+        #     self.right_thigh_indices[i] = self.gym.find_actor_rigid_body_handle(self.envs[0], self.actor_handles[0], right_thigh_names[i])
+        # # import ipdb; ipdb.set_trace()
 
 
         self.knee_joint_indices = torch.zeros(len(self.cfg.asset.knee_joints), dtype=torch.long, device=self.device, requires_grad=False)
@@ -975,16 +975,16 @@ class LeggedRobot(BaseTask):
         self.upper_body_joint_indices = torch.cat([self.right_arm_joint_indices, self.left_arm_joint_indices, self.waist_joint_indices])
         self.lower_body_joint_indices = torch.cat([self.all_hip_joint_indices, self.knee_joint_indices, self.ankle_joint_indices])
 
-        # tracking bodies
-        tracking_body_names = []
-        for target_name in self.cfg.asset.tracking_body_names:
-            for source_name in body_names:
-                if target_name in source_name and 'keyframe' not in source_name and 'aux' not in source_name:
-                    tracking_body_names.append(source_name)
-        self.tracking_body_indices = torch.zeros(len(tracking_body_names), dtype=torch.long, device=self.device)
-        self.tracking_body_names = tracking_body_names
-        for i, name in enumerate(tracking_body_names):
-            self.tracking_body_indices[i] = self.gym.find_actor_rigid_body_handle(self.envs[0], self.actor_handles[0], name)
+        # # tracking bodies
+        # tracking_body_names = []
+        # for target_name in self.cfg.asset.tracking_body_names:
+        #     for source_name in body_names:
+        #         if target_name in source_name and 'keyframe' not in source_name and 'aux' not in source_name:
+        #             tracking_body_names.append(source_name)
+        # self.tracking_body_indices = torch.zeros(len(tracking_body_names), dtype=torch.long, device=self.device)
+        # self.tracking_body_names = tracking_body_names
+        # for i, name in enumerate(tracking_body_names):
+        #     self.tracking_body_indices[i] = self.gym.find_actor_rigid_body_handle(self.envs[0], self.actor_handles[0], name)
 
         left_upper_body_names = []
         for target_name in self.cfg.asset.left_upper_body_names:
@@ -1499,7 +1499,7 @@ class LeggedRobot(BaseTask):
         right_ankle_pos = self.rigid_body_states[:, self.right_ankle_indices, 2].clone() * 10
         var = left_ankle_pos.var(1) + right_ankle_pos.var(1)
         var = torch.mean(torch.concat([left_ankle_pos.var(1).view(-1, 1), right_ankle_pos.var(1).view(-1, 1)], dim=-1), dim=-1)
-        reward = var < 0.05
+        reward = var < 0.06
 
         if self.cfg.constraints.post_task:
             standup  = self.root_states[:, 2] > self.cfg.rewards.target_base_height_phase3

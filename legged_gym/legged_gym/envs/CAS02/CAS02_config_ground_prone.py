@@ -237,17 +237,17 @@ class CAS02Cfg( LeggedRobotCfg ):
             style_hip_yaw_deviation = -10
             style_hip_roll_deviation = -10
             style_shoulder_roll_deviation = -2.5
-            style_left_foot_displacement = 3.0
-            style_right_foot_displacement = 3.0
+            style_left_foot_displacement = 2.5
+            style_right_foot_displacement = 2.5
             style_knee_deviation = -0.5
-            style_shank_orientation = 15
-            style_ground_parallel = 25
+            style_shank_orientation = 10
+            style_ground_parallel = 30
             style_feet_distance = -10
             style_style_ang_vel_xy = 1
 
             # post-task reward
-            target_ang_vel_xy = 13.0
-            target_lin_vel_xy = 13.0
+            target_ang_vel_xy = 10.0
+            target_lin_vel_xy = 10.0
             target_feet_height_var = 2.5
             target_target_upper_dof_pos = 10
             target_target_orientation = 10
