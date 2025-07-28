@@ -247,7 +247,7 @@ class CAS02Cfg( LeggedRobotCfg ):
             style_shoulder_roll_deviation = -2.5
             style_left_foot_displacement = 3 # 2.5
             style_right_foot_displacement = 3 # 2.5
-            style_feet_parallel_alignment = 1 # 新加入的引导左右脚相对平行的reward, 暂不使用
+            style_feet_parallel_alignment = 1 # 新加入的引导左右脚相对平行的reward
             style_knee_bend_enforcement = 2.0  # 在起身过程中强制膝关节弯曲 5.0
             style_knee_deviation = -0.5 # -0.25
             style_shank_orientation = 10 # 10
@@ -262,7 +262,7 @@ class CAS02Cfg( LeggedRobotCfg ):
             target_ang_vel_xy = 10
             target_lin_vel_xy = 10
             target_feet_height_var = 2.5
-            target_target_upper_dof_pos = 10 # 10
+            target_target_upper_dof_pos = 10 
             target_target_orientation = 10
             target_target_base_height = 10
 
