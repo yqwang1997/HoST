@@ -2,10 +2,15 @@ import xml.etree.ElementTree as xml_et
 import numpy as np
 import cv2
 import noise
+import os
 
-ROBOT = "go2"
-INPUT_SCENE_PATH = "./scene.xml"
-OUTPUT_SCENE_PATH = "../unitree_robots/" + ROBOT + "/scene_terrain.xml"
+
+# python3 ./legged_gym/legged_gym/scripts/terrain_generator.py
+
+ROBOT = "02"
+# INPUT_SCENE_PATH = "./scene.xml"
+INPUT_SCENE_PATH = "/home/casbot/ZHZ_ws/HoST/legged_gym/resources/robots/02/mjmodel02fb_sit.xml"
+OUTPUT_SCENE_PATH = "/home/casbot/ZHZ_ws/HoST/legged_gym/resources/robots/02/02_sit_chair.xml"
 
 
 # zyx euler angle to quaternion
@@ -111,16 +116,16 @@ class TerrainGenerator:
         geo.attrib["quat"] = list_to_str(quat)
 
     def AddStairs(self,
-                  init_pos=[1.0, 0.0, 0.0],
+                  init_pos=[0.0, 0.0, 0.0],
                   yaw=0.0,
-                  width=0.2,
-                  height=0.15,
-                  length=1.5,
-                  stair_nums=10):
+                  width=0.3,
+                  height=0.5,
+                  length=1.2,
+                  stair_nums=3):
 
         local_pos = [0.0, 0.0, -0.5 * height]
         for i in range(stair_nums):
-            local_pos[0] += width
+            local_pos[0] -= width
             local_pos[2] += height
             x, y = rot2d(local_pos[0], local_pos[1], yaw)
             self.AddBox([x + init_pos[0], y + init_pos[1], local_pos[2]],
@@ -200,7 +205,7 @@ class TerrainGenerator:
                                             lacunarity=perlin_lacunarity)
                 terrain_image[y, x] = int((noise_value + 1) / 2 * 255)
 
-        cv2.imwrite("../unitree_robots/" + ROBOT + "/" + output_hfield_image,
+        cv2.imwrite("../robots/" + ROBOT + "/" + output_hfield_image,
                     terrain_image)
 
         hfield = xml_et.SubElement(self.asset, "hfield")
@@ -237,7 +242,7 @@ class TerrainGenerator:
         terrain_image = cv2.cvtColor(resized_image, cv2.COLOR_BGR2GRAY)
         if invert_gray:
             terrain_image = 255 - position
-        cv2.imwrite("../unitree_robots/" + ROBOT + "/" + output_hfield_image,
+        cv2.imwrite("../robots/" + ROBOT + "/" + output_hfield_image,
                     terrain_image)
 
         hfield = xml_et.SubElement(self.asset, "hfield")
@@ -261,37 +266,37 @@ if __name__ == "__main__":
     tg = TerrainGenerator()
 
     # Box obstacle
-    tg.AddBox(position=[1.5, 0.0, 0.1], euler=[0, 0, 0.0], size=[1, 1.5, 0.2])
+    #tg.AddBox(position=[1.5, 0.0, 0.1], euler=[0, 0, 0.0], size=[1, 1.5, 0.2])
     
     # Geometry obstacle
     # geo_type supports "plane", "sphere", "capsule", "ellipsoid", "cylinder", "box"
-    tg.AddGeometry(position=[1.5, 0.0, 0.25], euler=[0, 0, 0.0], size=[1.0,0.5,0.5],geo_type="cylinder")
+    #tg.AddGeometry(position=[1.5, 0.0, 0.25], euler=[0, 0, 0.0], size=[1.0,0.5,0.5],geo_type="cylinder")
 
     # Slope
-    tg.AddBox(position=[2.0, 2.0, 0.5],
-              euler=[0.0, -0.5, 0.0],
-              size=[3, 1.5, 0.1])
+    # tg.AddBox(position=[2.0, 2.0, 0.5],
+    #           euler=[0.0, -0.5, 0.0],
+    #           size=[3, 1.5, 0.1])
 
     # Stairs
-    tg.AddStairs(init_pos=[1.0, 4.0, 0.0], yaw=0.0)
+    tg.AddStairs(init_pos=[0.3, 0.0, 0.0], yaw=0.0)
 
     # Suspend stairs
-    tg.AddSuspendStairs(init_pos=[1.0, 6.0, 0.0], yaw=0.0)
+    #tg.AddSuspendStairs(init_pos=[1.0, 6.0, 0.0], yaw=0.0)
 
     # Rough ground
-    tg.AddRoughGround(init_pos=[-2.5, 5.0, 0.0],
-                      euler=[0, 0, 0.0],
-                      nums=[10, 8])
+    # tg.AddRoughGround(init_pos=[-2.5, 5.0, 0.0],
+    #                   euler=[0, 0, 0.0],
+    #                   nums=[10, 8])
 
     # Perlin heigh field
-    tg.AddPerlinHeighField(position=[-1.5, 4.0, 0.0], size=[2.0, 1.5])
+    # tg.AddPerlinHeighField(position=[-1.5, 4.0, 0.0], size=[2.0, 1.5])
 
     # Heigh field from image
-    tg.AddHeighFieldFromImage(position=[-1.5, 2.0, 0.0],
-                              euler=[0, 0, -1.57],
-                              size=[2.0,2.0],
-                              input_img="./unitree_robot.jpeg",
-                              image_scale=[1.0, 1.0],
-                              output_hfield_image="unitree_hfield.png")
+    # tg.AddHeighFieldFromImage(position=[-1.5, 2.0, 0.0],
+    #                           euler=[0, 0, -1.57],
+    #                           size=[2.0,2.0],
+    #                           input_img="./unitree_robot.jpeg",
+    #                           image_scale=[1.0, 1.0],
+    #                           output_hfield_image="02_hfield.png")
 
     tg.Save()

@@ -1,0 +1,12 @@
+Fri Jul 25 15:42:46 2025
+WARNING: mju_openResource: unknown file '/home/casbot/ZHZ_ws/HoST/legged_gym/resources/robots/02/scene_terrain.xml'
+
+Fri Jul 25 17:00:17 2025
+WARNING: Nan, Inf or huge value in QACC at DOF 3. The simulation is unstable. Time = 0.0150.
+
+Fri Jul 25 17:01:29 2025
+WARNING: Nan, Inf or huge value in QACC at DOF 3. The simulation is unstable. Time = 0.0330.
+
+Mon Jul 28 10:17:30 2025
+WARNING: mju_openResource: unknown file '/home/casbot/ZHZ_ws/HoST/legged_gym/resources/robots/02/02_sit_chair.xml.xml'
+

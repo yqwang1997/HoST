@@ -48,7 +48,7 @@ import csv
 from threading import Thread
 
 
-# python legged_gym/legged_gym/scripts/sim2sim.py --load_model /home/casbot/ZHZ_ws/HoST/legged_gym/logs/CAS02_ground/1_exported/policies/policy_1.pt
+# python legged_gym/legged_gym/scripts/mujoco_scripts/sim2sim.py --load_model /home/casbot/ZHZ_ws/HoST/legged_gym/logs/CAS02_ground/test/policies/policy_1.pt
 joystick_use = True
 joystick_opened = False
 
@@ -176,6 +176,28 @@ def run_mujoco(policy, cfg):
     model = mujoco.MjModel.from_xml_path(cfg.sim_config.mujoco_model_path)
     model.opt.timestep = cfg.sim_config.dt
     data = mujoco.MjData(model)
+    init_pose = {
+    # 左腿
+        "leg_l1_joint": -1.3,  # 髋关节弯曲
+        #"leg_l2_joint": 0.3,   # 侧摆
+        #"leg_l3_joint": 0.1,   # 旋转
+        "leg_l4_joint": 1.5,   # 膝关节
+        #"leg_l5_joint": -0.5,  # 踝关节
+        # 右腿（对称）
+        "leg_r1_joint": -1.3,
+        #"leg_r2_joint": -0.3,
+        #"leg_r3_joint": -0.1,
+        "leg_r4_joint": 1.5,
+        #"leg_r5_joint": -0.5,
+        # 手臂
+        #"upper_left_1_joint": 0.5,
+        #"upper_right_1_joint": 0.5
+    }
+
+    # 应用初始姿态
+    for joint_name, angle in init_pose.items():
+        joint_id = mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_JOINT, joint_name)
+        data.qpos[model.jnt_qposadr[joint_id]] = angle
     mujoco.mj_step(model, data)
 
     # mujoco.set_mjcb_control(my_controller)
@@ -265,7 +287,9 @@ def run_mujoco(policy, cfg):
                 target_q *= 0
             else:
                 target_q = action * action_rescale
+            
             target_pos = target_q + default_dof_pos
+            print("目标角度",target_pos)
 
             action_buffer.append(target_pos)
 
@@ -448,7 +472,7 @@ if __name__ == '__main__':
             if args.terrain:
                 mujoco_model_path = f'{LEGGED_GYM_ROOT_DIR}/resources/robots/Mrobot/mjcf/mjmodel_terrain.xml'
             else:
-                mujoco_model_path = f'{LEGGED_GYM_ROOT_DIR}/resources/robots/02/mjmodel02fb.xml'
+                mujoco_model_path = f'{LEGGED_GYM_ROOT_DIR}/resources/robots/02/02_sit_chair.xml'
             sim_duration = 30.0
             # low level control frequency (In sim 200Hz, in real robot 500Hz)
             dt = 0.005
@@ -456,13 +480,13 @@ if __name__ == '__main__':
             decimation = 4
 
         class robot_config:
-            kps = np.array([360, 350, 350, 350, 100, 100, \
-                            360, 350, 350, 350, 100, 100,
+            kps = np.array([350, 350, 350, 350, 100, 100, \
+                            350, 350, 350, 350, 100, 100,
                             200,
                             200, 200, 0, 200, 0,
                             200, 200, 0, 200, 0], dtype=np.double)
-            kds = np.array([4.0, 4.0, 4.0, 4.0, 2.0, 1.8,  \
-                            4.0, 4.0, 4.0, 4.0, 2.0, 1.8,
+            kds = np.array([5.0, 5.0, 5.0, 5.0, 2.0, 1.8,  \
+                            5.0, 5.0, 5.0, 5.0, 2.0, 1.8,
                             5.0,
                             4.0, 4.0, .5, 4.0, 0.0,
                             4.0, 4.0, .5, 4.0, 0.0], dtype=np.double)

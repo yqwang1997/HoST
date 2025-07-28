@@ -632,7 +632,7 @@ class LeggedRobot(BaseTask):
             self.payload = torch_rand_float(self.cfg.domain_rand.payload_mass_range[0], self.cfg.domain_rand.payload_mass_range[1], (self.num_envs, 1), device=self.device)
         if self.cfg.domain_rand.randomize_com_displacement:
             self.com_displacement = torch_rand_float(self.cfg.domain_rand.com_displacement_range[0], self.cfg.domain_rand.com_displacement_range[1], (self.num_envs, 3), device=self.device)
-            self.com_displacement[:, 0] = self.com_displacement[:, 0] * 4 - 0.4
+            self.com_displacement[:, 0] = self.com_displacement[:, 0] * 4 - 0.45
             self.com_displacement[:, 1] = self.com_displacement[:, 1] * 4
             self.com_displacement[:, 2] = self.com_displacement[:, 2] * 2
             print("质心",self.com_displacement)
