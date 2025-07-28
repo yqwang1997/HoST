@@ -12,10 +12,15 @@ def train(args):
     env, env_cfg = task_registry.make_env(name=args.task, args=args)
     ppo_runner, train_cfg = task_registry.make_alg_runner(env=env, env_cfg=env_cfg, name=args.task, args=args)
     
-    # 保存配置文件的代码
+    # 添加保存配置文件的代码
     import shutil
     import inspect
     
+    # 临时调试代码
+    print("PPO Runner attributes:")
+    for attr in dir(ppo_runner):
+        if 'log' in attr.lower():
+            print(f"  {attr}: {getattr(ppo_runner, attr, 'N/A')}")
     try:
         # 获取配置文件路径
         config_module = inspect.getmodule(env_cfg.__class__)

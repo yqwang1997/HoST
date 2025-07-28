@@ -10,7 +10,7 @@
     <joint limited="true" damping="0.01" frictionloss="0.01" armature="0.01" pos="0 0 0" />
     <motor ctrllimited="false" forcelimited="false" />
     <default class="collision">
-      <geom condim="3" group="0" contype="1" conaffinity="15" solref='0.001 2' friction='0.9 0.2 0.2'/>
+      <geom condim="3" group="0" contype="1" conaffinity="15" solref='0.001 2' friction='1.1 1.0 0.2'/>
     </default>
     <default class="visual">
       <geom group="1" conaffinity="0" contype="0" density="0"/>
@@ -69,7 +69,7 @@
 
     <body name="torso" pos="0 0 0.55" euler="0 -1.57 0" >
       <freejoint name="root" />
-      <inertial pos="0.00071297 2.31e-05 -0.065761" quat="0.707071 0.707142 0.000946903 0.000931489" mass="4.4711" diaginertia="0.013383 0.011047 0.00875277"/>
+      <inertial pos="0.01071297 2.31e-05 -0.065761" quat="0.707071 0.707142 0.000946903 0.000931489" mass="4.4711" diaginertia="0.013383 0.011047 0.00875277"/>
       <geom type="mesh" contype="0" conaffinity="0" group="1" density="0" rgba="0.79216 0.81961 0.93333 1" mesh="base_link" class="collision"/>
       <geom type="mesh" class="visual" mesh="base_link"/>
       <geom size="0.05 0.05 0.05" contype="0" conaffinity="0" group="1" pos="0 0 0" type="box" mass="0.013191021" rgba="1.75294 0.75294 0.75294 1"/>

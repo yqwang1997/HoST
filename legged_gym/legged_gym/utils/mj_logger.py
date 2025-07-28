@@ -164,6 +164,40 @@ class MjLogger:
             a.plot(time, roll, label=f'roll ')
         a.set(xlabel='time [s]', ylabel='Imu R [Rad]', title='IMU Roll')
         a.legend()
+        
+            # 创建独立窗口显示所有23个关节扭矩（分成小图）
+        if any(f"dof_torque[{i}]" in self.state_log for i in range(23)):
+            # 使用4行6列布局，与主窗口风格一致
+            nb_rows_torque = 4
+            nb_cols_torque = 6
+            
+            fig_torque, axs_torque = plt.subplots(nb_rows_torque, nb_cols_torque, figsize=(16, 10))
+            fig_torque.suptitle('All 23 Joint Torques', fontsize=16)
+            
+            for i in range(23):
+                  row = i // nb_cols_torque
+                  col = i % nb_cols_torque
+                  
+                  key = f"dof_torque[{i}]"
+                  if key in self.state_log:
+                        axs_torque[row, col].plot(time, self.state_log[key], 
+                                                label='dof_torque',
+                                                color='#1f77b4',
+                                                linewidth=1.0)
+                        axs_torque[row, col].set(xlabel='time [s]', 
+                                          ylabel='Joint Torque [Nm]', 
+                                          title=f'Torque {i}')
+                        axs_torque[row, col].legend(fontsize=8)
+                        axs_torque[row, col].grid(True, alpha=0.3)
+            
+            # 隐藏多余的子图
+            for i in range(23, nb_rows_torque * nb_cols_torque):
+                  row = i // nb_cols_torque
+                  col = i % nb_cols_torque
+                  axs_torque[row, col].set_visible(False)
+            
+            plt.tight_layout()
+            plt.show(block=False)
 
 
         plt.show()

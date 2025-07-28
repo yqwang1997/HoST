@@ -51,7 +51,7 @@ joystick_opened = False
 
 
 class cmd:
-    vx = 0.4
+    vx = 0.0
     vy = 0.0
     dyaw = 0.0
 
@@ -341,8 +341,8 @@ def run_mujoco(policy, cfg):
             obs[0, 52:75] = action[:cfg.env.num_actions]
             rand = np.random.rand()
             # print(rand)
-            # obs[0, 75] = action_rescale + (rand - 0.5) * 0.05 #might have problem to fix later
-            obs[0, 75] = 0.25
+            obs[0, 75] = action_rescale + (rand - 0.5) * 0.05 #might have problem to fix later
+            # obs[0, 75] = 0.25
             # obs *= count_lowlevel > 30
             # print(obs)
 
@@ -361,7 +361,7 @@ def run_mujoco(policy, cfg):
             action[:cfg.env.num_actions] = policy(torch.tensor(policy_input))[0].detach().numpy()
             # action[17:] = upperbody_npz["dof_pos"][count_lowlevel%upperbody_npz["dof_pos"].shape[0]][17:] / cfg.control.action_scale
             action = np.clip(action, -cfg.normalization.clip_actions, cfg.normalization.clip_actions)
-            if count_lowlevel < 500:
+            if count_lowlevel < 200:
                 target_q *= 0
             else:
                 target_q = action * action_rescale
@@ -456,6 +456,17 @@ def run_mujoco(policy, cfg):
                 'dof_torque[9]': applied_tau[9].item(),
                 'dof_torque[10]': applied_tau[10].item(),
                 'dof_torque[11]': applied_tau[11].item(),
+                'dof_torque[12]': applied_tau[12].item(),
+                'dof_torque[13]': applied_tau[13].item(),
+                'dof_torque[14]': applied_tau[14].item(),
+                'dof_torque[15]': applied_tau[15].item(),
+                'dof_torque[16]': applied_tau[16].item(),
+                'dof_torque[17]': applied_tau[17].item(),
+                'dof_torque[18]': applied_tau[18].item(),
+                'dof_torque[19]': applied_tau[19].item(),
+                'dof_torque[20]': applied_tau[20].item(),
+                'dof_torque[21]': applied_tau[21].item(),
+                'dof_torque[22]': applied_tau[22].item(),
                 'dof_vel': dq[0].item(),
                 'dof_vel[0]': dq[0].item(),
                 'dof_vel[1]': dq[1].item(),
@@ -514,7 +525,7 @@ if __name__ == '__main__':
                 mujoco_model_path = f'{LEGGED_GYM_ROOT_DIR}/resources/robots/Mrobot/mjcf/mjmodel_terrain.xml'
             else:
                 mujoco_model_path = f'{LEGGED_GYM_ROOT_DIR}/resources/robots/02/mjmodel02fb.xml'
-            sim_duration = 150.0
+            sim_duration = 50.0 # 150
             # low level control frequency (In sim 200Hz, in real robot 500Hz)
             dt = 0.005
             # policy inference frequency 50Hz
@@ -525,24 +536,42 @@ if __name__ == '__main__':
             #                 500, 500, 400, 500, 120, 100], dtype=np.double)
             # kds = np.array([5, 5, 5, 5, 5, 5,  \
             #                 5, 5, 5, 5, 5, 5], dtype=np.double)
-            kps = np.array([350, 350, 350, 350, 120, 120, \
-                            350, 350, 350, 350, 120, 120,
-                            200,
-                            200, 200, 200, 200, 100,
-                            200, 200, 200, 200, 100], dtype=np.double)
-            kds = np.array([4.0, 4.0, 4.0, 4.0, 2.0, 2.0,  \
-                            4.0, 4.0, 4.0, 4.0, 2.0, 2.0,
+            
+            kps = np.array([300, 300, 300, 300, 100, 100, \
+                            300, 300, 300, 300, 100, 100,
+                            120,
+                            160, 160, 60, 120, 60, 
+                            160, 160, 60, 120, 60,], dtype=np.double)
+            kds = np.array([7.0, 7.0, 7.0, 6.0, 5.0, 5.0,  \
+                            7.0, 7.0, 7.0, 6.0, 5.0, 5.0,
                             4.0,
                             4.0, 4.0, 4.0, 4.0, 4.0,
                             4.0, 4.0, 4.0, 4.0, 4.0], dtype=np.double)
+            
+            # kps = np.array([250, 250, 250, 250, 100, 100, \
+            #                 250, 250, 250, 250, 100, 100,
+            #                 120,
+            #                 200, 200, 60, 120, 60,
+            #                 200, 200, 60, 120, 60], dtype=np.double)
+            # kds = np.array([7.0, 7.0, 7.0, 6.0, 5.0, 5.0,  \
+            #                 7.0, 7.0, 7.0, 6.0, 5.0, 5.0,
+            #                 4.0,
+            #                 4.0, 4.0, 4.0, 4.0, 4.0,
+            #                 4.0, 4.0, 4.0, 4.0, 4.0], dtype=np.double)
         
             # tau_limit = np.array([120., 120., 120., 120.,  90.,  64.,   \
             #                       120., 120., 120., 120.,  90.,  64.], dtype=np.double)
-            tau_limit = np.array([144., 144., 65., 144.,  65.,  65.,   \
-                                  144., 144., 65., 144.,  65.,  65.,
-                                  65,
-                                  60., 60., 60., 60., 60.,
-                                  60., 60., 60., 60., 60.], dtype=np.double)
+            # tau_limit = np.array([144., 144., 65., 144.,  65.,  65.,   \
+            #                       144., 144., 65., 144.,  65.,  65.,
+            #                       65,
+            #                       60., 60., 60., 60., 60.,
+            #                       60., 60., 60., 60., 60.], dtype=np.double)
+            
+            tau_limit = np.array([150.0, 150.0, 70.0, 150.0,  70.0,  70.0,   \
+                                  150.0, 150.0, 70.0, 150.0,  70.0,  70.0,
+                                  70,
+                                  65., 65., 16., 65., 16.,
+                                  65., 65., 16., 65., 16.], dtype=np.double)
             
             # tau_limit = 200. * np.ones(18, dtype=np.double)
             # tau_limit[4:6] = 24

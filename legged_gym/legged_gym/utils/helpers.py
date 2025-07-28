@@ -138,6 +138,10 @@ def get_args():
         {"name": "--num_envs", "type": int, "help": "Number of environments to create. Overrides config file if provided."},
         {"name": "--seed", "type": int, "help": "Random seed. Overrides config file if provided."},
         {"name": "--max_iterations", "type": int, "help": "Maximum number of training iterations. Overrides config file if provided."},
+        
+        # sim2sim 测试相关参数
+        {"name": "--model_path", "type": str, "default": None, "help": "Path to the trained model (.pt file) for sim2sim testing"},
+        {"name": "--xml_path", "type": str, "default": None, "help": "Path to the MuJoCo robot model (.xml file) for sim2sim testing"},
     ]
     # parse arguments
     args = gymutil.parse_arguments(

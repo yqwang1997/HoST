@@ -17,12 +17,12 @@ sns.set_theme(style='whitegrid')
 sns.set_style({'axes.facecolor': 'FFFFFF', "grid": False})
 
 length = 75
-root_state = np.load(f"./visualization/data/g1_{args.terrain}_root_state.npy", allow_pickle=True)[:length]
+root_state = np.load(f"./visualization/data/CAS02_{args.terrain}_root_state.npy", allow_pickle=True)[:length]
 
 plt.rcParams["font.family"] = "serif"
 plt.rcParams["font.serif"] = "Times New Roman"
 
-head_indices = 35
+head_indices = 26
 pelvis_indices = 0
 ara = np.arange(2, length + 2, 1)
 

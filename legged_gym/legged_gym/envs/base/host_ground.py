@@ -1106,17 +1106,17 @@ class LeggedRobot(BaseTask):
     #-----------------------------style rewards-----------------------------
     def _reward_waist_deviation(self):
         wrist_dof = self.dof_pos[:, self.waist_joint_indices]
-        reward = (torch.abs(wrist_dof) > 1.1).float()
+        reward = (torch.abs(wrist_dof) > 0.8).float()
         return reward.squeeze(1)
 
     def _reward_hip_yaw_deviation(self):
         hip_yaw_dof = self.dof_pos[:, self.hip_joint_indices]
-        reward = (torch.max(torch.abs(self.dof_pos[:, self.hip_joint_indices]), dim=-1)[0] > 1.2) | (torch.min(torch.abs(self.dof_pos[:, self.hip_joint_indices]), dim=-1)[0] > 0.5)
+        reward = (torch.max(torch.abs(self.dof_pos[:, self.hip_joint_indices]), dim=-1)[0] > 1.3 ) | (torch.min(torch.abs(self.dof_pos[:, self.hip_joint_indices]), dim=-1)[0] > 0.8)
         return reward
 
     def _reward_hip_roll_deviation(self):
         hip_roll_dof = self.dof_pos[:, self.hip_roll_joint_indices]
-        reward = (torch.max(torch.abs(self.dof_pos[:, self.hip_roll_joint_indices]), dim=-1)[0] >  1.2) | (torch.min(torch.abs(self.dof_pos[:, self.hip_roll_joint_indices]), dim=-1)[0] > 0.5)
+        reward = (torch.max(torch.abs(self.dof_pos[:, self.hip_roll_joint_indices]), dim=-1)[0] > 1.3 ) | (torch.min(torch.abs(self.dof_pos[:, self.hip_roll_joint_indices]), dim=-1)[0] > 0.8)
         return reward
 
     def _reward_shoulder_roll_deviation(self):
@@ -1165,12 +1165,121 @@ class LeggedRobot(BaseTask):
         both_feet_on_ground = left_on_ground & right_on_ground
         standup = self.root_states[:, 2] > self.cfg.rewards.target_base_height_phase3
         
-        return reward * both_feet_on_ground * standup
+        # 添加头部高度条件判断
+        head_height = self.rigid_body_states[:, self.head_indices, 2].squeeze(1)
+        head_high_enough = head_height > 1.28
+        
+        return reward * both_feet_on_ground * standup * head_high_enough
 
     def _reward_knee_deviation(self):
         hip_roll_dof = self.dof_pos[:, self.knee_joint_indices]
         reward = (torch.max(torch.abs(self.dof_pos[:, self.knee_joint_indices]), dim=-1)[0] > 2.85) | (torch.min(self.dof_pos[:, self.knee_joint_indices], dim=-1)[0] < -0.06)
         return reward
+
+    def _reward_knee_bend_enforcement(self):
+        """
+        在起身过程中强制膝关节保持弯曲，避免直膝夹起
+        只在起身阶段生效，站立后取消此限制
+        """
+        left_knee_pos = self.dof_pos[:, self.left_knee_joint_indices]
+        right_knee_pos = self.dof_pos[:, self.right_knee_joint_indices]
+        
+        # 计算两个膝关节的最小弯曲角度（取较小值，确保两腿都弯曲）
+        min_knee_bend = torch.min(torch.cat([left_knee_pos, right_knee_pos], dim=1), dim=1)[0]
+        
+        # 判断是否在起身阶段
+        base_height = self.root_states[:, 2]
+        in_getup_phase = base_height < self.cfg.rewards.target_base_height_knee_limit
+        
+        # 判断是否处于头部抬起但身体未完全站立的关键起身阶段
+        head_height = self.rigid_body_states[:, self.head_indices, 2].squeeze(1)
+        head_lifted = head_height > self.cfg.rewards.head_lift_threshold  
+        critical_getup_phase = in_getup_phase & head_lifted
+        
+        # 计算膝关节弯曲奖励
+        knee_bend_reward = tolerance(
+            min_knee_bend, 
+            [self.cfg.rewards.knee_bend_threshold, np.inf], 
+            self.cfg.rewards.knee_bend_margin, 
+            0.1
+        )
+        
+        # 对于完全直膝的情况给予额外惩罚
+        straight_knee_penalty = (min_knee_bend < 0.1).float()
+        
+        # 综合奖励：鼓励弯曲 - 惩罚直膝
+        total_reward = knee_bend_reward - straight_knee_penalty * 2.0
+        
+        return total_reward * critical_getup_phase.float()
+    
+    def _reward_center_of_mass_stability(self):
+        """
+        基于脚部压力分布判断重心稳定性
+        """
+        # 获取左右脚的接触力
+        left_foot_contact = self.contact_forces[:, self.left_foot_indices, 2]  # Z方向接触力
+        right_foot_contact = self.contact_forces[:, self.right_foot_indices, 2]
+        
+        left_foot_force = torch.sum(torch.abs(left_foot_contact), dim=1)
+        right_foot_force = torch.sum(torch.abs(right_foot_contact), dim=1)
+        
+        # 计算重心分布比例
+        total_force = left_foot_force + right_foot_force + 1e-8  # 避免除零
+        left_ratio = left_foot_force / total_force
+        right_ratio = right_foot_force / total_force
+        
+        # 理想情况下左右脚应该各承担50%重量
+        ideal_ratio = 0.5
+        ratio_error = torch.abs(left_ratio - ideal_ratio) + torch.abs(right_ratio - ideal_ratio)
+        
+        # 只在站立阶段应用
+        base_height = self.root_states[:, 2]
+        standing_phase = base_height > self.cfg.rewards.target_base_height_phase3
+        
+        # 重心越平衡奖励越高
+        stability_reward = torch.exp(-ratio_error * self.cfg.rewards.com_stability_weight)
+        
+        return stability_reward * standing_phase.float()
+    
+    def _reward_left_right_symmetry(self):
+        """
+        鼓励左右腿关节角度的对称性，避免重心偏移
+        """
+        # 根据URDF关节顺序正确获取关节角度
+        left_hip_pitch = self.dof_pos[:, 0:1]      # left_leg_pelvic_pitch_joint
+        right_hip_pitch = self.dof_pos[:, 6:7]     # right_leg_pelvic_pitch_joint
+        
+        left_hip_roll = self.dof_pos[:, 1:2]       # left_leg_pelvic_roll_joint  
+        right_hip_roll = self.dof_pos[:, 7:8]      # right_leg_pelvic_roll_joint
+        
+        left_knee = self.dof_pos[:, 3:4]           # left_leg_knee_pitch_joint
+        right_knee = self.dof_pos[:, 9:10]         # right_leg_knee_pitch_joint
+        
+        left_ankle_pitch = self.dof_pos[:, 4:5]    # left_leg_ankle_pitch_joint
+        right_ankle_pitch = self.dof_pos[:, 10:11] # right_leg_ankle_pitch_joint
+        
+        left_ankle_roll = self.dof_pos[:, 5:6]     # left_leg_ankle_roll_joint
+        right_ankle_roll = self.dof_pos[:, 11:12]  # right_leg_ankle_roll_joint
+        
+        # 计算左右对称性误差
+        hip_pitch_diff = torch.abs(left_hip_pitch - right_hip_pitch)
+        hip_roll_diff = torch.abs(left_hip_roll + right_hip_roll)  # roll应该相反对称
+        knee_diff = torch.abs(left_knee - right_knee)
+        ankle_pitch_diff = torch.abs(left_ankle_pitch - right_ankle_pitch)
+        ankle_roll_diff = torch.abs(left_ankle_roll + right_ankle_roll)  # roll也应该相反对称
+        
+        # 综合对称性误差
+        total_asymmetry = (hip_pitch_diff + hip_roll_diff + knee_diff + 
+                        ankle_pitch_diff + ankle_roll_diff).squeeze(1)
+        
+        # 只在站立阶段应用
+        base_height = self.root_states[:, 2]
+        standing_phase = base_height > self.cfg.rewards.target_base_height_phase3  # 0.8m
+        
+        # 使用tolerance函数：越对称奖励越高
+        symmetry_reward = tolerance(total_asymmetry, [0, 0.2], 0.15, 0.1)
+        
+        return symmetry_reward * standing_phase.float()
 
     def _reward_shank_orientation(self):
         left_knee_pos = self.rigid_body_states[:, self.left_knee_indices, :3].clone()
@@ -1196,7 +1305,7 @@ class LeggedRobot(BaseTask):
         right_ankle_pos = self.rigid_body_states[:, self.right_ankle_indices, 2].clone() * 10
         var = left_ankle_pos.var(1) + right_ankle_pos.var(1)
         var = torch.mean(torch.concat([left_ankle_pos.var(1).view(-1, 1), right_ankle_pos.var(1).view(-1, 1)], dim=-1), dim=-1)
-        reward = var < 0.03 # 0.05
+        reward = var < 0.02 # 0.05
 
         if self.cfg.constraints.post_task:
             standup  = self.root_states[:, 2] > self.cfg.rewards.target_base_height_phase3

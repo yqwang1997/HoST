@@ -69,13 +69,13 @@ class CAS02Cfg( LeggedRobotCfg ):
     class control( LeggedRobotCfg.control ):
         # PD Drive parameters:
         control_type = 'P'
-        stiffness = {'leg_pelvic_pitch': 300, # 350
-                     'leg_pelvic_roll':300, # 350
-                     'leg_pelvic_yaw':300, # 350
-                     'knee': 300, # 350 
+        stiffness = {'leg_pelvic_pitch': 250, # 350
+                     'leg_pelvic_roll':250, # 350
+                     'leg_pelvic_yaw':250, # 350
+                     'knee': 250, # 350 
                      'ankle': 100, # 120
-                     'shoulder_pitch': 160, # 200 
-                     'shoulder_roll': 160, # 200
+                     'shoulder_pitch': 200, # 200 
+                     'shoulder_roll': 200, # 200
                      'shoulder_yaw': 60, # 200
                      'elbow': 120, # 350
                      'waist': 120, # 200
@@ -198,14 +198,6 @@ class CAS02Cfg( LeggedRobotCfg ):
         right_foot_displacement_sigma = -2
         target_dof_pos_sigma = -0.1
         tracking_sigma = 0.25 # tracking reward = exp(-error^2/sigma)
-        # 添加膝关节弯曲相关参数
-        knee_bend_threshold = 0.6  # 膝关节最小弯曲角度（弧度）
-        knee_bend_target = 1.0     # 理想的膝关节弯曲角度
-        knee_bend_margin = 0.4     # 容忍范围
-        target_base_height_knee_limit = 0.65  # 超过此高度后取消膝关节限制
-        head_lift_threshold = 0.8
-        symmetry_tolerance = 0.2       # 对称性容忍度
-        com_stability_weight = 5.0     # 重心稳定性权重
 
         reward_groups = ['task', 'regu', 'style', 'target']
         num_reward_groups = len(reward_groups)
@@ -248,15 +240,11 @@ class CAS02Cfg( LeggedRobotCfg ):
             style_left_foot_displacement = 3 # 2.5
             style_right_foot_displacement = 3 # 2.5
             style_feet_parallel_alignment = 1 # 新加入的引导左右脚相对平行的reward, 暂不使用
-            style_knee_bend_enforcement = 2.0  # 在起身过程中强制膝关节弯曲 5.0
             style_knee_deviation = -0.5 # -0.25
             style_shank_orientation = 10 # 10
             style_ground_parallel = 20 # 20
             style_feet_distance = -10 # -10
             style_style_ang_vel_xy = 1.3 # 1
-            # 平衡性奖励
-            target_left_right_symmetry = 1.0       # 左右对称性
-            target_center_of_mass_stability = 2.0  # 重心稳定性 
 
             # post-task reward
             target_ang_vel_xy = 10

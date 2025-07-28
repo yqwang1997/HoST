@@ -11,7 +11,7 @@
     name="base_link">
     <inertial>
       <origin
-        xyz="0.00071297 2.31E-05 -0.065761"
+        xyz="0.01571297 2.31E-05 -0.065761"
         rpy="0 0 0" />
       <mass
         value="4.4711" />
@@ -220,7 +220,7 @@
     <limit
       lower="-1.5708"
       upper="1.5708"
-      effort="60"
+      effort="70"
       velocity="14" />
   </joint>
   <link
@@ -348,7 +348,7 @@
     <limit
       lower="-0.87266"
       upper="0.50614"
-      effort="60"
+      effort="70"
       velocity="14" />
   </joint>
   <link
@@ -479,7 +479,7 @@
     <limit
       lower="-0.50614"
       upper="0.50614"
-      effort="60"
+      effort="70"
       velocity="14" />
   </joint>
   <link
@@ -653,7 +653,7 @@
     <limit
       lower="-1.5708"
       upper="1.5708"
-      effort="60"
+      effort="70"
       velocity="14" />
   </joint>
   <link
@@ -781,7 +781,7 @@
     <limit
       lower="-0.87266"
       upper="0.50614"
-      effort="60"
+      effort="70"
       velocity="14" />
   </joint>
   <link
@@ -912,7 +912,7 @@
     <limit
       lower="-0.50614"
       upper="0.50614"
-      effort="60"
+      effort="70"
       velocity="14" />
   </joint>
   <link
@@ -970,7 +970,7 @@
     <limit
       lower="-1.5708"
       upper="1.5708"
-      effort="60"
+      effort="70"
       velocity="14" />
   </joint>
   <link
@@ -1610,7 +1610,7 @@
     <limit
       lower="-1.5708"
       upper="1.5708"
-      effort="60"
+      effort="65"
       velocity="14" />
   </joint>
   <link
@@ -1668,7 +1668,7 @@
     <limit
       lower="-0.2618"
       upper="0.5236"
-      effort="60"
+      effort="65"
       velocity="14" />
   </joint>
 <!-- Keyframe -->
