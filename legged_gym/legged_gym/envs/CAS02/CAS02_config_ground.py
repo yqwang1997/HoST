@@ -71,25 +71,25 @@ class CAS02Cfg( LeggedRobotCfg ):
         control_type = 'P'
         stiffness = {'pelvic': 350,
                      'knee': 350,
-                     'ankle': 150,
-                     'shoulder': 350,
-                     'elbow': 120,
-                     'waist': 120,
-                     'wrist': 120,
-                    #  'shoulder_pitch':350,
-                    #  'shoulder_roll':350,
-                    #  'shoulder_yaw':0,
+                     'ankle': 100,
+                     #'shoulder': 350,
+                     'elbow': 200,
+                     'waist': 200,
+                     'wrist': 0,
+                     'shoulder_pitch':200,
+                     'shoulder_roll':200,
+                     'shoulder_yaw':0,
                      }  # [N*m/rad]
-        damping = {  'pelvic': 6,
-                     'knee': 6,
-                     'ankle': 4,
-                     'shoulder': 4,
-                    #  'shoulder_pitch':4,
-                    #  'shoulder_roll':4,
-                    #  'shoulder_yaw':1,
+        damping = {  'pelvic': 4,
+                     'knee': 4,
+                     'ankle': 2,
+                     #'shoulder': 4,
+                     'shoulder_pitch':4,
+                     'shoulder_roll':4,
+                     'shoulder_yaw':0.5,
                      'elbow': 4,
                      'waist': 4,
-                     'wrist': 4,
+                     'wrist': 0,
                      }  # [N*m/rad]  # [N*m*s/rad]
         # action scale: target angle = actionRescale * action + cur_dof_pos
         action_scale = 1
@@ -238,7 +238,7 @@ class CAS02Cfg( LeggedRobotCfg ):
             style_left_foot_displacement = 3.0
             style_right_foot_displacement = 3.0
             style_knee_deviation = -0.5
-            style_shank_orientation = 15
+            style_shank_orientation = 20
             style_ground_parallel = 25
             style_feet_distance = -10
             style_style_ang_vel_xy = 1

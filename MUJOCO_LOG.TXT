@@ -10,3 +10,9 @@ WARNING: Nan, Inf or huge value in QACC at DOF 3. The simulation is unstable. Ti
 Mon Jul 28 10:17:30 2025
 WARNING: mju_openResource: unknown file '/home/casbot/ZHZ_ws/HoST/legged_gym/resources/robots/02/02_sit_chair.xml.xml'
 
+Mon Jul 28 11:05:36 2025
+WARNING: Nan, Inf or huge value in QACC at DOF 0. The simulation is unstable. Time = 5.7100.
+
+Mon Jul 28 11:13:36 2025
+WARNING: Nan, Inf or huge value in QACC at DOF 3. The simulation is unstable. Time = 9.1000.
+

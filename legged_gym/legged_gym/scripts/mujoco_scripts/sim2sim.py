@@ -470,7 +470,7 @@ if __name__ == '__main__':
 
         class sim_config:
             if args.terrain:
-                mujoco_model_path = f'{LEGGED_GYM_ROOT_DIR}/resources/robots/Mrobot/mjcf/mjmodel_terrain.xml'
+                mujoco_model_path = f'{LEGGED_GYM_ROOT_DIR}/resources/robots/02/mjmodel02fb.xml'
             else:
                 mujoco_model_path = f'{LEGGED_GYM_ROOT_DIR}/resources/robots/02/02_sit_chair.xml'
             sim_duration = 30.0
@@ -480,16 +480,16 @@ if __name__ == '__main__':
             decimation = 4
 
         class robot_config:
-            kps = np.array([350, 350, 350, 350, 100, 100, \
-                            350, 350, 350, 350, 100, 100,
-                            200,
-                            200, 200, 0, 200, 0,
-                            200, 200, 0, 200, 0], dtype=np.double)
-            kds = np.array([5.0, 5.0, 5.0, 5.0, 2.0, 1.8,  \
-                            5.0, 5.0, 5.0, 5.0, 2.0, 1.8,
-                            5.0,
-                            4.0, 4.0, .5, 4.0, 0.0,
-                            4.0, 4.0, .5, 4.0, 0.0], dtype=np.double)
+            kps = np.array([350, 350, 350, 350, 150, 150, \
+                            350, 350, 350, 350, 150, 150,
+                            120,
+                            120, 120, 0, 120, 0,
+                            120, 120, 0, 120, 0], dtype=np.double)
+            kds = np.array([6.0, 6.0, 6.0, 6.0, 2.0, 1.8,  \
+                            6.0, 6.0, 6.0, 6.0, 2.0, 1.8,
+                            4.0,
+                            4.0, 4.0, 1.0, 4.0, 4.0,
+                            4.0, 4.0, 1.0, 4.0, 4.0], dtype=np.double)
         
             # tau_limit = np.array([120., 120., 120., 120.,  90.,  64.,   \
             #                       120., 120., 120., 120.,  90.,  64.], dtype=np.double)
