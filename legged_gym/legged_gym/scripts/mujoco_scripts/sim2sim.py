@@ -6,7 +6,7 @@
 # 1. Redistributions of source code must retain the above copyright notice, this
 # list of conditions and the following disclaimer.
 #
-# 2. Redistributions in binary form must reproduce the above copyright notice,
+# 3. Redistributions in binary form must reproduce the above copyright notice,
 # this list of conditions and the following disclaimer in the documentation
 # and/or other materials provided with the distribution.
 #
@@ -210,6 +210,8 @@ def run_mujoco(policy, cfg):
     actions_scaled = np.zeros((cfg.env.num_actions), dtype=np.double)
     last_action = np.zeros((cfg.env.num_actions), dtype=np.double)
     action_rescale = cfg.control.action_scale
+    print("比例1", action_rescale)
+    
 
     rpy = np.zeros(3, dtype=np.double) # roll pitch yaw
 
@@ -287,9 +289,9 @@ def run_mujoco(policy, cfg):
                 target_q *= 0
             else:
                 target_q = action * action_rescale
-            
+            print("比例2", action_rescale)
             target_pos = target_q + default_dof_pos
-            print("目标角度",target_pos)
+            # print("目标角度",target_pos)
 
             action_buffer.append(target_pos)
 
@@ -480,16 +482,16 @@ if __name__ == '__main__':
             decimation = 4
 
         class robot_config:
-            kps = np.array([350, 350, 350, 350, 150, 150, \
-                            350, 350, 350, 350, 150, 150,
-                            120,
-                            120, 120, 0, 120, 0,
-                            120, 120, 0, 120, 0], dtype=np.double)
-            kds = np.array([6.0, 6.0, 6.0, 6.0, 2.0, 1.8,  \
-                            6.0, 6.0, 6.0, 6.0, 2.0, 1.8,
+            kps = np.array([350, 350, 350, 350, 100, 100, \
+                            350, 350, 350, 350, 100, 100,
+                            200,
+                            200, 200, 0, 200, 0,
+                            200, 200, 0, 200, 0], dtype=np.double)
+            kds = np.array([4.0, 4.0, 4.0, 4.0, 2.0, 2.0,  \
+                            4.0, 4.0, 4.0, 4.0, 2.0, 2.0,
                             4.0,
-                            4.0, 4.0, 1.0, 4.0, 4.0,
-                            4.0, 4.0, 1.0, 4.0, 4.0], dtype=np.double)
+                            4.0, 4.0, 1.0, 4.0, 1.0,
+                            4.0, 4.0, 1.0, 4.0, 1.0], dtype=np.double)
         
             # tau_limit = np.array([120., 120., 120., 120.,  90.,  64.,   \
             #                       120., 120., 120., 120.,  90.,  64.], dtype=np.double)

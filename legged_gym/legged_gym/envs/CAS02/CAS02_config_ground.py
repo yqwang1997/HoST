@@ -16,18 +16,18 @@ class CAS02Cfg( LeggedRobotCfg ):
            'right_leg_pelvic_roll_joint' : 0, 
            'right_leg_pelvic_yaw_joint' : 0,                                       
            'right_leg_knee_pitch_joint' : 0.36,                                             
-           'right_leg_ankle_pitch_joint' : -0.175,   
+           'right_leg_ankle_pitch_joint' : -0.0,   
            'right_leg_ankle_roll_joint' : 0,                                                                       
            'waist_yaw_joint' : 0., 
            'left_shoulder_pitch_joint' : 0.08725, 
            'left_shoulder_roll_joint' : 0., 
            'left_shoulder_yaw_joint' : 0.,
-           'left_elbow_pitch_joint'  : -85.0,
+           'left_elbow_pitch_joint'  : -0.26175,
            'left_wrist_yaw_joint' : 0.,
            'right_shoulder_pitch_joint' : 0.08725,
            'right_shoulder_roll_joint' : 0.,
            'right_shoulder_yaw_joint' : 0.,
-           'right_elbow_pitch_joint' : -85.0,
+           'right_elbow_pitch_joint' : -0.0,
            'right_wrist_yaw_joint' : 0.,
         }
 
@@ -58,9 +58,9 @@ class CAS02Cfg( LeggedRobotCfg ):
         }
 
     class env(LeggedRobotCfg.env):
-        num_one_step_observations= 76
-        num_actions = 23
-        num_dofs = 23
+        num_one_step_observations= 64 # 72
+        num_actions = 19 #23
+        num_dofs = 23 # 23
         num_actor_history = 6
         num_observations = num_actor_history * num_one_step_observations
         episode_length_s = 10 # episode length in seconds
@@ -72,24 +72,18 @@ class CAS02Cfg( LeggedRobotCfg ):
         stiffness = {'pelvic': 350,
                      'knee': 350,
                      'ankle': 100,
-                     #'shoulder': 350,
-                     'elbow': 200,
+                     'shoulder': 200,
+                     'elbow': 350,
                      'waist': 200,
-                     'wrist': 0,
-                     'shoulder_pitch':200,
-                     'shoulder_roll':200,
-                     'shoulder_yaw':0,
+                     'wrist': 200,
                      }  # [N*m/rad]
         damping = {  'pelvic': 4,
                      'knee': 4,
                      'ankle': 2,
-                     #'shoulder': 4,
-                     'shoulder_pitch':4,
-                     'shoulder_roll':4,
-                     'shoulder_yaw':0.5,
+                     'shoulder': 4,
                      'elbow': 4,
                      'waist': 4,
-                     'wrist': 0,
+                     'wrist': 2.0,
                      }  # [N*m/rad]  # [N*m*s/rad]
         # action scale: target angle = actionRescale * action + cur_dof_pos
         action_scale = 1
@@ -149,8 +143,8 @@ class CAS02Cfg( LeggedRobotCfg ):
         left_knee_joints = ['left_leg_knee_pitch_joint']
         right_knee_joints = ['right_leg_knee_pitch_joint']    
 
-        left_arm_joints = ['left_shoulder_pitch_joint', 'left_shoulder_roll_joint', 'left_shoulder_yaw_joint', 'left_elbow_pitch_joint', 'left_wrist_yaw_joint']
-        right_arm_joints = ['right_shoulder_pitch_joint', 'right_shoulder_roll_joint', 'right_shoulder_yaw_joint', 'right_elbow_pitch_joint', 'right_wrist_yaw_joint']
+        left_arm_joints = ['left_shoulder_pitch_joint', 'left_shoulder_roll_joint', 'left_elbow_pitch_joint']
+        right_arm_joints = ['right_shoulder_pitch_joint', 'right_shoulder_roll_joint', 'right_elbow_pitch_joint']
         waist_joints = ["waist_yaw_joint"]
         knee_joints = ['left_leg_knee_pitch_joint', 'right_leg_knee_pitch_joint']
         ankle_joints = [ 'left_leg_ankle_pitch_joint', 'left_leg_ankle_roll_joint', 'right_leg_ankle_pitch_joint', 'right_leg_ankle_roll_joint']
@@ -186,7 +180,7 @@ class CAS02Cfg( LeggedRobotCfg ):
         only_positive_rewards = False # if true negative total rewards are clipped at zero (avoids early termination problems)
         orientation_sigma = 1
         is_gaussian = True
-        target_head_height = 1.4
+        target_head_height = 1.5
         target_head_margin = 1
         target_base_height_phase1 = 0.55
         target_base_height_phase2 = 0.55
@@ -232,7 +226,7 @@ class CAS02Cfg( LeggedRobotCfg ):
 
             # style reward
             style_waist_deviation = -10
-            style_hip_yaw_deviation = -10
+            style_hip_yaw_deviation = -15
             style_hip_roll_deviation = -10
             style_shoulder_roll_deviation = -2.5
             style_left_foot_displacement = 3.0
@@ -247,7 +241,7 @@ class CAS02Cfg( LeggedRobotCfg ):
             target_ang_vel_xy = 13.0
             target_lin_vel_xy = 13.0
             target_feet_height_var = 2.5
-            target_target_upper_dof_pos = 10
+            target_target_upper_dof_pos = 30
             target_target_orientation = 10
             target_target_base_height = 10
 

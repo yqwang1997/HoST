@@ -64,6 +64,7 @@ class LeggedRobot(BaseTask):
         self.init_done = False
         self._parse_cfg(self.cfg)
         self.num_real_dofs = cfg.env.num_dofs
+        self.actuated_indices = [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,16,18,19,21]
 
         super().__init__(self.cfg, sim_params, physics_engine, sim_device, headless)
 
@@ -282,12 +283,12 @@ class LeggedRobot(BaseTask):
         """ Computes observations
         """
         current_obs = torch.cat(( 
-                                self.base_ang_vel  * self.obs_scales.ang_vel,
-                                self.projected_gravity,
-                                self.dof_pos * self.obs_scales.dof_pos,
-                                self.dof_vel * self.obs_scales.dof_vel,
-                                self.actions,
-                                self.action_rescale + (torch.rand_like(self.action_rescale) - 0.5) * 0.05,
+                                self.base_ang_vel  * self.obs_scales.ang_vel, # 3
+                                self.projected_gravity, # 3
+                                self.dof_pos[:,self.actuated_indices] * self.obs_scales.dof_pos, # 19
+                                self.dof_vel[:,self.actuated_indices] * self.obs_scales.dof_vel, # 19 
+                                self.actions[:,self.actuated_indices], #19
+                                self.action_rescale + (torch.rand_like(self.action_rescale) - 0.5) * 0.05, # 1
                                 ),dim=-1)
         
         if self.add_noise:
@@ -434,13 +435,14 @@ class LeggedRobot(BaseTask):
         """
         #pd controller
         actions_scaled = actions * self.action_rescale
-    
-        self.joint_pos_target = self.dof_pos + actions_scaled
+        self.joint_pos_target = torch.zeros_like(self.dof_pos)  # shape: [num_envs, 23]
+        #self.joint_pos_target = self.dof_pos + actions_scaled
+        self.joint_pos_target[:, self.actuated_indices] = self.dof_pos[:, self.actuated_indices] + actions_scaled
         if self.cfg.domain_rand.delay:
             self.delay_buffer = torch.concat((self.delay_buffer[1:], actions_scaled.unsqueeze(0)), dim=0)
-            self.joint_pos_target = self.dof_pos + self.delay_buffer[self.delay_idx, torch.arange(len(self.delay_idx)), :]
+            self.joint_pos_target[:, self.actuated_indices] = self.dof_pos[:, self.actuated_indices] + self.delay_buffer[self.delay_idx, torch.arange(len(self.delay_idx)), :]
         else:
-            self.joint_pos_target = self.dof_pos + actions_scaled
+            self.joint_pos_target[:, self.actuated_indices] = self.dof_pos[:, self.actuated_indices] + actions_scaled
 
         control_type = self.cfg.control.control_type
         if control_type=="P":
@@ -729,6 +731,7 @@ class LeggedRobot(BaseTask):
         # save body names from the asset
         body_names = self.gym.get_asset_rigid_body_names(robot_asset)
         self.dof_names = self.gym.get_asset_dof_names(robot_asset)
+        #print(self.dof_names)
         self.num_bodies = len(body_names)
         self.num_dofs = len(self.dof_names)
         feet_names = [s for s in body_names if self.cfg.asset.foot_name in s and 'auxiliary' not in s]
@@ -758,7 +761,7 @@ class LeggedRobot(BaseTask):
             self.payload = torch_rand_float(self.cfg.domain_rand.payload_mass_range[0], self.cfg.domain_rand.payload_mass_range[1], (self.num_envs, 1), device=self.device)
         if self.cfg.domain_rand.randomize_com_displacement:
             self.com_displacement = torch_rand_float(self.cfg.domain_rand.com_displacement_range[0], self.cfg.domain_rand.com_displacement_range[1], (self.num_envs, 3), device=self.device)
-            self.com_displacement[:, 0] = self.com_displacement[:, 0] * 4
+            self.com_displacement[:, 0] = self.com_displacement[:, 0] * 4 - 0.45
             self.com_displacement[:, 1] = self.com_displacement[:, 1] * 4
             self.com_displacement[:, 2] = self.com_displacement[:, 2] * 2
 
@@ -968,7 +971,7 @@ class LeggedRobot(BaseTask):
         self.left_ankle_names = left_ankle_names
         for i, name in enumerate(left_ankle_names):
             self.left_ankle_indices[i] = self.gym.find_actor_rigid_body_handle(self.envs[0], self.actor_handles[0], name)
-        print("left ankle are",self.left_ankle_names)
+        #print("left ankle are",self.left_ankle_names)
 
         right_ankle_names = []
         for target_name in self.cfg.asset.right_ankle_names:
@@ -979,7 +982,7 @@ class LeggedRobot(BaseTask):
         self.right_ankle_names = right_ankle_names
         for i, name in enumerate(right_ankle_names):
             self.right_ankle_indices[i] = self.gym.find_actor_rigid_body_handle(self.envs[0], self.actor_handles[0], name)
-        print("right ankle are",right_ankle_names)
+        #print("right ankle are",right_ankle_names)
 
     def _get_env_origins(self):
         """ Sets environment origins. On rough terrain the origins are defined by the terrain platforms.
@@ -1217,7 +1220,7 @@ class LeggedRobot(BaseTask):
         mse = torch.sum(torch.square(self.dof_pos[:, self.upper_body_joint_indices] - self.target_dof_pos[:, self.upper_body_joint_indices]), dim=-1)
         standup =self.root_states[:, 2] > self.cfg.rewards.target_base_height_phase3
         reward = torch.exp(mse * self.cfg.rewards.target_dof_pos_sigma) 
-        reward = reward * standup
+        #reward = reward * standup
         return reward
     
     def _reward_target_orientation(self):
