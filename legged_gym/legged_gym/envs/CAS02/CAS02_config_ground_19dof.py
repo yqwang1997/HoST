@@ -58,8 +58,8 @@ class CAS02Cfg( LeggedRobotCfg ):
         }
 
     class env(LeggedRobotCfg.env):
-        num_one_step_observations= 76 # 76
-        num_actions = 23 #23
+        num_one_step_observations= 64 # 76
+        num_actions = 19 #23
         num_dofs = 23 # 23
         num_actor_history = 6
         num_observations = num_actor_history * num_one_step_observations
@@ -143,8 +143,8 @@ class CAS02Cfg( LeggedRobotCfg ):
         left_knee_joints = ['left_leg_knee_pitch_joint']
         right_knee_joints = ['right_leg_knee_pitch_joint']    
 
-        left_arm_joints = ['left_shoulder_pitch_joint', 'left_shoulder_roll_joint', 'left_shoulder_yaw_joint','left_elbow_pitch_joint','left_wrist_yaw_joint']
-        right_arm_joints = ['right_shoulder_pitch_joint', 'right_shoulder_roll_joint', 'right_shoulder_yaw_joint','right_elbow_pitch_joint', 'right_wrist_yaw_joint']
+        left_arm_joints = ['left_shoulder_pitch_joint', 'left_shoulder_roll_joint', 'left_elbow_pitch_joint']
+        right_arm_joints = ['right_shoulder_pitch_joint', 'right_shoulder_roll_joint', 'right_elbow_pitch_joint']
         waist_joints = ["waist_yaw_joint"]
         knee_joints = ['left_leg_knee_pitch_joint', 'right_leg_knee_pitch_joint']
         ankle_joints = [ 'left_leg_ankle_pitch_joint', 'left_leg_ankle_roll_joint', 'right_leg_ankle_pitch_joint', 'right_leg_ankle_roll_joint']
@@ -231,17 +231,17 @@ class CAS02Cfg( LeggedRobotCfg ):
             style_shoulder_roll_deviation = -2.5
             style_left_foot_displacement = 3.0
             style_right_foot_displacement = 3.0
-            style_knee_deviation = -0.25
+            style_knee_deviation = -0.5
             style_shank_orientation = 25
-            style_ground_parallel = 25
-            style_feet_distance = -15
+            style_ground_parallel = 20
+            style_feet_distance = -10
             style_style_ang_vel_xy = 1
 
             # post-task reward
             target_ang_vel_xy = 10.0
             target_lin_vel_xy = 10.0
             target_feet_height_var = 2.5
-            target_target_upper_dof_pos = 0
+            target_target_upper_dof_pos = 10
             target_target_orientation = 10
             target_target_base_height = 10
 

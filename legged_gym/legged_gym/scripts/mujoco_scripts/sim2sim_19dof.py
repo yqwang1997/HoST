@@ -37,7 +37,7 @@ from tqdm import tqdm
 from collections import deque
 from scipy.spatial.transform import Rotation as R
 from legged_gym import LEGGED_GYM_ROOT_DIR
-from legged_gym.envs import CAS02CfgGround
+from legged_gym.envs import CAS02CfgGround19
 from legged_gym.utils.mj_logger import MjLogger
 import torch
 
@@ -163,7 +163,7 @@ ts_buffer = []
 target_pos = np.zeros((12), dtype=np.double)
 
 
-def run_mujoco(policy, cfg):
+def run_mujoco(policy, cfg, pos):
     """
     Run the Mujoco simulation using the provided policy and configuration.
 
@@ -177,45 +177,40 @@ def run_mujoco(policy, cfg):
     model = mujoco.MjModel.from_xml_path(cfg.sim_config.mujoco_model_path)
     model.opt.timestep = cfg.sim_config.dt
     data = mujoco.MjData(model)
-    init_pose = {
-    # 左腿
-        "leg_l1_joint": -1.3,  # 髋关节弯曲
-        #"leg_l2_joint": 0.3,   # 侧摆
-        #"leg_l3_joint": 0.1,   # 旋转
-        "leg_l4_joint": 1.5,   # 膝关节
-        #"leg_l5_joint": -0.5,  # 踝关节
-        # 右腿（对称）
-        "leg_r1_joint": -1.3,
-        #"leg_r2_joint": -0.3,
-        #"leg_r3_joint": -0.1,
-        "leg_r4_joint": 1.5,
-        #"leg_r5_joint": -0.5,
-        # 手臂
-        #"upper_left_1_joint": 0.5,
-        #"upper_right_1_joint": 0.5
-    }
-
-    # 应用初始姿态
-    for joint_name, angle in init_pose.items():
-        joint_id = mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_JOINT, joint_name)
-        data.qpos[model.jnt_qposadr[joint_id]] = angle
+    if pose == "set":
+        init_pose = {
+        # 左腿
+            "leg_l1_joint": -1.3,  # 髋关节弯曲
+            #"leg_l2_joint": 0.3,   # 侧摆
+            #"leg_l3_joint": 0.1,   # 旋转
+            "leg_l4_joint": 1.5,   # 膝关节
+            #"leg_l5_joint": -0.5,  # 踝关节
+            # 右腿（对称）
+            "leg_r1_joint": -1.3,
+            #"leg_r2_joint": -0.3,
+            #"leg_r3_joint": -0.1,
+            "leg_r4_joint": 1.5,
+            #"leg_r5_joint": -0.5,
+            # 手臂
+            #"upper_left_1_joint": 0.5,
+            #"upper_right_1_joint": 0.5
+        }
+        # 应用初始姿态
+        for joint_name, angle in init_pose.items():
+            joint_id = mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_JOINT, joint_name)
+            data.qpos[model.jnt_qposadr[joint_id]] = angle
     mujoco.mj_step(model, data)
+
     # mujoco.set_mjcb_control(my_controller)
     
     viewer = mujoco_viewer.MujocoViewer(model, data)
     #viewer.launch(model, data) 
-    if 1: # 临时增加
-        cfg.env.num_actions = 23 
-        cfg.env.num_one_step_observations = 76
-        cfg.env.num_observations = 6*76
-
-
-    target_q = np.zeros((cfg.env.num_actions), dtype=np.double)
+    target_q = np.zeros((cfg.env.num_dofs), dtype=np.double)
     action = np.zeros((cfg.env.num_actions), dtype=np.double)
     actions_scaled = np.zeros((cfg.env.num_actions), dtype=np.double)
     last_action = np.zeros((cfg.env.num_actions), dtype=np.double)
     action_rescale = cfg.control.action_scale
-    # print("比例1", action_rescale)
+    print("比例1", action_rescale)
     
 
     rpy = np.zeros(3, dtype=np.double) # roll pitch yaw
@@ -242,14 +237,15 @@ def run_mujoco(policy, cfg):
 
     logger = MjLogger(cfg.sim_config.dt)
     stop_state_log = int(cfg.sim_config.sim_duration / cfg.sim_config.dt)
+    actuated_indices = [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,16,18,19,21]
 
     for _ in tqdm(range(int(cfg.sim_config.sim_duration / cfg.sim_config.dt)), desc="Simulating..."):
 
         # Obtain an observation
         q, dq, quat, v, omega, gvec , base_pos, foot_positions, foot_forces= get_obs(data,model)
-        # q 的长度是30，为啥我不知道
         # q = q[-cfg.env.num_actions:] 
         # dq = dq[-cfg.env.num_actions:]
+        # q 的长度是30，为啥我不知道
         q = np.array(data.actuator_length)
         dq = np.array(data.actuator_velocity)
 
@@ -261,21 +257,16 @@ def run_mujoco(policy, cfg):
         # 200hz -> 50hz
         if count_lowlevel % cfg.sim_config.decimation == 0:
             #missing update action scale
-
             last_action[:] = action[:]
-
             obs = np.zeros([1, cfg.env.num_one_step_observations], dtype=np.float32)
             eu_ang = quaternion_to_euler_array(quat)
             eu_ang[eu_ang > math.pi] -= 2 * math.pi 
             obs[0, 0:3] = omega * cfg.normalization.obs_scales.ang_vel
             obs[0, 3:6] = gvec
-            obs[0, 6:29] = q[:cfg.env.num_actions] * cfg.normalization.obs_scales.dof_pos
-            obs[0, 29:52] = dq[:cfg.env.num_actions] * cfg.normalization.obs_scales.dof_vel
-            obs[0, 52:75] = action[:cfg.env.num_actions]
-            rand = np.random.rand()
-            # print(rand)
-            # obs[0, 75] = action_rescale + (rand - 0.5) * 0.05 #might have problem to fix later
-            obs[0, 75] = 0.25 
+            obs[0, 6:25] = q[actuated_indices] * cfg.normalization.obs_scales.dof_pos
+            obs[0, 25:44] = dq[actuated_indices] * cfg.normalization.obs_scales.dof_vel
+            obs[0, 44:63] = action[:cfg.env.num_actions]
+            obs[0, 63] = 0.25  # action_scale
             # obs *= count_lowlevel > 30
             # print(obs)
 
@@ -294,9 +285,9 @@ def run_mujoco(policy, cfg):
             if count_lowlevel < 750:
                 target_q *= 0
             else:
-                target_q = action * action_rescale
+                target_q[actuated_indices] = action * action_rescale
             # print("比例2", action_rescale)
-            target_pos = target_q + default_dof_pos
+            target_pos = target_q
             # print("目标角度",target_pos)
 
             action_buffer.append(target_pos)
@@ -304,8 +295,7 @@ def run_mujoco(policy, cfg):
             
         action_rescale = np.clip((action_rescale - 0.02), 0.25, np.inf)
         # action *= count_lowlevel > 30
-        actions_scaled = action * action_rescale
-        target_dq = np.zeros((cfg.env.num_actions), dtype=np.double)
+        target_dq = np.zeros((cfg.env.num_dofs), dtype=np.double)
 
         # if cfg.normalization.actions_filter:
         #     rate_ = (count_lowlevel % cfg.sim_config.decimation + 1.)/cfg.sim_config.decimation
@@ -473,8 +463,12 @@ if __name__ == '__main__':
                         help='Run to load from.')
     parser.add_argument('--terrain', action='store_true', help='terrain or plane')
     args = parser.parse_args()
+    if args.terrain:
+        pose = "sit"
+    else:
+        pose = "lay"
 
-    class Sim2simCfg(CAS02CfgGround):
+    class Sim2simCfg(CAS02CfgGround19):
 
         class sim_config:
             if args.terrain:
@@ -491,13 +485,13 @@ if __name__ == '__main__':
             kps = np.array([350, 350, 350, 350, 100, 100, \
                             350, 350, 350, 350, 100, 100,
                             200,
-                            200, 200, 0, 200, 0,
-                            200, 200, 0, 200, 0], dtype=np.double)
+                            200, 200, 200, 200, 200,
+                            200, 200, 200, 200, 200], dtype=np.double)
             kds = np.array([4.0, 4.0, 4.0, 4.0, 2.0, 2.0,  \
                             4.0, 4.0, 4.0, 4.0, 2.0, 2.0,
                             4.0,
-                            4.0, 4.0, 1.0, 4.0, 1.0,
-                            4.0, 4.0, 1.0, 4.0, 1.0], dtype=np.double)
+                            4.0, 4.0, 2.0, 4.0, 2.0,
+                            4.0, 4.0, 2.0, 4.0, 2.0], dtype=np.double)
         
             # tau_limit = np.array([120., 120., 120., 120.,  90.,  64.,   \
             #                       120., 120., 120., 120.,  90.,  64.], dtype=np.double)
@@ -507,4 +501,4 @@ if __name__ == '__main__':
                                   65., 65., 16., 65., 16.,
                                   65., 65., 16., 65., 16.], dtype=np.double)
     policy = torch.jit.load(args.load_model)
-    run_mujoco(policy, Sim2simCfg())
+    run_mujoco(policy, Sim2simCfg(), pose)
