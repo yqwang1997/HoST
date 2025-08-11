@@ -91,7 +91,7 @@ class cmd:
 #             print(cmd.vx, cmd.vy , cmd.dyaw)
 
 #             # 等待一小段时间，可以根据实际情况调整
-#             pygame.time.delay(100)
+#             pygame.time.delay(0)
 
 #         # 启动线程
 
@@ -436,8 +436,8 @@ def run_mujoco(policy, cfg):
         else:
             logger._plot(save_path="/home/casbot/ZHZ_ws/HoST/legged_gym/legged_gym/plots/fig4.png")
 
-        if(render_index % 2 ==0):
-            viewer.render()
+        time.sleep(0.03)
+        viewer.render()
 
         mujoco.mj_step(model, data)
 
@@ -473,26 +473,24 @@ if __name__ == '__main__':
                 mujoco_model_path = f'{LEGGED_GYM_ROOT_DIR}/resources/robots/02/mjmodel02fb.xml'
             else:
                 mujoco_model_path = f'{LEGGED_GYM_ROOT_DIR}/resources/robots/02/02_sit_chair.xml'
-            sim_duration = 30.0
+            sim_duration = 10.0
             # low level control frequency (In sim 200Hz, in real robot 500Hz)
             dt = 0.005
             # policy inference frequency 50Hz
             decimation = 4
 
         class robot_config:
-            kps = np.array([350, 350, 350, 350, 150, 150, \
-                            350, 350, 350, 350, 150, 150,
+            kps = np.array([350, 350, 350, 350, 100, 100, \
+                            350, 350, 350, 350, 100, 100,
                             120,
-                            120, 120, 0, 120, 0,
-                            120, 120, 0, 120, 0], dtype=np.double)
-            kds = np.array([6.0, 6.0, 6.0, 6.0, 2.0, 1.8,  \
-                            6.0, 6.0, 6.0, 6.0, 2.0, 1.8,
+                            200, 200, 0, 200, 0,
+                            200, 200, 0, 200, 0], dtype=np.double)
+            kds = np.array([4.0, 4.0, 4.0, 4.0, 2.0, 1.5,  \
+                            4.0, 4.0, 4.0, 4.0, 2.0, 1.5,
                             4.0,
-                            4.0, 4.0, 1.0, 4.0, 4.0,
-                            4.0, 4.0, 1.0, 4.0, 4.0], dtype=np.double)
+                            4.0, 4.0, 2.0, 4.0, 2.0,
+                            4.0, 4.0, 2.0, 4.0, 2.0], dtype=np.double)
         
-            # tau_limit = np.array([120., 120., 120., 120.,  90.,  64.,   \
-            #                       120., 120., 120., 120.,  90.,  64.], dtype=np.double)
             tau_limit = np.array([150., 150., 150., 250.,  70.,  70.,   \
                                   150., 150., 150., 250.,  70.,  70.,
                                   70,

@@ -22,12 +22,12 @@ class CAS02Cfg( LeggedRobotCfg ):
            'left_shoulder_pitch_joint' : 0.08725, 
            'left_shoulder_roll_joint' : 0., 
            'left_shoulder_yaw_joint' : 0.,
-           'left_elbow_pitch_joint'  : -85.0,
+           'left_elbow_pitch_joint'  : -0.0,
            'left_wrist_yaw_joint' : 0.,
            'right_shoulder_pitch_joint' : 0.08725,
            'right_shoulder_roll_joint' : 0.,
            'right_shoulder_yaw_joint' : 0.,
-           'right_elbow_pitch_joint' : -85.0,
+           'right_elbow_pitch_joint' : -0.0,
            'right_wrist_yaw_joint' : 0.,
         }
 
@@ -86,10 +86,10 @@ class CAS02Cfg( LeggedRobotCfg ):
                      #'shoulder': 4,
                      'shoulder_pitch':4,
                      'shoulder_roll':4,
-                     'shoulder_yaw':0.5,
+                     'shoulder_yaw':2,
                      'elbow': 4,
                      'waist': 4,
-                     'wrist': 0,
+                     'wrist': 2,
                      }  # [N*m/rad]  # [N*m*s/rad]
         # action scale: target angle = actionRescale * action + cur_dof_pos
         action_scale = 1
@@ -232,7 +232,7 @@ class CAS02Cfg( LeggedRobotCfg ):
 
             # style reward
             style_waist_deviation = -10
-            style_hip_yaw_deviation = -10
+            style_hip_yaw_deviation = -20
             style_hip_roll_deviation = -10
             style_shoulder_roll_deviation = -2.5
             style_left_foot_displacement = 3.0

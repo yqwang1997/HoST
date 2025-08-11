@@ -73,7 +73,7 @@
       <site name="imu" size="0.01" pos="0.0 0 0.0" />
 
       <body name="leg_l1_link" pos="0 0.061 -0.070239">
-        <inertial pos="0.007411 0.073782 -0.047759" quat="0.405457 0.911334 -0.0612639 0.0363621" mass="2.1606" diaginertia="0.00386287 0.00324431 0.00186522" />
+        <inertial pos="0.107411 0.073782 -0.047759" quat="0.405457 0.911334 -0.0612639 0.0363621" mass="2.1606" diaginertia="0.00386287 0.00324431 0.00186522" />
         <joint name="leg_l1_joint" pos="0 0 0" axis="0 1 0" range="-1.9199 1.5708" class="leg_joint_param" />
         <geom type="mesh" contype="0" conaffinity="0" group="1" density="0" rgba="0.792157 0.819608 0.933333 1" mesh="left_leg_pelvic_pitch_link" />
         <body name="leg_l2_link" pos="-0.0028 0.0815 -0.055">
