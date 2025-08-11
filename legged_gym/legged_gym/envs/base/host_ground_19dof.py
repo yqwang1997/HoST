@@ -285,9 +285,9 @@ class LeggedRobot(BaseTask):
         current_obs = torch.cat(( 
                                 self.base_ang_vel  * self.obs_scales.ang_vel, # 3
                                 self.projected_gravity, # 3
-                                self.dof_pos * self.obs_scales.dof_pos, # 23
-                                self.dof_vel * self.obs_scales.dof_vel, # 23 
-                                self.actions, # 23
+                                self.dof_pos[:,self.actuated_indices] * self.obs_scales.dof_pos, # 19
+                                self.dof_vel[:,self.actuated_indices] * self.obs_scales.dof_vel, # 19 
+                                self.actions, #19
                                 self.action_rescale + (torch.rand_like(self.action_rescale) - 0.5) * 0.05, # 1
                                 ),dim=-1)
         
@@ -435,12 +435,14 @@ class LeggedRobot(BaseTask):
         """
         #pd controller
         actions_scaled = actions * self.action_rescale
-        self.joint_pos_target = self.dof_pos + actions_scaled
+        self.joint_pos_target = torch.zeros_like(self.dof_pos)  # shape: [num_envs, 23]
+        #self.joint_pos_target = self.dof_pos + actions_scaled
+        self.joint_pos_target[:, self.actuated_indices] = self.dof_pos[:, self.actuated_indices] + actions_scaled
         if self.cfg.domain_rand.delay:
             self.delay_buffer = torch.concat((self.delay_buffer[1:], actions_scaled.unsqueeze(0)), dim=0)
-            self.joint_pos_target = self.dof_pos + self.delay_buffer[self.delay_idx, torch.arange(len(self.delay_idx)), :]
+            self.joint_pos_target[:, self.actuated_indices] = self.dof_pos[:, self.actuated_indices] + self.delay_buffer[self.delay_idx, torch.arange(len(self.delay_idx)), :]
         else:
-            self.joint_pos_target = self.dof_pos + actions_scaled
+            self.joint_pos_target[:, self.actuated_indices] = self.dof_pos[:, self.actuated_indices] + actions_scaled
         control_type = self.cfg.control.control_type
         if control_type=="P":
             torques = self.p_gains * self.Kp_factors * (self.joint_pos_target - self.dof_pos) - self.d_gains *  self.Kd_factors * self.dof_vel

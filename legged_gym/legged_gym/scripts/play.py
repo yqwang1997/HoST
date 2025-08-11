@@ -23,7 +23,7 @@ def play(args):
     env_cfg.terrain.num_cols = 4
     env_cfg.terrain.curriculum = False
     env_cfg.noise.add_noise = False
-    env_cfg.control.action_scale = 0.3
+    env_cfg.control.action_scale = 0.25
     env_cfg.curriculum.pull_force = False
     env_cfg.env.test = True
 
