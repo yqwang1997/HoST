@@ -48,7 +48,7 @@ import csv
 from threading import Thread
 
 
-# python legged_gym/legged_gym/scripts/mujoco_scripts/sim2sim.py --load_model /home/casbot/ZHZ_ws/HoST/legged_gym/logs/CAS02_ground/test/policies/policy_1.pt
+# python legged_gym/legged_gym/scripts/mujoco_scripts/sim2sim_19dof.py --load_model /home/casbot/ZHZ_ws/HoST/legged_gym/logs/CAS02_ground/test/policies/policy_1.pt
 joystick_use = True
 joystick_opened = False
 
@@ -160,7 +160,7 @@ root_states_buffer = []
 euler_xyz_buffer = []
 action_buffer = []
 ts_buffer = []
-target_pos = np.zeros((12), dtype=np.double)
+
 
 
 def run_mujoco(policy, cfg, pos):
@@ -210,7 +210,7 @@ def run_mujoco(policy, cfg, pos):
     actions_scaled = np.zeros((cfg.env.num_actions), dtype=np.double)
     last_action = np.zeros((cfg.env.num_actions), dtype=np.double)
     action_rescale = cfg.control.action_scale
-    print("比例1", action_rescale)
+    #print("比例1", action_rescale)
     
 
     rpy = np.zeros(3, dtype=np.double) # roll pitch yaw
@@ -285,11 +285,10 @@ def run_mujoco(policy, cfg, pos):
             if count_lowlevel < 750:
                 target_q *= 0
             else:
-                target_q[actuated_indices] = action * action_rescale
+                target_q[actuated_indices] = action * action_rescale 
             # print("比例2", action_rescale)
-            target_pos = target_q
             # print("目标角度",target_pos)
-
+            target_pos = target_q + q
             action_buffer.append(target_pos)
 
             
@@ -434,8 +433,8 @@ def run_mujoco(policy, cfg, pos):
         else:
             logger._plot(save_path="/home/casbot/ZHZ_ws/HoST/legged_gym/legged_gym/plots/fig4.png")
 
-        if(render_index % 2 ==0):
-            viewer.render()
+        time.sleep(0.005)
+        viewer.render()
 
         mujoco.mj_step(model, data)
 
@@ -475,11 +474,11 @@ if __name__ == '__main__':
                 mujoco_model_path = f'{LEGGED_GYM_ROOT_DIR}/resources/robots/02/mjmodel02fb.xml'
             else:
                 mujoco_model_path = f'{LEGGED_GYM_ROOT_DIR}/resources/robots/02/02_sit_chair.xml'
-            sim_duration = 30.0
+            sim_duration = 10.0
             # low level control frequency (In sim 200Hz, in real robot 500Hz)
-            dt = 0.005
+            dt = 0.002
             # policy inference frequency 50Hz
-            decimation = 4
+            decimation = 10
 
         class robot_config:
             kps = np.array([350, 350, 350, 350, 100, 100, \

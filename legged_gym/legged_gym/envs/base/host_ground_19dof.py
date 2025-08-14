@@ -1109,6 +1109,26 @@ class LeggedRobot(BaseTask):
     def _reward_torque_limits(self):
         # penalize torques too close to the limit
         return torch.sum((torch.abs(self.torques) - self.torque_limits*self.cfg.rewards.soft_torque_limit).clip(min=0.), dim=1)
+    
+    # def _reward_torque_balance(self):
+    #     # 提取左右髋关节力矩: shape (num_envs, 3)
+    #     left_hip_torques = self.torques[:, [0, 1, 2]] * 0.01  # shape: (num_envs, 3)
+    #     right_hip_torques = self.torques[:, [6, 7, 8]] * 0.01 # shape: (num_envs, 3)
+
+    #     # 计算每条腿内部 3 个 DOF 力矩的方差（在 DOF 维度 dim=1 上）
+    #     left_var = left_hip_torques.var(dim=1)   # (num_envs,), 方差越小越均衡
+    #     right_var = right_hip_torques.var(dim=1) # (num_envs,)
+
+    #     # 拼接左右方差，并取平均
+    #     combined_var = torch.mean(
+    #         torch.cat([
+    #             left_var.view(-1, 1),      # (num_envs, 1)
+    #             right_var.view(-1, 1)      # (num_envs, 1)
+    #         ], dim=-1),                    # -> (num_envs, 2)
+    #         dim=-1                         # -> (num_envs,)
+    #     )
+
+    #     return combined_var
 
 
     #-----------------------------style rewards-----------------------------
@@ -1197,6 +1217,28 @@ class LeggedRobot(BaseTask):
         # Penalize xy axes base angular velocity
         base_height = self.root_states[:, 2] > self.cfg.rewards.target_base_height_phase1
         return torch.exp(torch.sum(torch.square(self.base_ang_vel[:, :2]), dim=1) * -2) * base_height
+    
+    def _reward_torque_balance(self):
+        # 提取左右髋关节力矩: shape (num_envs, 3)
+        left_hip_torques = self.torques[:, [0, 1, 2]] * 0.01  # shape: (num_envs, 3)
+        right_hip_torques = self.torques[:, [6, 7, 8]] * 0.01 # shape: (num_envs, 3)
+        # left_hip_torques[:,2] *= 1.2
+        # right_hip_torques[:,2] *= 1.2
+
+        # 计算每条腿内部 3 个 DOF 力矩的方差（在 DOF 维度 dim=1 上）
+        left_var = left_hip_torques.var(dim=1)   # (num_envs,), 方差越小越均衡
+        right_var = right_hip_torques.var(dim=1) # (num_envs,)
+
+        # 拼接左右方差，并取平均
+        combined_var = torch.mean(
+            torch.cat([
+                left_var.view(-1, 1),      # (num_envs, 1)
+                right_var.view(-1, 1)      # (num_envs, 1)
+            ], dim=-1),                    # -> (num_envs, 2)
+            dim=-1                         # -> (num_envs,)
+        )
+
+        return combined_var
  
     #--------------------------post-task rewards-----------------------------
     def _reward_ang_vel_xy(self):

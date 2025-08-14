@@ -11,9 +11,16 @@ def record_config(log_root, name="a1_amp"):
     
     root1 = name.split('_')[0]
 
-    root_path1 = os.path.join(LEGGED_GYM_ENVS_DIR, root1, 'CAS02_config_ground.py')
-    #root_path1 = os.path.join('/home/casbot/ZHZ_ws/HoST/legged_gym/legged_gym/envs/CAS02/CAS02_config_ground.py')
-    root_path2 = os.path.join(LEGGED_GYM_ENVS_DIR, 'base', 'host_ground.py')
+    if name == "CAS02_ground_19dof":
+        root_path1 = os.path.join(LEGGED_GYM_ENVS_DIR, root1, 'CAS02_config_ground_19dof.py')
+        root_path2 = os.path.join(LEGGED_GYM_ENVS_DIR, 'base', 'host_ground_19dof.py')
+    elif name == "CAS02_ground":
+        root_path1 = os.path.join(LEGGED_GYM_ENVS_DIR, root1, 'CAS02_config_ground.py')
+        #root_path1 = os.path.join('/home/casbot/ZHZ_ws/HoST/legged_gym/legged_gym/envs/CAS02/CAS02_config_ground.py')
+        root_path2 = os.path.join(LEGGED_GYM_ENVS_DIR, 'base', 'host_ground.py')
+    elif name == "CAS02_ground_prone":
+        root_path1 = os.path.join(LEGGED_GYM_ENVS_DIR, root1, 'CAS02_config_ground_prone.py')
+        root_path2 = os.path.join(LEGGED_GYM_ENVS_DIR, 'base', 'host_ground_prone.py')
 
     with open(root_path1, 'r', encoding='utf-8') as file:
         content = file.read()

@@ -236,6 +236,7 @@ class CAS02Cfg( LeggedRobotCfg ):
             style_ground_parallel = 20
             style_feet_distance = -10
             style_style_ang_vel_xy = 1
+            style_torque_balance = -1
 
             # post-task reward
             target_ang_vel_xy = 10.0
