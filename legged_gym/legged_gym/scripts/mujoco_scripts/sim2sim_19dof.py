@@ -177,28 +177,28 @@ def run_mujoco(policy, cfg, pos):
     model = mujoco.MjModel.from_xml_path(cfg.sim_config.mujoco_model_path)
     model.opt.timestep = cfg.sim_config.dt
     data = mujoco.MjData(model)
-    if pose == "set":
-        init_pose = {
-        # 左腿
-            "leg_l1_joint": -1.3,  # 髋关节弯曲
-            #"leg_l2_joint": 0.3,   # 侧摆
-            #"leg_l3_joint": 0.1,   # 旋转
-            "leg_l4_joint": 1.5,   # 膝关节
-            #"leg_l5_joint": -0.5,  # 踝关节
-            # 右腿（对称）
-            "leg_r1_joint": -1.3,
-            #"leg_r2_joint": -0.3,
-            #"leg_r3_joint": -0.1,
-            "leg_r4_joint": 1.5,
-            #"leg_r5_joint": -0.5,
-            # 手臂
-            #"upper_left_1_joint": 0.5,
-            #"upper_right_1_joint": 0.5
-        }
-        # 应用初始姿态
-        for joint_name, angle in init_pose.items():
-            joint_id = mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_JOINT, joint_name)
-            data.qpos[model.jnt_qposadr[joint_id]] = angle
+    # if pose == "sit":
+    #     init_pose = {
+    #     # 左腿
+    #         "leg_l1_joint": -1.3,  # 髋关节弯曲
+    #         #"leg_l2_joint": 0.3,   # 侧摆
+    #         #"leg_l3_joint": 0.1,   # 旋转
+    #         "leg_l4_joint": 1.5,   # 膝关节
+    #         #"leg_l5_joint": -0.5,  # 踝关节
+    #         # 右腿（对称）
+    #         "leg_r1_joint": -1.3,
+    #         #"leg_r2_joint": -0.3,
+    #         #"leg_r3_joint": -0.1,
+    #         "leg_r4_joint": 1.5,
+    #         #"leg_r5_joint": -0.5,
+    #         # 手臂
+    #         #"upper_left_1_joint": 0.5,
+    #         #"upper_right_1_joint": 0.5
+    #     }
+    #     # 应用初始姿态
+    #     for joint_name, angle in init_pose.items():
+    #         joint_id = mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_JOINT, joint_name)
+    #         data.qpos[model.jnt_qposadr[joint_id]] = angle
     mujoco.mj_step(model, data)
 
     # mujoco.set_mjcb_control(my_controller)
@@ -433,7 +433,7 @@ def run_mujoco(policy, cfg, pos):
         else:
             logger._plot(save_path="/home/casbot/ZHZ_ws/HoST/legged_gym/legged_gym/plots/fig4.png")
 
-        time.sleep(0.005)
+        time.sleep(0.03)
         viewer.render()
 
         mujoco.mj_step(model, data)
@@ -465,7 +465,7 @@ if __name__ == '__main__':
     if args.terrain:
         pose = "sit"
     else:
-        pose = "lay"
+        pose = "sit"
 
     class Sim2simCfg(CAS02CfgGround19):
 

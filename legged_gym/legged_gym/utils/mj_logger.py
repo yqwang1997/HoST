@@ -85,10 +85,10 @@ class MjLogger:
                 # 选择对应的子图
                 a = axs[row, col]  
                         
-                # a.plot(time, log["dof_pos["+str(i)+"]"], label='measured')
+                a.plot(time, log["dof_pos["+str(i)+"]"], label='mea')
     
             
-                a.plot(time, log["dof_pos_target["+str(i)+"]"], label='target')
+                a.plot(time, log["dof_pos_target["+str(i)+"]"], label='targ')
                 a.set(xlabel='time [s]', ylabel='Position [rad]', title='DOF Position '+ str(i))
                 a.legend()
 

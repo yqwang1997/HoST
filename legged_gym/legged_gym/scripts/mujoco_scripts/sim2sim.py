@@ -177,28 +177,28 @@ def run_mujoco(policy, cfg):
     model = mujoco.MjModel.from_xml_path(cfg.sim_config.mujoco_model_path)
     model.opt.timestep = cfg.sim_config.dt
     data = mujoco.MjData(model)
-    init_pose = {
-    # 左腿
-        "leg_l1_joint": -1.3,  # 髋关节弯曲
-        #"leg_l2_joint": 0.3,   # 侧摆
-        #"leg_l3_joint": 0.1,   # 旋转
-        "leg_l4_joint": 1.5,   # 膝关节
-        #"leg_l5_joint": -0.5,  # 踝关节
-        # 右腿（对称）
-        "leg_r1_joint": -1.3,
-        #"leg_r2_joint": -0.3,
-        #"leg_r3_joint": -0.1,
-        "leg_r4_joint": 1.5,
-        #"leg_r5_joint": -0.5,
-        # 手臂
-        #"upper_left_1_joint": 0.5,
-        #"upper_right_1_joint": 0.5
-    }
+    # init_pose = {
+    # # 左腿
+    #     "leg_l1_joint": -1.3,  # 髋关节弯曲
+    #     #"leg_l2_joint": 0.3,   # 侧摆
+    #     #"leg_l3_joint": 0.1,   # 旋转
+    #     "leg_l4_joint": 1.5,   # 膝关节
+    #     #"leg_l5_joint": -0.5,  # 踝关节
+    #     # 右腿（对称）
+    #     "leg_r1_joint": -1.3,
+    #     #"leg_r2_joint": -0.3,
+    #     #"leg_r3_joint": -0.1,
+    #     "leg_r4_joint": 1.5,
+    #     #"leg_r5_joint": -0.5,
+    #     # 手臂
+    #     #"upper_left_1_joint": 0.5,
+    #     #"upper_right_1_joint": 0.5
+    # }
 
     # 应用初始姿态
-    for joint_name, angle in init_pose.items():
-        joint_id = mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_JOINT, joint_name)
-        data.qpos[model.jnt_qposadr[joint_id]] = angle
+    # for joint_name, angle in init_pose.items():
+    #     joint_id = mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_JOINT, joint_name)
+    #     data.qpos[model.jnt_qposadr[joint_id]] = angle
     mujoco.mj_step(model, data)
     # mujoco.set_mjcb_control(my_controller)
     
@@ -291,12 +291,12 @@ def run_mujoco(policy, cfg):
                 policy_input[0, i * cfg.env.num_one_step_observations : (i + 1) * cfg.env.num_one_step_observations] = hist_obs[i][0, :]
             action[:cfg.env.num_actions] = policy(torch.tensor(policy_input))[0].detach().numpy()
             action = np.clip(action, -cfg.normalization.clip_actions, cfg.normalization.clip_actions)
-            if count_lowlevel < 750:
+            if count_lowlevel < 550:
                 target_q *= 0
             else:
                 target_q = action * action_rescale
             # print("比例2", action_rescale)
-            target_pos = target_q + default_dof_pos
+            target_pos = target_q + q
             # print("目标角度",target_pos)
 
             action_buffer.append(target_pos)
@@ -444,7 +444,7 @@ def run_mujoco(policy, cfg):
         else:
             logger._plot(save_path="/home/casbot/ZHZ_ws/HoST/legged_gym/legged_gym/plots/fig4.png")
 
-        time.sleep(0.03)
+        time.sleep(0.01)
         viewer.render()
 
         mujoco.mj_step(model, data)
@@ -483,13 +483,13 @@ if __name__ == '__main__':
                 mujoco_model_path = f'{LEGGED_GYM_ROOT_DIR}/resources/robots/02/02_sit_chair.xml'
             sim_duration = 10.0
             # low level control frequency (In sim 200Hz, in real robot 500Hz)
-            dt = 0.005
+            dt = 0.002
             # policy inference frequency 50Hz
-            decimation = 4
+            decimation = 10
 
         class robot_config:
-            kps = np.array([350, 350, 350, 350, 100, 100, \
-                            350, 350, 350, 350, 100, 100,
+            kps = np.array([500, 500, 500, 500, 100, 100, \
+                            500, 500, 500, 500, 100, 100,
                             200,
                             200, 200, 0, 200, 0,
                             200, 200, 0, 200, 0], dtype=np.double)
@@ -499,8 +499,8 @@ if __name__ == '__main__':
                             4.0, 4.0, 1.0, 4.0, 1.0,
                             4.0, 4.0, 1.0, 4.0, 1.0], dtype=np.double)
         
-            tau_limit = np.array([150., 150., 150., 250.,  70.,  70.,   \
-                                  150., 150., 150., 250.,  70.,  70.,
+            tau_limit = np.array([300., 300., 300., 250.,  70.,  70.,   \
+                                  300., 300., 300., 250.,  70.,  70.,
                                   70,
                                   65., 65., 16., 65., 16.,
                                   65., 65., 16., 65., 16.], dtype=np.double)
