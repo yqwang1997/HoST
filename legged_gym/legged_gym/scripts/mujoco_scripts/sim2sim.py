@@ -296,7 +296,7 @@ def run_mujoco(policy, cfg):
             else:
                 target_q = action * action_rescale
             # print("比例2", action_rescale)
-            target_pos = target_q + default_dof_pos
+            target_pos = target_q + q
             # print("目标角度",target_pos)
 
             action_buffer.append(target_pos)
@@ -444,8 +444,8 @@ def run_mujoco(policy, cfg):
         else:
             logger._plot(save_path="/home/casbot/ZHZ_ws/HoST/legged_gym/legged_gym/plots/fig4.png")
 
-        if(render_index % 2 ==0):
-            viewer.render()
+        time.sleep(0.01)
+        viewer.render()
 
         mujoco.mj_step(model, data)
 
@@ -481,11 +481,11 @@ if __name__ == '__main__':
                 mujoco_model_path = f'{LEGGED_GYM_ROOT_DIR}/resources/robots/02/mjmodel02fb.xml'
             else:
                 mujoco_model_path = f'{LEGGED_GYM_ROOT_DIR}/resources/robots/02/02_sit_chair.xml'
-            sim_duration = 30.0
+            sim_duration = 20.0
             # low level control frequency (In sim 200Hz, in real robot 500Hz)
-            dt = 0.005
+            dt = 0.002
             # policy inference frequency 50Hz
-            decimation = 4
+            decimation = 10
 
         class robot_config:
             kps = np.array([350, 350, 350, 350, 100, 100, \
@@ -496,8 +496,8 @@ if __name__ == '__main__':
             kds = np.array([4.0, 4.0, 4.0, 4.0, 2.0, 2.0,  \
                             4.0, 4.0, 4.0, 4.0, 2.0, 2.0,
                             4.0,
-                            4.0, 4.0, 1.0, 4.0, 1.0,
-                            4.0, 4.0, 1.0, 4.0, 1.0], dtype=np.double)
+                            4.0, 4.0, 2.0, 4.0, 2.0,
+                            4.0, 4.0, 2.0, 4.0, 2.0], dtype=np.double)
         
             # tau_limit = np.array([120., 120., 120., 120.,  90.,  64.,   \
             #                       120., 120., 120., 120.,  90.,  64.], dtype=np.double)

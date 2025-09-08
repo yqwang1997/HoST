@@ -72,18 +72,24 @@ class CAS02Cfg( LeggedRobotCfg ):
         stiffness = {'pelvic': 350,
                      'knee': 350,
                      'ankle': 100,
-                     'shoulder': 200,
+                     #'shoulder': 200,
                      'elbow': 350,
                      'waist': 200,
-                     'wrist': 200,
+                     'wrist': 0,
+                     'shoulder_pitch':350,
+                     'shoulder_roll':350,
+                     'shoulder_yaw':0,
                      }  # [N*m/rad]
         damping = {  'pelvic': 4,
                      'knee': 4,
                      'ankle': 2,
-                     'shoulder': 4,
+                      #'shoulder': 4,
                      'elbow': 4,
                      'waist': 4,
                      'wrist': 2.0,
+                     'shoulder_pitch':4,
+                     'shoulder_roll':4,
+                     'shoulder_yaw':2.0,
                      }  # [N*m/rad]  # [N*m*s/rad]
         # action scale: target angle = actionRescale * action + cur_dof_pos
         action_scale = 1
@@ -115,7 +121,8 @@ class CAS02Cfg( LeggedRobotCfg ):
         slope_treshold = 0.75 # slopes above this threshold will be corrected to vertical surfaces
 
     class asset( LeggedRobotCfg.asset ):
-        file = '{LEGGED_GYM_ROOT_DIR}/resources/robots/02/CASBOT_02.urdf'
+        # file = '{LEGGED_GYM_ROOT_DIR}/resources/robots/02/CASBOT_02.urdf'
+        file = '{LEGGED_GYM_ROOT_DIR}/resources/robots/02/CASBOT02_ENCOS_5dof_shell_20250801.urdf' 
         name = "CASBOT"
         left_foot_name = "left_leg_ankle_pitch"
         right_foot_name = "right_leg_ankle_pitch"
@@ -236,6 +243,7 @@ class CAS02Cfg( LeggedRobotCfg ):
             style_ground_parallel = 25
             style_feet_distance = -15
             style_style_ang_vel_xy = 1
+            style_torque_balance = -1
 
             # post-task reward
             target_ang_vel_xy = 10.0

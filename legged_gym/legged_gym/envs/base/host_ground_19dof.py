@@ -251,6 +251,7 @@ class LeggedRobot(BaseTask):
             self.rew_buf[:, :] = 0
             task_group_index = self.reward_groups.index('task')
             self.rew_buf[:, task_group_index] = 1
+            
             for i in range(len(self.reward_functions)):
                 name = self.reward_names[i]
                 rew = self.reward_functions[i]() * self.reward_scales[name]
@@ -550,6 +551,19 @@ class LeggedRobot(BaseTask):
         self.root_states = gymtorch.wrap_tensor(actor_root_state)
         self.dof_state = gymtorch.wrap_tensor(dof_state_tensor)
         self.rigid_body_states = gymtorch.wrap_tensor(rigid_body_state).view(self.num_envs, self.num_bodies, 13)
+        # print("=== rigid_body_states 信息 ===")
+        # print(f"数据类型 (dtype): {self.rigid_body_states.dtype}")
+        # print(f"设备 (device): {self.rigid_body_states.device}")
+        # print(f"形状 (shape): {self.rigid_body_states.shape}")
+        # print(f"维度 (ndim): {self.rigid_body_states.ndim}")
+        # print(f"元素总数 (numel): {self.rigid_body_states.numel()}")
+        # for i in range(self.num_bodies):
+        #     z_positions = self.rigid_body_states[:, i, 2].clone()
+        #     # 将张量移到CPU并转换为NumPy数组以便打印
+        #     z_np = z_positions.cpu().numpy()
+        #     print(f"Body Index {i}:")
+        #     print(f"  Min Z: {z_np.min():.4f}, Max Z: {z_np.max():.4f}, Mean Z: {z_np.mean():.4f}")
+        #     print(f"  First 5 values: {z_np[:5]}") # 只打印前5个环境的值
         self.dof_pos = self.dof_state.view(self.num_envs, self.num_dof, 2)[..., 0]
         self.dof_vel = self.dof_state.view(self.num_envs, self.num_dof, 2)[..., 1]
         self.dof_states = self.dof_state.view(self.num_envs, self.num_dof, 2)
@@ -636,7 +650,7 @@ class LeggedRobot(BaseTask):
             self.com_displacement[:, 0] = self.com_displacement[:, 0] * 4 - 0.45
             self.com_displacement[:, 1] = self.com_displacement[:, 1] * 4
             self.com_displacement[:, 2] = self.com_displacement[:, 2] * 2
-            print("质心1",self.com_displacement)
+            # print("质心1",self.com_displacement)
         if self.cfg.domain_rand.delay:
             self.delay_idx = torch.randint(low=0, high=self.cfg.domain_rand.max_delay_timesteps, size=(self.num_envs,), device=self.device)
 
@@ -763,7 +777,7 @@ class LeggedRobot(BaseTask):
             self.com_displacement[:, 0] = self.com_displacement[:, 0] * 4 
             self.com_displacement[:, 1] = self.com_displacement[:, 1] * 4
             self.com_displacement[:, 2] = self.com_displacement[:, 2] * 2
-            print("质心2",self.com_displacement)
+            # print("质心2",self.com_displacement)
 
         for i in range(self.num_envs):
             # create env instance
@@ -856,9 +870,6 @@ class LeggedRobot(BaseTask):
         self.head_names = [s for s in body_names if self.cfg.asset.head_name in s]
         # import ipdb; ipdb.set_trace()
         self.head_indices = torch.zeros(len(self.head_names), dtype=torch.long, device=self.device)
-        for i, name in enumerate(self.head_names):
-            self.head_indices[i] = self.gym.find_actor_rigid_body_handle(self.envs[0], self.actor_handles[0], name)
-
         self.left_hip_joint_indices = torch.zeros(len(self.cfg.asset.left_hip_joints), dtype=torch.long, device=self.device, requires_grad=False)
         for i in range(len(self.cfg.asset.left_hip_joints)):
             self.left_hip_joint_indices[i] = self.dof_names.index(self.cfg.asset.left_hip_joints[i])
@@ -1198,6 +1209,25 @@ class LeggedRobot(BaseTask):
         base_height = self.root_states[:, 2] > self.cfg.rewards.target_base_height_phase1
         return torch.exp(torch.sum(torch.square(self.base_ang_vel[:, :2]), dim=1) * -2) * base_height
  
+    def _reward_torque_balance(self):
+        # 提取左右髋关节力矩: shape (num_envs, 3)
+        left_hip_torques = self.torques[:, [0, 1, 2]] * 0.01  # shape: (num_envs, 3)
+        right_hip_torques = self.torques[:, [6, 7, 8]] * 0.01 # shape: (num_envs, 3)
+
+        # 计算每条腿内部 3 个 DOF 力矩的方差（在 DOF 维度 dim=1 上）
+        left_var = left_hip_torques.var(dim=1)   # (num_envs,), 方差越小越均衡
+        right_var = right_hip_torques.var(dim=1) # (num_envs,)
+
+        # 拼接左右方差，并取平均
+        combined_var = torch.mean(
+            torch.cat([
+                left_var.view(-1, 1),      # (num_envs, 1)
+                right_var.view(-1, 1)      # (num_envs, 1)
+            ], dim=-1),                    # -> (num_envs, 2)
+            dim=-1                         # -> (num_envs,)
+        )
+
+        return combined_var
     #--------------------------post-task rewards-----------------------------
     def _reward_ang_vel_xy(self):
         # Penalize xy axes base angular velocity
@@ -1230,6 +1260,8 @@ class LeggedRobot(BaseTask):
 
     def _reward_target_base_height(self):
         # Penalize base height away from target
+        
         base_height = self.root_states[:, 2]
+        
         standup  = self.root_states[:, 2] > self.cfg.rewards.target_base_height_phase3
         return torch.exp(torch.abs(base_height - self.cfg.rewards.base_height_target) * - 20) * standup

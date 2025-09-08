@@ -1,5 +1,5 @@
 <mujoco model="L13dof">
-  <compiler angle="radian" meshdir="meshes/" autolimits="true" />
+  <compiler angle="radian" meshdir="meshes_old/" autolimits="true" />
   <option timestep="0.001" gravity="0 0 -9.81" iterations="50" tolerance="1e-10" solver="Newton" jacobian="dense" cone="pyramidal" />
   
   <statistic meansize="0.156914" extent="1.9142" center="0.00807807 -1.06969e-05 -0.254506" />

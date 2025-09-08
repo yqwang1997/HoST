@@ -1,0 +1,1926 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- This URDF was automatically created by SolidWorks to URDF Exporter! Originally created by Stephen Brawner (brawner@gmail.com) 
+     Commit Version: 1.6.0-4-g7f85cfe  Build Version: 1.6.7995.38578
+     For more information, please see http://wiki.ros.org/sw_urdf_exporter -->
+<robot
+  name="CASBOT_02">
+<mujoco>
+  <compiler meshdir="/home/casbot/ZHZ_ws/HoST/legged_gym/resources/robots/02/meshes_02" balanceinertia="true" discardvisual="false"/>
+</mujoco>
+  <link
+    name="base_link">
+    <inertial>
+      <origin
+        xyz="0.000723 4.36E-05 0.059255"
+        rpy="0 0 0" />
+      <mass
+        value="4.7364" />
+      <inertia
+        ixx="0.014859"
+        ixy="5.75E-06"
+        ixz="4.18E-06"
+        iyy="0.010209"
+        iyz="4.58E-06"
+        izz="0.012669" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="/home/casbot/ZHZ_ws/HoST/legged_gym/resources/robots/02/meshes_02/base_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.79216 0.81961 0.93333 1" />
+      </material>
+    </visual>
+    <!-- <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="/home/casbot/ZHZ_ws/HoST/legged_gym/resources/robots/02/meshes_02/base_link.STL" />
+      </geometry>
+    </collision> -->
+  </link>
+
+  <!-- <Left Leg> -->
+  <link
+    name="left_leg_pelvic_pitch_link">
+    <inertial>
+      <origin
+        xyz="0.007392 0.073579 -0.047622"
+        rpy="0 0 0" />
+      <mass
+        value="2.1671" />
+      <inertia
+        ixx="0.0038978"
+        ixy="-3E-05"
+        ixz="8.41E-05"
+        iyy="0.0025035"
+        iyz="-0.00071248"
+        izz="0.0026698" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="/home/casbot/ZHZ_ws/HoST/legged_gym/resources/robots/02/meshes_02/left_leg_pelvic_pitch_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.792156862745098 0.819607843137255 0.933333333333333 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="/home/casbot/ZHZ_ws/HoST/legged_gym/resources/robots/02/meshes_02/left_leg_pelvic_pitch_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="left_leg_pelvic_pitch_joint"
+    type="revolute">
+    <origin
+      xyz="0 0.061 0.0575"
+      rpy="0 0 0" />
+    <parent
+      link="base_link" />
+    <child
+      link="left_leg_pelvic_pitch_link" />
+    <axis
+      xyz="0 1 0" />
+    <limit
+      lower="-1.9199"
+      upper="1.5708"
+      effort="250"
+      velocity="14" />
+  </joint>
+  <link
+    name="left_leg_pelvic_roll_link">
+    <inertial>
+      <origin
+        xyz="0.024639 0.00080539 -0.053958"
+        rpy="0 0 0" />
+      <mass
+        value="0.72933" />
+      <inertia
+        ixx="0.0019449"
+        ixy="8.56E-06"
+        ixz="0.00055534"
+        iyy="0.0021761"
+        iyz="2.15E-05"
+        izz="0.0013377" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="/home/casbot/ZHZ_ws/HoST/legged_gym/resources/robots/02/meshes_02/left_leg_pelvic_roll_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.792156862745098 0.819607843137255 0.933333333333333 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="/home/casbot/ZHZ_ws/HoST/legged_gym/resources/robots/02/meshes_02/left_leg_pelvic_roll_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="left_leg_pelvic_roll_joint"
+    type="revolute">
+    <origin
+      xyz="-0.0028 0.0815 -0.055"
+      rpy="0 0 0" />
+    <parent
+      link="left_leg_pelvic_pitch_link" />
+    <child
+      link="left_leg_pelvic_roll_link" />
+    <axis
+      xyz="1 0 0" />
+    <limit
+      lower="-0.17453"
+      upper="1.5708"
+      effort="150"
+      velocity="14" />
+  </joint>
+  <link
+    name="left_leg_pelvic_yaw_link">
+    <inertial>
+      <origin
+        xyz="-0.00661879 0.00244386 -0.16688757"
+        rpy="0 0 0" />
+      <mass
+        value="4.14153252" />
+      <inertia
+        ixx="0.05817152"
+        ixy="-0.00030409"
+        ixz="0.00381984"
+        iyy="0.05963585"
+        iyz="-0.00122513"
+        izz="0.00607035" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="/home/casbot/ZHZ_ws/HoST/legged_gym/resources/robots/02/meshes_02/left_leg_pelvic_yaw_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.792156862745098 0.819607843137255 0.933333333333333 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="/home/casbot/ZHZ_ws/HoST/legged_gym/resources/robots/02/meshes_02/left_leg_pelvic_yaw_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="left_leg_pelvic_yaw_joint"
+    type="revolute">
+    <origin
+      xyz="0 0 -0.0975"
+      rpy="0 0 0" />
+    <parent
+      link="left_leg_pelvic_roll_link" />
+    <child
+      link="left_leg_pelvic_yaw_link" />
+    <axis
+      xyz="0 0 1" />
+    <limit
+      lower="-1.5708"
+      upper="1.5708"
+      effort="150"
+      velocity="14" />
+  </joint>
+  <link
+    name="left_leg_knee_pitch_link">
+    <inertial>
+      <origin
+        xyz="0.00629688 -0.00316905 -0.19469131"
+        rpy="0 0 0" />
+      <mass
+        value="4.2950796" />
+      <inertia
+        ixx="0.05403181"
+        ixy="0.00011774"
+        ixz="0.00184486"
+        iyy="0.05447074"
+        iyz="-0.00229582"
+        izz="0.00569046" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="/home/casbot/ZHZ_ws/HoST/legged_gym/resources/robots/02/meshes_02/left_leg_knee_pitch_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.792156862745098 0.819607843137255 0.933333333333333 1" />
+      </material>
+    </visual>
+    <!-- <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="/home/casbot/ZHZ_ws/HoST/legged_gym/resources/robots/02/meshes_02/left_leg_knee_pitch_link.STL" />
+      </geometry>
+    </collision> -->
+    <collision>
+      <origin xyz="0.0 0.001 -0.18" rpy="0 0 0"/>
+      <geometry>
+        <box size="0.05 0.07 0.19"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="0.02 0.00 -0.35" rpy="0 0 0"/>
+      <geometry>
+        <box size="0.03 0.06 0.1"/>
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="left_leg_knee_pitch_joint"
+    type="revolute">
+    <origin
+      xyz="-0.02 0 -0.2735"
+      rpy="0 0 0" />
+    <parent
+      link="left_leg_pelvic_yaw_link" />
+    <child
+      link="left_leg_knee_pitch_link" />
+    <axis
+      xyz="0 1 0" />
+    <limit
+      lower="0"
+      upper="2.5307"
+      effort="250"
+      velocity="14" />
+  </joint>
+  <link
+    name="left_leg_ankle_pitch_link">
+    <inertial>
+      <origin
+        xyz="0 -1.93E-06 0"
+        rpy="0 0 0" />
+      <mass
+        value="0.057376" />
+      <inertia
+        ixx="1.17E-05"
+        ixy="0"
+        ixz="0"
+        iyy="9.47E-06"
+        iyz="0"
+        izz="1.04E-05" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="/home/casbot/ZHZ_ws/HoST/legged_gym/resources/robots/02/meshes_02/left_leg_ankle_pitch_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.792156862745098 0.819607843137255 0.933333333333333 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="/home/casbot/ZHZ_ws/HoST/legged_gym/resources/robots/02/meshes_02/left_leg_ankle_pitch_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="left_leg_ankle_pitch_joint"
+    type="revolute">
+    <origin
+      xyz="0 0 -0.453"
+      rpy="0 0 0" />
+    <parent
+      link="left_leg_knee_pitch_link" />
+    <child
+      link="left_leg_ankle_pitch_link" />
+    <axis
+      xyz="0 1 0" />
+    <limit
+      lower="-0.87266"
+      upper="0.50614"
+      effort="70"
+      velocity="14" />
+  </joint>
+  <link
+    name="left_leg_ankle_roll_link">
+    <inertial>
+      <origin
+        xyz="0.0227294 0.00124718 -0.03609679"
+        rpy="0 0 0" />
+      <mass
+        value="1.10059947" />
+      <inertia
+        ixx="0.00146891"
+        ixy="0.00010055"
+        ixz="-0.00028119"
+        iyy="0.00580567"
+        iyz="-1.06E-05"
+        izz="0.00623844" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="/home/casbot/ZHZ_ws/HoST/legged_gym/resources/robots/02/meshes_02/left_leg_ankle_roll_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.792156862745098 0.819607843137255 0.933333333333333 1" />
+      </material>
+    </visual>
+    <!-- <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="/home/casbot/ZHZ_ws/HoST/legged_gym/resources/robots/02/meshes_02/left_leg_ankle_roll_link.STL" />
+      </geometry>
+    </collision> -->
+    <!-- <collision>
+      <origin
+        xyz="0.03 0 -0.05"
+        rpy="0 0 0" />
+      <geometry>
+        <box size="0.23 0.08 0.02" />
+      </geometry>
+    </collision> -->
+<!-- <rear2> -->
+    <collision>
+      <origin xyz="-0.05 0.05 -0.05" rpy="0 0 0"/>
+      <geometry>
+        <sphere radius="0.005"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-0.05 -0.05 -0.05" rpy="0 0 0"/>
+      <geometry>
+        <sphere radius="0.005"/>
+      </geometry>
+    </collision>
+    <!-- <front2> -->
+    <collision>
+      <origin xyz="0.12 0.04 -0.05" rpy="0 0 0"/>
+      <geometry>
+        <sphere radius="0.005"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="0.12 -0.04 -0.05" rpy="0 0 0"/>
+      <geometry>
+        <sphere radius="0.005"/>
+      </geometry>
+    </collision>
+    <!-- <mid2> -->
+    <collision>
+      <origin xyz="0.05 -0.04 -0.05" rpy="0 0 0"/>
+      <geometry>
+        <sphere radius="0.005"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="0.05 0.035 -0.05" rpy="0 0 0"/>
+      <geometry>
+        <sphere radius="0.005"/>
+      </geometry>
+    </collision>
+    <!-- <tip> -->
+    <collision>
+      <origin xyz="0.16 -0.0 -0.05" rpy="0 0 0"/>
+      <geometry>
+        <sphere radius="0.005"/>
+      </geometry>
+    </collision>
+    <!-- <rear3> -->
+    <collision>
+      <origin xyz="-0.082 -0.0 -0.05" rpy="0 0 0"/>
+      <geometry>
+        <sphere radius="0.005"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-0.07 -0.036 -0.05" rpy="0 0 0"/>
+      <geometry>
+        <sphere radius="0.005"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-0.07 0.036 -0.05" rpy="0 0 0"/>
+      <geometry>
+        <sphere radius="0.005"/>
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="left_leg_ankle_roll_joint"
+    type="revolute">
+    <origin
+      xyz="0 0 0"
+      rpy="0 0 0" />
+    <parent
+      link="left_leg_ankle_pitch_link" />
+    <child
+      link="left_leg_ankle_roll_link" />
+    <axis
+      xyz="1 0 0" />
+    <limit
+      lower="-0.50614"
+      upper="0.50614"
+      effort="70"
+      velocity="14" />
+  </joint>
+
+  <!-- <Right Leg> -->
+  <link
+    name="right_leg_pelvic_pitch_link">
+    <inertial>
+      <origin
+        xyz="0.0073684 -0.073515 -0.047566"
+        rpy="0 0 0" />
+      <mass
+        value="2.1692" />
+      <inertia
+        ixx="0.0039156"
+        ixy="2.66E-05"
+        ixz="8.11E-05"
+        iyy="0.0025133"
+        iyz="0.00072134"
+        izz="0.0026803" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="/home/casbot/ZHZ_ws/HoST/legged_gym/resources/robots/02/meshes_02/right_leg_pelvic_pitch_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.79216 0.81961 0.93333 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="/home/casbot/ZHZ_ws/HoST/legged_gym/resources/robots/02/meshes_02/right_leg_pelvic_pitch_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="right_leg_pelvic_pitch_joint"
+    type="revolute">
+    <origin
+      xyz="0 -0.061 0.0575"
+      rpy="0 0 0" />
+    <parent
+      link="base_link" />
+    <child
+      link="right_leg_pelvic_pitch_link" />
+    <axis
+      xyz="0 1 0" />
+    <limit
+      lower="-1.9199"
+      upper="1.5708"
+      effort="250"
+      velocity="14" />
+  </joint>
+  <link
+    name="right_leg_pelvic_roll_link">
+    <inertial>
+      <origin
+        xyz="0.02454135 -0.00073527 -0.05397896"
+        rpy="0 0 0" />
+      <mass
+        value="0.73063815" />
+      <inertia
+        ixx="0.00194532"
+        ixy="-1.08E-05"
+        ixz="0.00055616"
+        iyy="0.00218022"
+        iyz="-3.35E-05"
+        izz="0.0013419" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="/home/casbot/ZHZ_ws/HoST/legged_gym/resources/robots/02/meshes_02/right_leg_pelvic_roll_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.792156862745098 0.819607843137255 0.933333333333333 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="/home/casbot/ZHZ_ws/HoST/legged_gym/resources/robots/02/meshes_02/right_leg_pelvic_roll_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="right_leg_pelvic_roll_joint"
+    type="revolute">
+    <origin
+      xyz="-0.0028 -0.0815 -0.055"
+      rpy="0 0 0" />
+    <parent
+      link="right_leg_pelvic_pitch_link" />
+    <child
+      link="right_leg_pelvic_roll_link" />
+    <axis
+      xyz="1 0 0" />
+    <limit
+      lower="-1.5708"
+      upper="0.17453"
+      effort="150"
+      velocity="14" />
+  </joint>
+  <link
+    name="right_leg_pelvic_yaw_link">
+    <inertial>
+      <origin
+        xyz="-0.00661803 -0.00237857 -0.16684884"
+        rpy="0 0 0" />
+      <mass
+        value="4.14269385" />
+      <inertia
+        ixx="0.05821261"
+        ixy="0.00029196"
+        ixz="0.00381166"
+        iyy="0.05967094"
+        iyz="0.00126828"
+        izz="0.00607468" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="/home/casbot/ZHZ_ws/HoST/legged_gym/resources/robots/02/meshes_02/right_leg_pelvic_yaw_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.792156862745098 0.819607843137255 0.933333333333333 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="/home/casbot/ZHZ_ws/HoST/legged_gym/resources/robots/02/meshes_02/right_leg_pelvic_yaw_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="right_leg_pelvic_yaw_joint"
+    type="revolute">
+    <origin
+      xyz="0 0 -0.0975"
+      rpy="0 0 0" />
+    <parent
+      link="right_leg_pelvic_roll_link" />
+    <child
+      link="right_leg_pelvic_yaw_link" />
+    <axis
+      xyz="0 0 1" />
+    <limit
+      lower="-1.5708"
+      upper="1.5708"
+      effort="150"
+      velocity="14" />
+  </joint>
+  <link
+    name="right_leg_knee_pitch_link">
+    <inertial>
+      <origin
+        xyz="0.0062807 0.003158 -0.1947"
+        rpy="0 0 0" />
+      <mass
+        value="4.2982" />
+      <inertia
+        ixx="0.054098"
+        ixy="-0.00011728"
+        ixz="0.0018468"
+        iyy="0.054533"
+        iyz="0.002294"
+        izz="0.0056954" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="/home/casbot/ZHZ_ws/HoST/legged_gym/resources/robots/02/meshes_02/right_leg_knee_pitch_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.792156862745098 0.819607843137255 0.933333333333333 1" />
+      </material>
+    </visual>
+    <!-- <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="/home/casbot/ZHZ_ws/HoST/legged_gym/resources/robots/02/meshes_02/right_leg_knee_pitch_link.STL" />
+      </geometry>
+    </collision> -->
+    <collision>
+      <origin xyz="0.0 -0.001 -0.18" rpy="0 0 0"/>
+      <geometry>
+        <box size="0.05 0.07 0.19"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="0.02 0.00 -0.35" rpy="0 0 0"/>
+      <geometry>
+        <box size="0.03 0.06 0.1"/>
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="right_leg_knee_pitch_joint"
+    type="revolute">
+    <origin
+      xyz="-0.02 0 -0.2735"
+      rpy="0 0 0" />
+    <parent
+      link="right_leg_pelvic_yaw_link" />
+    <child
+      link="right_leg_knee_pitch_link" />
+    <axis
+      xyz="0 1 0" />
+    <limit
+      lower="0"
+      upper="2.5307"
+      effort="250"
+      velocity="14" />
+  </joint>
+  <link
+    name="right_leg_ankle_pitch_link">
+    <inertial>
+      <origin
+        xyz="0 -1.93E-06 0"
+        rpy="0 0 0" />
+      <mass
+        value="0.05737571" />
+      <inertia
+        ixx="1.17E-05"
+        ixy="0"
+        ixz="0"
+        iyy="9.47E-06"
+        iyz="0"
+        izz="1.04E-05" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="/home/casbot/ZHZ_ws/HoST/legged_gym/resources/robots/02/meshes_02/right_leg_ankle_pitch_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.792156862745098 0.819607843137255 0.933333333333333 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="/home/casbot/ZHZ_ws/HoST/legged_gym/resources/robots/02/meshes_02/right_leg_ankle_pitch_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="right_leg_ankle_pitch_joint"
+    type="revolute">
+    <origin
+      xyz="0 0 -0.453"
+      rpy="0 0 0" />
+    <parent
+      link="right_leg_knee_pitch_link" />
+    <child
+      link="right_leg_ankle_pitch_link" />
+    <axis
+      xyz="0 1 0" />
+    <limit
+      lower="-0.87266"
+      upper="0.50614"
+      effort="70"
+      velocity="14" />
+  </joint>
+  <link
+    name="right_leg_ankle_roll_link">
+    <inertial>
+      <origin
+        xyz="0.02309987 -0.00122698 -0.03296727"
+        rpy="0 0 0" />
+      <mass
+        value="1.09359253" />
+      <inertia
+        ixx="0.00168213"
+        ixy="-9.7E-05"
+        ixz="-0.0002557"
+        iyy="0.0065233"
+        iyz="9.99E-06"
+        izz="0.00707086" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="/home/casbot/ZHZ_ws/HoST/legged_gym/resources/robots/02/meshes_02/right_leg_ankle_roll_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.792156862745098 0.819607843137255 0.933333333333333 1" />
+      </material>
+    </visual>
+    <!-- <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="/home/casbot/ZHZ_ws/HoST/legged_gym/resources/robots/02/meshes_02/right_leg_ankle_roll_link.STL" />
+      </geometry>
+    </collision> -->
+    <!-- <collision>
+      <origin
+        xyz="0.03 0 -0.05"
+        rpy="0 0 0" />
+      <geometry>
+        <box size="0.23 0.08 0.02" />
+      </geometry>
+    </collision> -->
+<!-- <rear2> -->
+    <collision>
+      <origin xyz="-0.05 0.05 -0.05" rpy="0 0 0"/>
+      <geometry>
+        <sphere radius="0.005"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-0.05 -0.05 -0.05" rpy="0 0 0"/>
+      <geometry>
+        <sphere radius="0.005"/>
+      </geometry>
+    </collision>
+    <!-- <front2> -->
+    <collision>
+      <origin xyz="0.12 0.04 -0.05" rpy="0 0 0"/>
+      <geometry>
+        <sphere radius="0.005"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="0.12 -0.04 -0.05" rpy="0 0 0"/>
+      <geometry>
+        <sphere radius="0.005"/>
+      </geometry>
+    </collision>
+    <!-- <mid2> -->
+    <collision>
+      <origin xyz="0.05 -0.04 -0.05" rpy="0 0 0"/>
+      <geometry>
+        <sphere radius="0.005"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="0.05 0.035 -0.05" rpy="0 0 0"/>
+      <geometry>
+        <sphere radius="0.005"/>
+      </geometry>
+    </collision>
+    <!-- <tip> -->
+    <collision>
+      <origin xyz="0.16 -0.0 -0.05" rpy="0 0 0"/>
+      <geometry>
+        <sphere radius="0.005"/>
+      </geometry>
+    </collision>
+    <!-- <rear3> -->
+    <collision>
+      <origin xyz="-0.082 -0.0 -0.05" rpy="0 0 0"/>
+      <geometry>
+        <sphere radius="0.005"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-0.07 -0.036 -0.05" rpy="0 0 0"/>
+      <geometry>
+        <sphere radius="0.005"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-0.07 0.036 -0.05" rpy="0 0 0"/>
+      <geometry>
+        <sphere radius="0.005"/>
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="right_leg_ankle_roll_joint"
+    type="revolute">
+    <origin
+      xyz="0 0 0"
+      rpy="0 0 0" />
+    <parent
+      link="right_leg_ankle_pitch_link" />
+    <child
+      link="right_leg_ankle_roll_link" />
+    <axis
+      xyz="1 0 0" />
+    <limit
+      lower="-0.50614"
+      upper="0.50614"
+      effort="70"
+      velocity="14" />
+  </joint>
+  <link
+    name="waist_yaw_link">
+    <inertial>
+      <origin
+        xyz="-0.011182 0.00019844 0.18439"
+        rpy="0 0 0" />
+      <mass
+        value="11.255" />
+      <inertia
+        ixx="0.13369"
+        ixy="0.0001217"
+        ixz="-0.0059434"
+        iyy="0.12551"
+        iyz="1.709E-05"
+        izz="0.073851" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="/home/casbot/ZHZ_ws/HoST/legged_gym/resources/robots/02/meshes_02/waist_yaw_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.79216 0.81961 0.93333 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="/home/casbot/ZHZ_ws/HoST/legged_gym/resources/robots/02/meshes_02/waist_yaw_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="waist_yaw_joint"
+    type="revolute">
+    <origin
+      xyz="0 0 0.154238635424338"
+      rpy="0 0 0" />
+    <parent
+      link="base_link" />
+    <child
+      link="waist_yaw_link" />
+    <axis
+      xyz="0 0 1" />
+    <limit
+      lower="-1.5708"
+      upper="1.5708"
+      effort="100"
+      velocity="14" />
+  </joint>
+
+  
+  <link
+    name="head_yaw_link">
+    <inertial>
+      <origin
+        xyz="-0.00045035 0.0020279 0.04382949"
+        rpy="0 0 0" />
+      <mass
+        value="0.53744272" />
+      <inertia
+        ixx="0.0003913"
+        ixy="-2.5E-06"
+        ixz="1.18E-05"
+        iyy="0.00032903"
+        iyz="-8.01E-06"
+        izz="0.00037805" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="/home/casbot/ZHZ_ws/HoST/legged_gym/resources/robots/02/meshes_02/head_yaw_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.792156862745098 0.819607843137255 0.933333333333333 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="/home/casbot/ZHZ_ws/HoST/legged_gym/resources/robots/02/meshes_02/head_yaw_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="head_yaw_joint"
+    type="fixed">
+    <origin
+      xyz="0 0 0.36225"
+      rpy="0 0 0" />
+    <parent
+      link="waist_yaw_link" />
+    <child
+      link="head_yaw_link" />
+    <axis
+      xyz="0 0 1" />
+    <limit
+      lower="-1.5708"
+      upper="1.5708"
+      effort="60"
+      velocity="14" />
+  </joint>
+  <link
+    name="head_pitch_link">
+    <inertial>
+      <origin
+        xyz="0.02869766 -0.00085276 0.08546482"
+        rpy="0 0 0" />
+      <mass
+        value="1.3963681" />
+      <inertia
+        ixx="0.0046253"
+        ixy="-2.19E-05"
+        ixz="0.00054718"
+        iyy="0.00519563"
+        iyz="-6.62E-05"
+        izz="0.00499916" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="/home/casbot/ZHZ_ws/HoST/legged_gym/resources/robots/02/meshes_02/head_pitch_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.792156862745098 0.819607843137255 0.933333333333333 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="/home/casbot/ZHZ_ws/HoST/legged_gym/resources/robots/02/meshes_02/head_pitch_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="head_pitch_joint"
+    type="fixed">
+    <origin
+      xyz="0 0 0.045409"
+      rpy="0 0 0" />
+    <parent
+      link="head_yaw_link" />
+    <child
+      link="head_pitch_link" />
+    <axis
+      xyz="0 1 0" />
+    <limit
+      lower="-0.2618"
+      upper="0.5236"
+      effort="60"
+      velocity="14" />
+  </joint>
+
+<!-- Keyframe -->
+  <link name="keyframe_head_link">
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+        <sphere radius="0.05"/>
+      </geometry>
+    </visual>
+  </link>
+  <joint name="keyframe_head_joint" type="fixed" dont_collapse="true">
+    <origin xyz="0 0 0.05" rpy="0 0 0"/>
+    <parent link="head_yaw_link"/>
+    <child link="keyframe_head_link"/>
+  </joint>
+
+
+  <link
+    name="left_shoulder_pitch_link">
+    <inertial>
+      <origin
+        xyz="0.00449097 0.05106439 1.17E-06"
+        rpy="0 0 0" />
+      <mass
+        value="0.70124345" />
+      <inertia
+        ixx="0.00048251"
+        ixy="1.97E-05"
+        ixz="4.6E-07"
+        iyy="0.00035011"
+        iyz="-2.2E-06"
+        izz="0.00045997" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="/home/casbot/ZHZ_ws/HoST/legged_gym/resources/robots/02/meshes_02/left_shoulder_pitch_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.792156862745098 0.819607843137255 0.933333333333333 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="/home/casbot/ZHZ_ws/HoST/legged_gym/resources/robots/02/meshes_02/left_shoulder_pitch_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="left_shoulder_pitch_joint"
+    type="revolute">
+    <origin
+      xyz="0 0.145 0.2673"
+      rpy="0 0 0" />
+    <parent
+      link="waist_yaw_link" />
+    <child
+      link="left_shoulder_pitch_link" />
+    <axis
+      xyz="0 1 0" />
+    <limit
+      lower="-3.1416"
+      upper="1.0472"
+      effort="65"
+      velocity="26" />
+  </joint>
+  <link
+    name="left_shoulder_roll_link">
+    <inertial>
+      <origin
+        xyz="-0.00220551 0.00043559 -0.08273431"
+        rpy="0 0 0" />
+      <mass
+        value="0.67594611" />
+      <inertia
+        ixx="0.0010679"
+        ixy="1.49E-06"
+        ixz="-0.00010051"
+        iyy="0.00121514"
+        iyz="2.35E-05"
+        izz="0.00049051" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="/home/casbot/ZHZ_ws/HoST/legged_gym/resources/robots/02/meshes_02/left_shoulder_roll_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.792156862745098 0.819607843137255 0.933333333333333 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="/home/casbot/ZHZ_ws/HoST/legged_gym/resources/robots/02/meshes_02/left_shoulder_roll_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="left_shoulder_roll_joint"
+    type="revolute">
+    <origin
+      xyz="0 0.057 0"
+      rpy="0 0 0" />
+    <parent
+      link="left_shoulder_pitch_link" />
+    <child
+      link="left_shoulder_roll_link" />
+    <axis
+      xyz="1 0 0" />
+    <limit
+      lower="-0.3491"
+      upper="3.1416"
+      effort="65"
+      velocity="26" />
+  </joint>
+  <link
+    name="left_shoulder_yaw_link">
+    <inertial>
+      <origin
+        xyz="0.00017586 0.019459 -0.022426"
+        rpy="0 0 0" />
+      <mass
+        value="0.14218" />
+      <inertia
+        ixx="0.00021135"
+        ixy="-1.9E-07"
+        ixz="1E-07"
+        iyy="0.00017485"
+        iyz="-6.46E-05"
+        izz="0.00012187" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="/home/casbot/ZHZ_ws/HoST/legged_gym/resources/robots/02/meshes_02/left_shoulder_yaw_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.792156862745098 0.819607843137255 0.933333333333333 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="/home/casbot/ZHZ_ws/HoST/legged_gym/resources/robots/02/meshes_02/left_shoulder_yaw_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="left_shoulder_yaw_joint"
+    type="revolute">
+    <origin
+      xyz="0 0 -0.1315"
+      rpy="0 0 0" />
+    <parent
+      link="left_shoulder_roll_link" />
+    <child
+      link="left_shoulder_yaw_link" />
+    <axis
+      xyz="0 0 1" />
+    <limit
+      lower="-1.5708"
+      upper="1.5708"
+      effort="16"
+      velocity="13.6" />
+  </joint>
+
+
+  <link
+    name="left_elbow_pitch_link">
+    <inertial>
+      <origin
+        xyz="-0.00178731 -0.00205423 -0.05553697"
+        rpy="0 0 0" />
+      <mass
+        value="1.35289277" />
+      <inertia
+        ixx="0.00551956"
+        ixy="-2.11E-05"
+        ixz="6.23E-05"
+        iyy="0.0054991"
+        iyz="-0.00018228"
+        izz="0.00082725" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="/home/casbot/ZHZ_ws/HoST/legged_gym/resources/robots/02/meshes_02/left_elbow_pitch_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.792156862745098 0.819607843137255 0.933333333333333 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="/home/casbot/ZHZ_ws/HoST/legged_gym/resources/robots/02/meshes_02/left_elbow_pitch_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="left_elbow_pitch_joint"
+    type="revolute">
+    <origin
+      xyz="0 0 -0.061"
+      rpy="0 0 0" />
+    <parent
+      link="left_shoulder_yaw_link" />
+    <child
+      link="left_elbow_pitch_link" />
+    <axis
+      xyz="0 1 0" />
+    <limit
+      lower="-1.8675"
+      upper="0"
+      effort="65"
+      velocity="26" />
+  </joint>
+  <link
+    name="left_wrist_yaw_link">
+    <inertial>
+      <origin
+        xyz="0.00066742 -0.00325051 -0.03139976"
+        rpy="0 0 0" />
+      <mass
+        value="0.12440601" />
+      <inertia
+        ixx="0.00013262"
+        ixy="-1.8E-07"
+        ixz="9.8E-07"
+        iyy="0.00013609"
+        iyz="2.81E-06"
+        izz="2.11E-05" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="/home/casbot/ZHZ_ws/HoST/legged_gym/resources/robots/02/meshes_02/left_wrist_yaw_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.792156862745098 0.819607843137255 0.933333333333333 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="/home/casbot/ZHZ_ws/HoST/legged_gym/resources/robots/02/meshes_02/left_wrist_yaw_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="left_wrist_yaw_joint"
+    type="revolute">
+    <origin
+      xyz="0 0 -0.131"
+      rpy="0 0 0" />
+    <parent
+      link="left_elbow_pitch_link" />
+    <child
+      link="left_wrist_yaw_link" />
+    <axis
+      xyz="0 0 1" />
+    <limit
+      lower="-1.5708"
+      upper="1.5708"
+      effort="16"
+      velocity="13.6" />
+  </joint>
+  <link
+    name="left_hand_link">
+    <inertial>
+      <origin
+        xyz="0 -1.97E-05 -0.00469405"
+        rpy="0 0 0" />
+      <mass
+        value="0.01573321" />
+      <inertia
+        ixx="2.21E-06"
+        ixy="0"
+        ixz="0"
+        iyy="2.22E-06"
+        iyz="0"
+        izz="4.03E-06" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="/home/casbot/ZHZ_ws/HoST/legged_gym/resources/robots/02/meshes_02/left_hand_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.898039215686275 0.917647058823529 0.929411764705882 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="/home/casbot/ZHZ_ws/HoST/legged_gym/resources/robots/02/meshes_02/left_hand_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="left_hand_joint"
+    type="fixed">
+    <origin
+      xyz="0 0 -0.1004"
+      rpy="0 0 0" />
+    <parent
+      link="left_wrist_yaw_link" />
+    <child
+      link="left_hand_link" />
+    <axis
+      xyz="0 0 1" />
+    <limit
+      lower="0"
+      upper="0"
+      effort="0"
+      velocity="0" />
+  </joint>
+  <link
+    name="right_shoulder_pitch_link">
+    <inertial>
+      <origin
+        xyz="0.0044088 -0.050926 -6.71E-05"
+        rpy="0 0 0" />
+      <mass
+        value="0.70562" />
+      <inertia
+        ixx="0.00048946"
+        ixy="-1.96E-05"
+        ixz="6E-07"
+        iyy="0.00035213"
+        iyz="-4.7E-07"
+        izz="0.00046784" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="/home/casbot/ZHZ_ws/HoST/legged_gym/resources/robots/02/meshes_02/right_shoulder_pitch_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.792156862745098 0.819607843137255 0.933333333333333 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="/home/casbot/ZHZ_ws/HoST/legged_gym/resources/robots/02/meshes_02/right_shoulder_pitch_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="right_shoulder_pitch_joint"
+    type="revolute">
+    <origin
+      xyz="0 -0.145 0.2673"
+      rpy="0 0 0" />
+    <parent
+      link="waist_yaw_link" />
+    <child
+      link="right_shoulder_pitch_link" />
+    <axis
+      xyz="0 1 0" />
+    <limit
+      lower="-3.1416"
+      upper="1.0472"
+      effort="65"
+      velocity="26" />
+  </joint>
+  <link
+    name="right_shoulder_roll_link">
+    <inertial>
+      <origin
+        xyz="-0.00221509 -0.00044725 -0.08274294"
+        rpy="0 0 0" />
+      <mass
+        value="0.67591047" />
+      <inertia
+        ixx="0.00106728"
+        ixy="-1.24E-06"
+        ixz="-0.00010009"
+        iyy="0.00121435"
+        iyz="-2.4E-05"
+        izz="0.00049032" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="/home/casbot/ZHZ_ws/HoST/legged_gym/resources/robots/02/meshes_02/right_shoulder_roll_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.792156862745098 0.819607843137255 0.933333333333333 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="/home/casbot/ZHZ_ws/HoST/legged_gym/resources/robots/02/meshes_02/right_shoulder_roll_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="right_shoulder_roll_joint"
+    type="revolute">
+    <origin
+      xyz="0 -0.057 0"
+      rpy="0 0 0" />
+    <parent
+      link="right_shoulder_pitch_link" />
+    <child
+      link="right_shoulder_roll_link" />
+    <axis
+      xyz="1 0 0" />
+    <limit
+      lower="-3.1416"
+      upper="0.3491"
+      effort="65"
+      velocity="26" />
+  </joint>
+
+  <link
+    name="right_shoulder_yaw_link">
+    <inertial>
+      <origin
+        xyz="0.00014542 -0.01944032 -0.02242457"
+        rpy="0 0 0" />
+      <mass
+        value="0.14218567" />
+      <inertia
+        ixx="0.00021124"
+        ixy="2.2E-07"
+        ixz="5.3E-07"
+        iyy="0.00017487"
+        iyz="6.45E-05"
+        izz="0.00012175" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="/home/casbot/ZHZ_ws/HoST/legged_gym/resources/robots/02/meshes_02/right_shoulder_yaw_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.792156862745098 0.819607843137255 0.933333333333333 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="/home/casbot/ZHZ_ws/HoST/legged_gym/resources/robots/02/meshes_02/right_shoulder_yaw_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="right_shoulder_yaw_joint"
+    type="revolute">
+    <origin
+      xyz="0 0 -0.1315"
+      rpy="0 0 0" />
+    <parent
+      link="right_shoulder_roll_link" />
+    <child
+      link="right_shoulder_yaw_link" />
+    <axis
+      xyz="0 0 1" />
+    <limit
+      lower="-1.5708"
+      upper="1.5708"
+      effort="16"
+      velocity="13.6" />
+  </joint>
+  <link
+    name="right_elbow_pitch_link">
+    <inertial>
+      <origin
+        xyz="-0.0015975 0.00201012 -0.05546157"
+        rpy="0 0 0" />
+      <mass
+        value="1.35485023" />
+      <inertia
+        ixx="0.00552546"
+        ixy="1.94E-05"
+        ixz="4.18E-05"
+        iyy="0.00550399"
+        iyz="0.00017918"
+        izz="0.00083042" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="/home/casbot/ZHZ_ws/HoST/legged_gym/resources/robots/02/meshes_02/right_elbow_pitch_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.792156862745098 0.819607843137255 0.933333333333333 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="/home/casbot/ZHZ_ws/HoST/legged_gym/resources/robots/02/meshes_02/right_elbow_pitch_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="right_elbow_pitch_joint"
+    type="revolute">
+    <origin
+      xyz="0 0 -0.061"
+      rpy="0 0 0" />
+    <parent
+      link="right_shoulder_yaw_link" />
+    <child
+      link="right_elbow_pitch_link" />
+    <axis
+      xyz="0 1 0" />
+    <limit
+      lower="-1.8675"
+      upper="0"
+      effort="65"
+      velocity="26" />
+  </joint>
+
+
+
+  <!-- Auxiliary -->
+  <link name="auxiliary_right_leg_ankle_roll_link1">
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+        <sphere radius="0.01"/>
+      </geometry>
+    </visual>
+  </link>
+  <joint name="auxiliary_right_leg_ankle_roll_joint1" type="fixed" dont_collapse="true">
+    <origin xyz="0.035 0.1 -0.05" rpy="0 0 0"/>
+    <parent link="right_leg_ankle_roll_link"/>
+    <child link="auxiliary_right_leg_ankle_roll_link1"/>
+  </joint>
+  <link name="auxiliary_right_leg_ankle_roll_link2">
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+        <sphere radius="0.01"/>
+      </geometry>
+    </visual>
+  </link>
+  <joint name="auxiliary_right_leg_ankle_roll_joint2" type="fixed" dont_collapse="true">
+    <origin xyz="0.035 -0.1 -0.05" rpy="0 0 0"/>
+    <parent link="right_leg_ankle_roll_link"/>
+    <child link="auxiliary_right_leg_ankle_roll_link2"/>
+  </joint>
+
+  <link name="auxiliary_right_leg_ankle_roll_link3">
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+        <sphere radius="0.01"/>
+      </geometry>
+    </visual>
+  </link>
+  <joint name="auxiliary_right_leg_ankle_roll_joint3" type="fixed" dont_collapse="true">
+    <origin xyz="0.2 0 -0.05" rpy="0 0 0"/>
+    <parent link="right_leg_ankle_roll_link"/>
+    <child link="auxiliary_right_leg_ankle_roll_link3"/>
+  </joint>
+  <link name="auxiliary_right_leg_ankle_roll_link4">
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+        <sphere radius="0.01"/>
+      </geometry>
+    </visual>
+  </link>
+  <joint name="auxiliary_right_leg_ankle_roll_joint4" type="fixed" dont_collapse="true">
+    <origin xyz="-0.15 0 -0.05" rpy="0 0 0"/>
+    <parent link="right_leg_ankle_roll_link"/>
+    <child link="auxiliary_right_leg_ankle_roll_link4"/>
+  </joint>
+
+  <link name="auxiliary_left_leg_ankle_roll_link1">
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+        <sphere radius="0.01"/>
+      </geometry>
+    </visual>
+  </link>
+  <joint name="auxiliary_left_leg_ankle_roll_joint1" type="fixed" dont_collapse="true">
+    <origin xyz="0.035 0.1 -0.05" rpy="0 0 0"/>
+    <parent link="left_leg_ankle_roll_link"/>
+    <child link="auxiliary_left_leg_ankle_roll_link1"/>
+  </joint>
+  <link name="auxiliary_left_leg_ankle_roll_link2">
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+        <sphere radius="0.01"/>
+      </geometry>
+    </visual>
+  </link>
+  <joint name="auxiliary_left_leg_ankle_roll_joint2" type="fixed" dont_collapse="true">
+    <origin xyz="0.035 -0.1 -0.05" rpy="0 0 0"/>
+    <parent link="left_leg_ankle_roll_link"/>
+    <child link="auxiliary_left_leg_ankle_roll_link2"/>
+  </joint>
+
+  <link name="auxiliary_left_leg_ankle_roll_link3">
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+        <sphere radius="0.01"/>
+      </geometry>
+    </visual>
+  </link>
+  <joint name="auxiliary_left_leg_ankle_roll_joint3" type="fixed" dont_collapse="true">
+    <origin xyz="0.2 0 -0.05" rpy="0 0 0"/>
+    <parent link="left_leg_ankle_roll_link"/>
+    <child link="auxiliary_left_leg_ankle_roll_link3"/>
+  </joint>
+  <link name="auxiliary_left_leg_ankle_roll_link4">
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+        <sphere radius="0.01"/>
+      </geometry>
+    </visual>
+  </link>
+  <joint name="auxiliary_left_leg_ankle_roll_joint4" type="fixed" dont_collapse="true">
+    <origin xyz="-0.15 0 -0.05" rpy="0 0 0"/>
+    <parent link="left_leg_ankle_roll_link"/>
+    <child link="auxiliary_left_leg_ankle_roll_link4"/>
+  </joint>
+
+  <link
+    name="right_wrist_yaw_link">
+    <inertial>
+      <origin
+        xyz="-0.00066742 0.00325051 -0.03139976"
+        rpy="0 0 0" />
+      <mass
+        value="0.12440601" />
+      <inertia
+        ixx="0.00013262"
+        ixy="-1.8E-07"
+        ixz="-9.8E-07"
+        iyy="0.00013609"
+        iyz="-2.81E-06"
+        izz="2.11E-05" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="/home/casbot/ZHZ_ws/HoST/legged_gym/resources/robots/02/meshes_02/right_wrist_yaw_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.792156862745098 0.819607843137255 0.933333333333333 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="/home/casbot/ZHZ_ws/HoST/legged_gym/resources/robots/02/meshes_02/right_wrist_yaw_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="right_wrist_yaw_joint"
+    type="revolute">
+    <origin
+      xyz="0 0 -0.131"
+      rpy="0 0 0" />
+    <parent
+      link="right_elbow_pitch_link" />
+    <child
+      link="right_wrist_yaw_link" />
+    <axis
+      xyz="0 0 1" />
+    <limit
+      lower="-1.5708"
+      upper="1.5708"
+      effort="16"
+      velocity="13.6" />
+  </joint>
+  <link
+    name="right_hand_link">
+    <inertial>
+      <origin
+        xyz="0 0.00042229 -0.00469405"
+        rpy="0 0 0" />
+      <mass
+        value="0.01573321" />
+      <inertia
+        ixx="2.21E-06"
+        ixy="0"
+        ixz="0"
+        iyy="2.22E-06"
+        iyz="0"
+        izz="4.03E-06" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="/home/casbot/ZHZ_ws/HoST/legged_gym/resources/robots/02/meshes_02/right_hand_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.898039215686275 0.917647058823529 0.929411764705882 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="/home/casbot/ZHZ_ws/HoST/legged_gym/resources/robots/02/meshes_02/right_hand_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="right_hand_joint"
+    type="fixed">
+    <origin
+      xyz="0 -0.00040261 -0.1004"
+      rpy="0 0 0" />
+    <parent
+      link="right_wrist_yaw_link" />
+    <child
+      link="right_hand_link" />
+    <axis
+      xyz="0 0 1" />
+    <limit
+      lower="0"
+      upper="0"
+      effort="0"
+      velocity="0" />
+  </joint>
+
+
+</robot>

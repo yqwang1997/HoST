@@ -5,7 +5,7 @@
 <robot
   name="CASBOT_02">
 <mujoco>
-  <compiler meshdir="meshes/" balanceinertia="true" discardvisual="false"/>
+  <compiler meshdir="/home/casbot/ZHZ_ws/HoST/legged_gym/resources/robots/02/meshes_old/" balanceinertia="true" discardvisual="false"/>
 </mujoco>
   <link
     name="base_link">
@@ -29,7 +29,7 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="meshes/base_link.STL" />
+          filename="/home/casbot/ZHZ_ws/HoST/legged_gym/resources/robots/02/meshes_old/base_link.STL" />
       </geometry>
       <material
         name="">
@@ -43,7 +43,7 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="meshes/base_link.STL" />
+          filename="/home/casbot/ZHZ_ws/HoST/legged_gym/resources/robots/02/meshes_old/base_link.STL" />
       </geometry>
     </collision> -->
   </link>
@@ -71,7 +71,7 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="meshes/left_leg_pelvic_pitch_link.STL" />
+          filename="/home/casbot/ZHZ_ws/HoST/legged_gym/resources/robots/02/meshes_old/left_leg_pelvic_pitch_link.STL" />
       </geometry>
       <material
         name="">
@@ -85,7 +85,7 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="meshes/left_leg_pelvic_pitch_link.STL" />
+          filename="/home/casbot/ZHZ_ws/HoST/legged_gym/resources/robots/02/meshes_old/left_leg_pelvic_pitch_link.STL" />
       </geometry>
     </collision>
   </link>
@@ -104,7 +104,7 @@
     <limit
       lower="-1.9199"
       upper="1.5708"
-      effort="250"
+      effort="200"
       velocity="14" />
   </joint>
   <link
@@ -129,7 +129,7 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="meshes/left_leg_pelvic_roll_link.STL" />
+          filename="/home/casbot/ZHZ_ws/HoST/legged_gym/resources/robots/02/meshes_old/left_leg_pelvic_roll_link.STL" />
       </geometry>
       <material
         name="">
@@ -143,7 +143,7 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="meshes/left_leg_pelvic_roll_link.STL" />
+          filename="/home/casbot/ZHZ_ws/HoST/legged_gym/resources/robots/02/meshes_old/left_leg_pelvic_roll_link.STL" />
       </geometry>
     </collision>
   </link>
@@ -162,7 +162,7 @@
     <limit
       lower="-0.17453"
       upper="1.5708"
-      effort="150"
+      effort="200"
       velocity="14" />
   </joint>
   <link
@@ -187,7 +187,7 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="meshes/left_leg_pelvic_yaw_link.STL" />
+          filename="/home/casbot/ZHZ_ws/HoST/legged_gym/resources/robots/02/meshes_old/left_leg_pelvic_yaw_link.STL" />
       </geometry>
       <material
         name="">
@@ -201,7 +201,7 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="meshes/left_leg_pelvic_yaw_link.STL" />
+          filename="/home/casbot/ZHZ_ws/HoST/legged_gym/resources/robots/02/meshes_old/left_leg_pelvic_yaw_link.STL" />
       </geometry>
     </collision>
   </link>
@@ -220,7 +220,7 @@
     <limit
       lower="-1.5708"
       upper="1.5708"
-      effort="150"
+      effort="100"
       velocity="14" />
   </joint>
   <link
@@ -245,7 +245,7 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="meshes/left_leg_knee_pitch_link.STL" />
+          filename="/home/casbot/ZHZ_ws/HoST/legged_gym/resources/robots/02/meshes_old/left_leg_knee_pitch_link.STL" />
       </geometry>
       <material
         name="">
@@ -259,7 +259,7 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="meshes/left_leg_knee_pitch_link.STL" />
+          filename="/home/casbot/ZHZ_ws/HoST/legged_gym/resources/robots/02/meshes_old/left_leg_knee_pitch_link.STL" />
       </geometry>
     </collision> -->
     <collision>
@@ -315,7 +315,7 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="meshes/left_leg_ankle_pitch_link.STL" />
+          filename="/home/casbot/ZHZ_ws/HoST/legged_gym/resources/robots/02/meshes_old/left_leg_ankle_pitch_link.STL" />
       </geometry>
       <material
         name="">
@@ -329,7 +329,7 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="meshes/left_leg_ankle_pitch_link.STL" />
+          filename="/home/casbot/ZHZ_ws/HoST/legged_gym/resources/robots/02/meshes_old/left_leg_ankle_pitch_link.STL" />
       </geometry>
     </collision> -->
   </link>
@@ -373,7 +373,7 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="meshes/left_leg_ankle_roll_link.STL" />
+          filename="/home/casbot/ZHZ_ws/HoST/legged_gym/resources/robots/02/meshes_old/left_leg_ankle_roll_link.STL" />
       </geometry>
       <material
         name="">
@@ -387,7 +387,7 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="meshes/left_leg_ankle_roll_link.STL" />
+          filename="/home/casbot/ZHZ_ws/HoST/legged_gym/resources/robots/02/meshes_old/left_leg_ankle_roll_link.STL" />
       </geometry>
     </collision> -->
     <!-- <collision>
@@ -506,7 +506,7 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="meshes/right_leg_pelvic_pitch_link.STL" />
+          filename="/home/casbot/ZHZ_ws/HoST/legged_gym/resources/robots/02/meshes_old/right_leg_pelvic_pitch_link.STL" />
       </geometry>
       <material
         name="">
@@ -520,7 +520,7 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="meshes/right_leg_pelvic_pitch_link.STL" />
+          filename="/home/casbot/ZHZ_ws/HoST/legged_gym/resources/robots/02/meshes_old/right_leg_pelvic_pitch_link.STL" />
       </geometry>
     </collision>
   </link>
@@ -539,7 +539,7 @@
     <limit
       lower="-1.9199"
       upper="1.5708"
-      effort="250"
+      effort="200"
       velocity="14" />
   </joint>
   <link
@@ -564,7 +564,7 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="meshes/right_leg_pelvic_roll_link.STL" />
+          filename="/home/casbot/ZHZ_ws/HoST/legged_gym/resources/robots/02/meshes_old/right_leg_pelvic_roll_link.STL" />
       </geometry>
       <material
         name="">
@@ -578,7 +578,7 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="meshes/right_leg_pelvic_roll_link.STL" />
+          filename="/home/casbot/ZHZ_ws/HoST/legged_gym/resources/robots/02/meshes_old/right_leg_pelvic_roll_link.STL" />
       </geometry>
     </collision>
   </link>
@@ -597,7 +597,7 @@
     <limit
       lower="-1.5708"
       upper="0.17453"
-      effort="150"
+      effort="200"
       velocity="14" />
   </joint>
   <link
@@ -622,7 +622,7 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="meshes/right_leg_pelvic_yaw_link.STL" />
+          filename="/home/casbot/ZHZ_ws/HoST/legged_gym/resources/robots/02/meshes_old/right_leg_pelvic_yaw_link.STL" />
       </geometry>
       <material
         name="">
@@ -636,7 +636,7 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="meshes/right_leg_pelvic_yaw_link.STL" />
+          filename="/home/casbot/ZHZ_ws/HoST/legged_gym/resources/robots/02/meshes_old/right_leg_pelvic_yaw_link.STL" />
       </geometry>
     </collision>
   </link>
@@ -655,7 +655,7 @@
     <limit
       lower="-1.5708"
       upper="1.5708"
-      effort="150"
+      effort="100"
       velocity="14" />
   </joint>
   <link
@@ -680,7 +680,7 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="meshes/right_leg_knee_pitch_link.STL" />
+          filename="/home/casbot/ZHZ_ws/HoST/legged_gym/resources/robots/02/meshes_old/right_leg_knee_pitch_link.STL" />
       </geometry>
       <material
         name="">
@@ -694,7 +694,7 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="meshes/right_leg_knee_pitch_link.STL" />
+          filename="/home/casbot/ZHZ_ws/HoST/legged_gym/resources/robots/02/meshes_old/right_leg_knee_pitch_link.STL" />
       </geometry>
     </collision> -->
     <collision>
@@ -750,7 +750,7 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="meshes/right_leg_ankle_pitch_link.STL" />
+          filename="/home/casbot/ZHZ_ws/HoST/legged_gym/resources/robots/02/meshes_old/right_leg_ankle_pitch_link.STL" />
       </geometry>
       <material
         name="">
@@ -764,7 +764,7 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="meshes/right_leg_ankle_pitch_link.STL" />
+          filename="/home/casbot/ZHZ_ws/HoST/legged_gym/resources/robots/02/meshes_old/right_leg_ankle_pitch_link.STL" />
       </geometry>
     </collision> -->
   </link>
@@ -808,7 +808,7 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="meshes/right_leg_ankle_roll_link.STL" />
+          filename="/home/casbot/ZHZ_ws/HoST/legged_gym/resources/robots/02/meshes_old/right_leg_ankle_roll_link.STL" />
       </geometry>
       <material
         name="">
@@ -822,7 +822,7 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="meshes/right_leg_ankle_roll_link.STL" />
+          filename="/home/casbot/ZHZ_ws/HoST/legged_gym/resources/robots/02/meshes_old/right_leg_ankle_roll_link.STL" />
       </geometry>
     </collision> -->
     <!-- <collision>
@@ -939,7 +939,7 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="meshes/waist_yaw_link.STL" />
+          filename="/home/casbot/ZHZ_ws/HoST/legged_gym/resources/robots/02/meshes_old/waist_yaw_link.STL" />
       </geometry>
       <material
         name="">
@@ -953,7 +953,7 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="meshes/waist_yaw_link.STL" />
+          filename="/home/casbot/ZHZ_ws/HoST/legged_gym/resources/robots/02/meshes_old/waist_yaw_link.STL" />
       </geometry>
     </collision>
   </link>
@@ -999,7 +999,7 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="meshes/left_shoulder_pitch_link.STL" />
+          filename="/home/casbot/ZHZ_ws/HoST/legged_gym/resources/robots/02/meshes_old/left_shoulder_pitch_link.STL" />
       </geometry>
       <material
         name="">
@@ -1013,7 +1013,7 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="meshes/left_shoulder_pitch_link.STL" />
+          filename="/home/casbot/ZHZ_ws/HoST/legged_gym/resources/robots/02/meshes_old/left_shoulder_pitch_link.STL" />
       </geometry>
     </collision> -->
   </link>
@@ -1057,7 +1057,7 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="meshes/left_shoulder_roll_link.STL" />
+          filename="/home/casbot/ZHZ_ws/HoST/legged_gym/resources/robots/02/meshes_old/left_shoulder_roll_link.STL" />
       </geometry>
       <material
         name="">
@@ -1071,7 +1071,7 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="meshes/left_shoulder_roll_link.STL" />
+          filename="/home/casbot/ZHZ_ws/HoST/legged_gym/resources/robots/02/meshes_old/left_shoulder_roll_link.STL" />
       </geometry>
     </collision>
   </link>
@@ -1115,7 +1115,7 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="meshes/left_shoulder_yaw_link.STL" />
+          filename="/home/casbot/ZHZ_ws/HoST/legged_gym/resources/robots/02/meshes_old/left_shoulder_yaw_link.STL" />
       </geometry>
       <material
         name="">
@@ -1129,7 +1129,7 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="meshes/left_shoulder_yaw_link.STL" />
+          filename="/home/casbot/ZHZ_ws/HoST/legged_gym/resources/robots/02/meshes_old/left_shoulder_yaw_link.STL" />
       </geometry>
     </collision>
   </link>
@@ -1173,7 +1173,7 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="meshes/left_elbow_pitch_link.STL" />
+          filename="/home/casbot/ZHZ_ws/HoST/legged_gym/resources/robots/02/meshes_old/left_elbow_pitch_link.STL" />
       </geometry>
       <material
         name="">
@@ -1187,7 +1187,7 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="meshes/left_elbow_pitch_link.STL" />
+          filename="/home/casbot/ZHZ_ws/HoST/legged_gym/resources/robots/02/meshes_old/left_elbow_pitch_link.STL" />
       </geometry>
     </collision>
   </link>
@@ -1231,7 +1231,7 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="meshes/left_wrist_yaw_link.STL" />
+          filename="/home/casbot/ZHZ_ws/HoST/legged_gym/resources/robots/02/meshes_old/left_wrist_yaw_link.STL" />
       </geometry>
       <material
         name="">
@@ -1245,7 +1245,7 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="meshes/left_wrist_yaw_link.STL" />
+          filename="/home/casbot/ZHZ_ws/HoST/legged_gym/resources/robots/02/meshes_old/left_wrist_yaw_link.STL" />
       </geometry>
     </collision>
   </link>
@@ -1291,7 +1291,7 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="meshes/right_shoulder_pitch_link.STL" />
+          filename="/home/casbot/ZHZ_ws/HoST/legged_gym/resources/robots/02/meshes_old/right_shoulder_pitch_link.STL" />
       </geometry>
       <material
         name="">
@@ -1305,7 +1305,7 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="meshes/right_shoulder_pitch_link.STL" />
+          filename="/home/casbot/ZHZ_ws/HoST/legged_gym/resources/robots/02/meshes_old/right_shoulder_pitch_link.STL" />
       </geometry>
     </collision> -->
   </link>
@@ -1349,7 +1349,7 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="meshes/right_shoulder_roll_link.STL" />
+          filename="/home/casbot/ZHZ_ws/HoST/legged_gym/resources/robots/02/meshes_old/right_shoulder_roll_link.STL" />
       </geometry>
       <material
         name="">
@@ -1363,7 +1363,7 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="meshes/right_shoulder_roll_link.STL" />
+          filename="/home/casbot/ZHZ_ws/HoST/legged_gym/resources/robots/02/meshes_old/right_shoulder_roll_link.STL" />
       </geometry>
     </collision>
   </link>
@@ -1407,7 +1407,7 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="meshes/right_shoulder_yaw_link.STL" />
+          filename="/home/casbot/ZHZ_ws/HoST/legged_gym/resources/robots/02/meshes_old/right_shoulder_yaw_link.STL" />
       </geometry>
       <material
         name="">
@@ -1421,7 +1421,7 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="meshes/right_shoulder_yaw_link.STL" />
+          filename="/home/casbot/ZHZ_ws/HoST/legged_gym/resources/robots/02/meshes_old/right_shoulder_yaw_link.STL" />
       </geometry>
     </collision>
   </link>
@@ -1465,7 +1465,7 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="meshes/right_elbow_pitch_link.STL" />
+          filename="/home/casbot/ZHZ_ws/HoST/legged_gym/resources/robots/02/meshes_old/right_elbow_pitch_link.STL" />
       </geometry>
       <material
         name="">
@@ -1479,7 +1479,7 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="meshes/right_elbow_pitch_link.STL" />
+          filename="/home/casbot/ZHZ_ws/HoST/legged_gym/resources/robots/02/meshes_old/right_elbow_pitch_link.STL" />
       </geometry>
     </collision>
   </link>
@@ -1523,7 +1523,7 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="meshes/right_wrist_yaw_link.STL" />
+          filename="/home/casbot/ZHZ_ws/HoST/legged_gym/resources/robots/02/meshes_old/right_wrist_yaw_link.STL" />
       </geometry>
       <material
         name="">
@@ -1537,7 +1537,7 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="meshes/right_wrist_yaw_link.STL" />
+          filename="/home/casbot/ZHZ_ws/HoST/legged_gym/resources/robots/02/meshes_old/right_wrist_yaw_link.STL" />
       </geometry>
     </collision>
   </link>
@@ -1582,7 +1582,7 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="meshes/head_yaw_link.STL" />
+          filename="/home/casbot/ZHZ_ws/HoST/legged_gym/resources/robots/02/meshes_old/head_yaw_link.STL" />
       </geometry>
       <material
         name="">
@@ -1596,7 +1596,7 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="meshes/head_yaw_link.STL" />
+          filename="/home/casbot/ZHZ_ws/HoST/legged_gym/resources/robots/02/meshes_old/head_yaw_link.STL" />
       </geometry>
     </collision>
   </link>
@@ -1640,7 +1640,7 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="meshes/head_pitch_link.STL" />
+          filename="/home/casbot/ZHZ_ws/HoST/legged_gym/resources/robots/02/meshes_old/head_pitch_link.STL" />
       </geometry>
       <material
         name="">
@@ -1654,7 +1654,7 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="meshes/head_pitch_link.STL" />
+          filename="/home/casbot/ZHZ_ws/HoST/legged_gym/resources/robots/02/meshes_old/head_pitch_link.STL" />
       </geometry>
     </collision>
   </link>

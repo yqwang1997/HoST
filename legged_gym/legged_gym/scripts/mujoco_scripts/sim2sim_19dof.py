@@ -48,7 +48,7 @@ import csv
 from threading import Thread
 
 
-# python legged_gym/legged_gym/scripts/mujoco_scripts/sim2sim.py --load_model /home/casbot/ZHZ_ws/HoST/legged_gym/logs/CAS02_ground/test/policies/policy_1.pt
+# python legged_gym/legged_gym/scripts/mujoco_scripts/sim2sim_19dof.py --load_model /home/casbot/ZHZ_ws/HoST/legged_gym/logs/CAS02_ground/test/policies/policy_1.pt
 joystick_use = True
 joystick_opened = False
 
@@ -268,7 +268,7 @@ def run_mujoco(policy, cfg, pos):
             obs[0, 44:63] = action[:cfg.env.num_actions]
             obs[0, 63] = 0.25  # action_scale
             # obs *= count_lowlevel > 30
-            # print(obs)
+            # print(gvec)
 
             rpy[0:2] = eu_ang[:2] 
 
@@ -287,7 +287,7 @@ def run_mujoco(policy, cfg, pos):
             else:
                 target_q[actuated_indices] = action * action_rescale
             # print("比例2", action_rescale)
-            target_pos = target_q
+            target_pos = target_q + q
             # print("目标角度",target_pos)
 
             action_buffer.append(target_pos)
@@ -303,8 +303,8 @@ def run_mujoco(policy, cfg, pos):
         #     target_q_filter = action_filter * cfg.control.action_scale
         # else:
         #     target_q_filter = action * cfg.control.action_scale
-
-        tau = pd_control(target_q + q, q, cfg.robot_config.kps,
+        
+        tau = pd_control(target_pos, q, cfg.robot_config.kps,
                         target_dq, dq, cfg.robot_config.kds)  # Calc torques
 
         tau = np.clip(tau, -cfg.robot_config.tau_limit, cfg.robot_config.tau_limit) # Clamp torques
@@ -334,6 +334,9 @@ def run_mujoco(policy, cfg, pos):
                 'cmd_dof_torque': tau[idx],
                 'imu_p': rpy[0].item(),
                 'imu_r': rpy[1].item(),
+                'gvec_1': gvec[0].item(),
+                'gvec_2': gvec[1].item(),
+                'gvec_3': gvec[2].item(),
                 'dof_pos_target[0]':  target_pos[0].item(),
                 'dof_pos_target[1]':  target_pos[1].item(),
                 'dof_pos_target[2]': target_pos[2].item(),
@@ -432,7 +435,7 @@ def run_mujoco(policy, cfg, pos):
             }
             )
         else:
-            logger._plot(save_path="/home/casbot/ZHZ_ws/HoST/legged_gym/legged_gym/plots/fig4.png")
+            logger._plot(save_path="/home/casbot/ZHZ_ws/HoST/legged_gym/legged_gym/plots/fig3.png")
 
         if(render_index % 2 ==0):
             viewer.render()
@@ -475,11 +478,11 @@ if __name__ == '__main__':
                 mujoco_model_path = f'{LEGGED_GYM_ROOT_DIR}/resources/robots/02/mjmodel02fb.xml'
             else:
                 mujoco_model_path = f'{LEGGED_GYM_ROOT_DIR}/resources/robots/02/02_sit_chair.xml'
-            sim_duration = 30.0
+            sim_duration = 10.0
             # low level control frequency (In sim 200Hz, in real robot 500Hz)
-            dt = 0.005
+            dt = 0.002
             # policy inference frequency 50Hz
-            decimation = 4
+            decimation = 10
 
         class robot_config:
             kps = np.array([350, 350, 350, 350, 100, 100, \

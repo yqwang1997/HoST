@@ -1528,3 +1528,23 @@ class LeggedRobot(BaseTask):
         feet_distances = torch.norm(left_feet_pos[:, :, :2] - right_feet_pos[:, :, :2], dim=-1)
         standup  = self.root_states[:, 2] > self.cfg.rewards.target_base_height_phase3
         return (torch.var(feet_distances, dim=-1) < 1) * standup
+
+    def _reward_torque_balance(self):
+        # 提取左右髋关节力矩: shape (num_envs, 3)
+        left_hip_torques = self.torques[:, [0, 1, 2]] * 0.01  # shape: (num_envs, 3)
+        right_hip_torques = self.torques[:, [6, 7, 8]] * 0.01 # shape: (num_envs, 3)
+
+        # 计算每条腿内部 3 个 DOF 力矩的方差（在 DOF 维度 dim=1 上）
+        left_var = left_hip_torques.var(dim=1)   # (num_envs,), 方差越小越均衡
+        right_var = right_hip_torques.var(dim=1) # (num_envs,)
+
+        # 拼接左右方差，并取平均
+        combined_var = torch.mean(
+            torch.cat([
+                left_var.view(-1, 1),      # (num_envs, 1)
+                right_var.view(-1, 1)      # (num_envs, 1)
+            ], dim=-1),                    # -> (num_envs, 2)
+            dim=-1                         # -> (num_envs,)
+        )
+
+        return combined_var

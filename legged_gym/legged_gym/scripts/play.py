@@ -18,7 +18,7 @@ from multiprocessing import Process, Value
 
 def play(args):
     env_cfg, train_cfg = task_registry.get_cfgs(name=args.task)
-    env_cfg.env.num_envs = min(env_cfg.env.num_envs, 100)
+    env_cfg.env.num_envs = min(env_cfg.env.num_envs, 1)
     env_cfg.terrain.num_rows = 4
     env_cfg.terrain.num_cols = 4
     env_cfg.terrain.curriculum = False
@@ -47,6 +47,7 @@ def play(args):
         result = env.gym.fetch_results(env.sim, True)
         actions = policy(obs.detach())
         obs, _, rews, dones, infos = env.step(actions.detach())
+        time.sleep(0.02) 
 
 
 if __name__ == '__main__':

@@ -115,7 +115,9 @@ class CAS02Cfg( LeggedRobotCfg ):
         slope_treshold = 0.75 # slopes above this threshold will be corrected to vertical surfaces
 
     class asset( LeggedRobotCfg.asset ):
-        file = '{LEGGED_GYM_ROOT_DIR}/resources/robots/02/CASBOT_02.urdf'
+        #file = '{LEGGED_GYM_ROOT_DIR}/resources/robots/02/CASBOT02_ENCOS_5dof_shell_20250801.urdf' 
+        #file = '{LEGGED_GYM_ROOT_DIR}/resources/robots/02/CASBOT_02.urdf' 
+        file = '/home/casbot/ZHZ_ws/HoST/legged_gym/resources/robots/02_encos/Serial/urdf/CASBOT02_ENCOS_5dof_skeleton_20250904.urdf'
         name = "CASBOT"
         left_foot_name = "left_leg_ankle_pitch"
         right_foot_name = "right_leg_ankle_pitch"
@@ -231,11 +233,12 @@ class CAS02Cfg( LeggedRobotCfg ):
             style_shoulder_roll_deviation = -2.5
             style_left_foot_displacement = 3.0
             style_right_foot_displacement = 3.0
-            style_knee_deviation = -0.5
-            style_shank_orientation = 25
-            style_ground_parallel = 20
+            style_knee_deviation = -0.25
+            style_shank_orientation = 15
+            style_ground_parallel = 10
             style_feet_distance = -10
             style_style_ang_vel_xy = 1
+            style_torque_balance = -1
 
             # post-task reward
             target_ang_vel_xy = 10.0

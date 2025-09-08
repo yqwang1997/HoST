@@ -634,7 +634,7 @@ class LeggedRobot(BaseTask):
             self.com_displacement[:, 0] = self.com_displacement[:, 0] * 4 - 0.45
             self.com_displacement[:, 1] = self.com_displacement[:, 1] * 4
             self.com_displacement[:, 2] = self.com_displacement[:, 2] * 2
-            print("质心1",self.com_displacement)
+            # print("质心1",self.com_displacement)
         if self.cfg.domain_rand.delay:
             self.delay_idx = torch.randint(low=0, high=self.cfg.domain_rand.max_delay_timesteps, size=(self.num_envs,), device=self.device)
 
@@ -761,7 +761,7 @@ class LeggedRobot(BaseTask):
             self.com_displacement[:, 0] = self.com_displacement[:, 0] * 4 
             self.com_displacement[:, 1] = self.com_displacement[:, 1] * 4
             self.com_displacement[:, 2] = self.com_displacement[:, 2] * 2
-            print("质心2",self.com_displacement)
+            # print("质心2",self.com_displacement)
 
         for i in range(self.num_envs):
             # create env instance
@@ -1175,7 +1175,7 @@ class LeggedRobot(BaseTask):
     def _reward_ground_parallel(self):
         left_ankle_pos = self.rigid_body_states[:, self.left_ankle_indices, 2].clone() * 10
         right_ankle_pos = self.rigid_body_states[:, self.right_ankle_indices, 2].clone() * 10
-        var = left_ankle_pos.var(1) + right_ankle_pos.var(1)
+        # var = left_ankle_pos.var(1) + right_ankle_pos.var(1)
         var = torch.mean(torch.concat([left_ankle_pos.var(1).view(-1, 1), right_ankle_pos.var(1).view(-1, 1)], dim=-1), dim=-1)
         reward = var < 0.06
 
@@ -1195,7 +1195,27 @@ class LeggedRobot(BaseTask):
         # Penalize xy axes base angular velocity
         base_height = self.root_states[:, 2] > self.cfg.rewards.target_base_height_phase1
         return torch.exp(torch.sum(torch.square(self.base_ang_vel[:, :2]), dim=1) * -2) * base_height
- 
+    
+    def _reward_torque_balance(self):
+        # 提取左右髋关节力矩: shape (num_envs, 3)
+        left_hip_torques = self.torques[:, [0, 1, 2]] * 0.01  # shape: (num_envs, 3)
+        right_hip_torques = self.torques[:, [6, 7, 8]] * 0.01 # shape: (num_envs, 3)
+
+        # 计算每条腿内部 3 个 DOF 力矩的方差（在 DOF 维度 dim=1 上）
+        left_var = left_hip_torques.var(dim=1)   # (num_envs,), 方差越小越均衡
+        right_var = right_hip_torques.var(dim=1) # (num_envs,)
+
+        # 拼接左右方差，并取平均
+        combined_var = torch.mean(
+            torch.cat([
+                left_var.view(-1, 1),      # (num_envs, 1)
+                right_var.view(-1, 1)      # (num_envs, 1)
+            ], dim=-1),                    # -> (num_envs, 2)
+            dim=-1                         # -> (num_envs,)
+        )
+
+        return combined_var
+
     #--------------------------post-task rewards-----------------------------
     def _reward_ang_vel_xy(self):
         # Penalize xy axes base angular velocity

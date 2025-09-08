@@ -85,7 +85,7 @@ class MjLogger:
                 # 选择对应的子图
                 a = axs[row, col]  
                         
-                # a.plot(time, log["dof_pos["+str(i)+"]"], label='measured')
+                a.plot(time, log["dof_pos["+str(i)+"]"], label='measured')
     
             
                 a.plot(time, log["dof_pos_target["+str(i)+"]"], label='target')
@@ -167,6 +167,25 @@ class MjLogger:
         #     a.plot(time, roll, label=f'roll ')
         # a.set(xlabel='time [s]', ylabel='Imu R [Rad]', title='IMU Roll')
         # a.legend()
+
+        a = axs[2, 9]
+        if log["gvec_1"]:
+            pitch = np.array(log["gvec_1"])
+            a.plot(time, pitch, label=f'gvec_1')
+        a.set(xlabel='time [s]', ylabel='1', title='gvec')
+        a.legend()
+        a = axs[3, 9]
+        if log["gvec_2"]:
+            roll = np.array(log["gvec_2"])
+            a.plot(time, roll, label=f'gvec_2')
+        a.set(xlabel='time [s]', ylabel='2', title='gvec')
+        a.legend()
+        a = axs[4, 9]
+        if log["gvec_3"]:
+            roll = np.array(log["gvec_3"])
+            a.plot(time, roll, label=f'gvec_3')
+        a.set(xlabel='time [s]', ylabel='3', title='gvec')
+        a.legend()
         if save_path:
             try:
                 plt.savefig(save_path, dpi=300, bbox_inches='tight')
