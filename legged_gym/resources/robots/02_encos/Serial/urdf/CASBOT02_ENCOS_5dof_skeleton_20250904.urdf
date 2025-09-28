@@ -1204,7 +1204,7 @@
     <axis
       xyz="1 0 0" />
     <limit
-      lower="-0.3491"
+      lower="-0.0"
       upper="1.5716"
       effort="75"
       velocity="12.2" />
@@ -1385,7 +1385,7 @@
       effort="36"
       velocity="9.3" />
   </joint>
-  <!-- <link
+  <link
     name="left_hand_link">
     <inertial>
       <origin
@@ -1442,7 +1442,7 @@
       upper="0"
       effort="0"
       velocity="0" />
-  </joint> -->
+  </joint>
 
 
   <!-- Left Hand -->
@@ -2545,7 +2545,7 @@
       xyz="1 0 0" />
     <limit
       lower="-1.5716"
-      upper="0.3491"
+      upper="0.0"
       effort="75"
       velocity="12.2" />
   </joint>
@@ -2723,7 +2723,7 @@
       effort="36"
       velocity="9.3" />
   </joint>
-  <!-- <link
+  <link
     name="right_hand_link">
     <inertial>
       <origin
@@ -2780,7 +2780,7 @@
       upper="0"
       effort="0"
       velocity="0" />
-  </joint> -->
+  </joint>
 
   
   <!-- Right Hand -->

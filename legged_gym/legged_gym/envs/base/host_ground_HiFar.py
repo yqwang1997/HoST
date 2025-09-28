@@ -64,12 +64,12 @@ class LeggedRobot(BaseTask):
         self.init_done = False
         self._parse_cfg(self.cfg)
         self.num_real_dofs = cfg.env.num_dofs
-        self.actuated_indices = [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,16,18,19,21]
+        self.actuated_indices = [0,3,4,6,9,10,13,16,18,21]
         #self.actuated_indices = list(range(23)) 
 
         super().__init__(self.cfg, sim_params, physics_engine, sim_device, headless)
 
-        self.num_one_step_obs = self.cfg.env.num_one_step_observations # 64 if not self.cfg.env.add_force else self.cfg.env.num_one_step_observations + 1
+        self.num_one_step_obs = self.cfg.env.num_one_step_observations # 37 if not self.cfg.env.add_force else self.cfg.env.num_one_step_observations + 1
         self.actor_history_length = self.cfg.env.num_actor_history # 6
         self.actor_proprioceptive_obs_length = self.num_one_step_obs * self.actor_history_length
 
@@ -286,9 +286,9 @@ class LeggedRobot(BaseTask):
         current_obs = torch.cat(( 
                                 self.base_ang_vel  * self.obs_scales.ang_vel, # 3
                                 self.projected_gravity, # 3
-                                self.dof_pos[:,self.actuated_indices] * self.obs_scales.dof_pos, # 19
-                                self.dof_vel[:,self.actuated_indices] * self.obs_scales.dof_vel, # 19 
-                                self.actions, #19
+                                self.dof_pos[:,self.actuated_indices] * self.obs_scales.dof_pos, # 10
+                                self.dof_vel[:,self.actuated_indices] * self.obs_scales.dof_vel, # 10 
+                                self.actions, #10
                                 self.action_rescale + (torch.rand_like(self.action_rescale) - 0.5) * 0.05, # 1
                                 ),dim=-1)
         
@@ -437,7 +437,6 @@ class LeggedRobot(BaseTask):
         #pd controller
         actions_scaled = actions * self.action_rescale
         self.joint_pos_target = torch.zeros_like(self.dof_pos)  # shape: [num_envs, 23]
-        #self.joint_pos_target = self.dof_pos + actions_scaled
         self.joint_pos_target[:, self.actuated_indices] = self.dof_pos[:, self.actuated_indices] + actions_scaled
         if self.cfg.domain_rand.delay:
             self.delay_buffer = torch.concat((self.delay_buffer[1:], actions_scaled.unsqueeze(0)), dim=0)
@@ -457,75 +456,90 @@ class LeggedRobot(BaseTask):
         
         return torch.clip(torques, -self.torque_limits, self.torque_limits)
 
+        
     def _reset_dofs(self, env_ids):
-        """ Resets DOF position and velocities of selected environmments
-        Positions are randomly selected within 0.5:1.5 x default positions.
-        Velocities are set to zero.
-
-        Args:
-            env_ids (List[int]): Environemnt ids
-        """
+        pos_num = self.cfg.init_state.pos_num
+        dof_pos_mapping = self.cfg.init_state.dof_pos_mapping
         dof_upper = self.dof_pos_limits[:, 1].view(1, -1)
         dof_lower = self.dof_pos_limits[:, 0].view(1, -1)
-        
-        if self.cfg.domain_rand.randomize_initial_joint_pos:
-            init_dos_pos = self.default_dof_pos * torch_rand_float(self.cfg.domain_rand.initial_joint_pos_scale[0], self.cfg.domain_rand.initial_joint_pos_scale[1], (len(env_ids), self.num_dof), device=self.device)
-            init_dos_pos += torch_rand_float(self.cfg.domain_rand.initial_joint_pos_offset[0], self.cfg.domain_rand.initial_joint_pos_offset[1], (len(env_ids), self.num_dof), device=self.device)
-            self.dof_pos[env_ids] = torch.clip(init_dos_pos, dof_lower, dof_upper)
-        else:
-            self.dof_pos[env_ids] = self.default_dof_pos * torch_rand_float(0.5, 1.5, (len(env_ids), self.num_dof), device=self.device) + int(self.cfg.domain_rand.random_pose) * torch_rand_float(-1, 1, (len(env_ids), self.num_dof), device=self.device) 
-            self.dof_vel[env_ids] = 0.
 
-        self.dof_vel[env_ids] = 0.
-
-        env_ids_int32 = env_ids.to(dtype=torch.int32)
-        self.gym.set_dof_state_tensor_indexed(self.sim,
-                                              gymtorch.unwrap_tensor(self.dof_state),
-                                              gymtorch.unwrap_tensor(env_ids_int32), len(env_ids_int32))
-        
-    def _reset_dofs(self, env_ids):
-        pos_num = self.cfg["init_state"]["pos_num"]
-        dof_pos_mapping = self.cfg["init_state"]["dof_pos_mapping"]
-
-        # self.dof_pos[env_ids] = apply_randomizations(self.default_dof_pos, self.cfg["randomization"].get("init_dof_pos"))
-        init_dos_pos = self.default_dof_pos * torch_rand_float(self.cfg.domain_rand.initial_joint_pos_scale[0], self.cfg.domain_rand.initial_joint_pos_scale[1], (len(env_ids), self.num_dof), device=self.device)
-        init_dos_pos += torch_rand_float(self.cfg.domain_rand.initial_joint_pos_offset[0], self.cfg.domain_rand.initial_joint_pos_offset[1], (len(env_ids), self.num_dof), device=self.device)
+        # 初始化默认的关节位置，并应用随机化
+        init_dos_pos = self.default_dof_pos * torch_rand_float(
+            self.cfg.domain_rand.initial_joint_pos_scale[0],
+            self.cfg.domain_rand.initial_joint_pos_scale[1],
+            (len(env_ids), self.num_dof),
+            device=self.device
+        )
+        init_dos_pos += torch_rand_float(
+            self.cfg.domain_rand.initial_joint_pos_offset[0],
+            self.cfg.domain_rand.initial_joint_pos_offset[1],
+            (len(env_ids), self.num_dof),
+            device=self.device
+        )
         self.dof_pos[env_ids] = torch.clip(init_dos_pos, dof_lower, dof_upper)
-
-        for mod_value, ref_idx in dof_pos_mapping.items():
-            mask = (env_ids % pos_num == mod_value)
-            idx = env_ids[mask]
-
-            if ref_idx is not None:
-                # self.dof_pos[idx] = apply_randomizations(self.reference_dof_pos[ref_idx], self.cfg["randomization"].get("init_dof_pos"))
-                init_dos_pos = self.default_dof_pos * torch_rand_float(self.cfg.domain_rand.initial_joint_pos_scale[0], self.cfg.domain_rand.initial_joint_pos_scale[1], (len(env_ids), self.num_dof), device=self.device)
-                init_dos_pos += torch_rand_float(self.cfg.domain_rand.initial_joint_pos_offset[0], self.cfg.domain_rand.initial_joint_pos_offset[1], (len(env_ids), self.num_dof), device=self.device)
-                self.dof_pos[env_ids] = torch.clip(init_dos_pos, dof_lower, dof_upper)
+        
+        if self.cfg.init_state.train_pos:
+            for mod_value, ref_idx in dof_pos_mapping.items():
+                mask = (env_ids % pos_num == mod_value)
+                if torch.any(mask):  
+                    idx = env_ids[mask]
+                    if ref_idx is not None:
+                        reference_pose = self.reference_dof_pos[ref_idx]
+                        randomized_reference_pose = reference_pose * torch_rand_float(
+                            self.cfg.domain_rand.initial_joint_pos_scale[0],
+                            self.cfg.domain_rand.initial_joint_pos_scale[1],
+                            (len(idx), self.num_dof),
+                            device=self.device
+                        ) + torch_rand_float(
+                            self.cfg.domain_rand.initial_joint_pos_offset[0],
+                            self.cfg.domain_rand.initial_joint_pos_offset[1],
+                            (len(idx), self.num_dof),
+                            device=self.device
+                        )
+                        self.dof_pos[idx] = torch.clip(randomized_reference_pose, dof_lower, dof_upper)
 
         self.dof_vel[env_ids] = 0.0
         env_ids_int32 = env_ids.to(dtype=torch.int32)
         self.gym.set_dof_state_tensor_indexed(self.sim, gymtorch.unwrap_tensor(self.dof_state), gymtorch.unwrap_tensor(env_ids_int32), len(env_ids_int32))
-
+        
     def _reset_root_states(self, env_ids):
-        """ Resets ROOT states position and velocities of selected environmments
-            Sets base position based on the curriculum
-            Selects randomized base velocities within -0.5:0.5 [m/s, rad/s]
-        Args:
-            env_ids (List[int]): Environemnt ids
-        """
-        # base position
-        if self.custom_origins:
-            self.root_states[env_ids] = self.base_init_state
-            self.root_states[env_ids, :3] += self.env_origins[env_ids]
-            self.root_states[env_ids, :2] += torch_rand_float(-1., 1., (len(env_ids), 2), device=self.device) # xy position within 1m of the center
-        else:
-            self.root_states[env_ids] = self.base_init_state
-            self.root_states[env_ids, :3] += self.env_origins[env_ids]
+        pos_num = self.cfg.init_state.pos_num
+        pos_height_mapping = self.cfg.init_state.pos_height_mapping
+
+        self.root_states[env_ids] = self.base_init_state
+        self.root_states[env_ids, :3] += self.env_origins[env_ids]
+        self.root_states[env_ids, :2] += torch_rand_float(-1., 1., (len(env_ids), 2), device=self.device) # xy position within 1m of the center
+
+        roll = torch.zeros(len(env_ids), device=self.device)
+        pitch = torch.rand(len(env_ids), device=self.device) * 0.2 - 0.1
+
+        if self.cfg.init_state.train_pos:
+            for mod_value, params in pos_height_mapping.items():
+                if params is None:
+                    continue
+                
+                mask = (env_ids % pos_num == mod_value)
+                idx = env_ids[mask]
+
+                if "height" in params:
+                    self.root_states[idx, 2] = params["height"] # + self.terrain.terrain_heights(self.root_states[idx, :2])
+                if "roll" in params:
+                    roll[torch.nonzero(mask, as_tuple=True)[0]] = params["roll"]
+                if "pitch" in params:
+                    pitch[torch.nonzero(mask, as_tuple=True)[0]] = params["pitch"]
+
+            yaw = torch.rand(len(env_ids), device=self.device) * (2 * np.pi)
+            # self.root_states[env_ids, 3:7] = quat_from_euler_xyz(roll, pitch, yaw)
+            euler_angles = torch.stack([roll, pitch, yaw], dim=-1)  # shape: [N, 3]
+            quat = euler_xyz_to_quat(euler_angles)                 # shape: [N, 4] -> [x,y,z,w]
+            self.root_states[env_ids, 3:7] = quat
 
         env_ids_int32 = env_ids.to(dtype=torch.int32)
         self.gym.set_actor_root_state_tensor_indexed(self.sim,
                                                      gymtorch.unwrap_tensor(self.root_states),
                                                      gymtorch.unwrap_tensor(env_ids_int32), len(env_ids_int32))
+    
+
 
     def update_force_curriculum(self, env_ids):
         if torch.mean(self.old_headheight[env_ids]) > self.cfg.curriculum.threshold_height:
@@ -574,19 +588,6 @@ class LeggedRobot(BaseTask):
         self.root_states = gymtorch.wrap_tensor(actor_root_state)
         self.dof_state = gymtorch.wrap_tensor(dof_state_tensor)
         self.rigid_body_states = gymtorch.wrap_tensor(rigid_body_state).view(self.num_envs, self.num_bodies, 13)
-        # print("=== rigid_body_states 信息 ===")
-        # print(f"数据类型 (dtype): {self.rigid_body_states.dtype}")
-        # print(f"设备 (device): {self.rigid_body_states.device}")
-        # print(f"形状 (shape): {self.rigid_body_states.shape}")
-        # print(f"维度 (ndim): {self.rigid_body_states.ndim}")
-        # print(f"元素总数 (numel): {self.rigid_body_states.numel()}")
-        # for i in range(self.num_bodies):
-        #     z_positions = self.rigid_body_states[:, i, 2].clone()
-        #     # 将张量移到CPU并转换为NumPy数组以便打印
-        #     z_np = z_positions.cpu().numpy()
-        #     print(f"Body Index {i}:")
-        #     print(f"  Min Z: {z_np.min():.4f}, Max Z: {z_np.max():.4f}, Mean Z: {z_np.mean():.4f}")
-        #     print(f"  First 5 values: {z_np[:5]}") # 只打印前5个环境的值
         self.dof_pos = self.dof_state.view(self.num_envs, self.num_dof, 2)[..., 0]
         self.dof_vel = self.dof_state.view(self.num_envs, self.num_dof, 2)[..., 1]
         self.dof_states = self.dof_state.view(self.num_envs, self.num_dof, 2)
@@ -629,13 +630,15 @@ class LeggedRobot(BaseTask):
         self.delay_buffer = torch.zeros(self.cfg.domain_rand.max_delay_timesteps, self.num_envs, self.num_actions, dtype=torch.float, device=self.device, requires_grad=False)
         
         # joint positions offsets and PD gains
+        self.num_references = self.cfg.init_state.reference_num
         self.default_dof_pos = torch.zeros(self.num_dof, dtype=torch.float, device=self.device, requires_grad=False)
         self.target_dof_pos = torch.zeros(self.num_envs, self.num_dof, dtype=torch.float, device=self.device, requires_grad=False)
+        self.reference_dof_pos = torch.zeros(self.num_references, self.num_dofs, dtype=torch.float, device=self.device, requires_grad=False)
         for i in range(self.num_dofs):
             name = self.dof_names[i]
-            # print("Name of joint is: ", name)
+            print("Name of joint is: ", name)
             angle = self.cfg.init_state.default_joint_angles[name]
-            # print("Angle for each joint is: ", angle)
+            print("Angle for each joint is: ", angle)
             self.default_dof_pos[i] = angle
             self.target_dof_pos[:, i] = self.cfg.init_state.target_joint_angles[name]
             found = False
@@ -650,6 +653,24 @@ class LeggedRobot(BaseTask):
                 if self.cfg.control.control_type in ["P", "V"]:
                     print(f"PD gain of joint {name} were not defined, setting them to zero")
         self.default_dof_pos = self.default_dof_pos.unsqueeze(0)
+        
+        for j in range(self.num_references):
+            ref_key = f"reference_joint_angles_{j + 1}"
+            ref_angles = getattr(self.cfg.init_state, ref_key, None)           
+            default_val = ref_angles['default']  # 获取 default 值
+            for i in range(self.num_dofs):
+                dof_name = self.dof_names[i]
+                found = False
+                for name in ref_angles.keys():
+                    if name == "default":  # 跳过 default 键
+                        continue
+                    if name in dof_name:  # 模糊匹配，如 "hip" in "left_hip_yaw"
+                        self.reference_dof_pos[j, i] = ref_angles[name]
+                        found = True
+                        break  # 找到就退出
+                if not found:
+                    self.reference_dof_pos[j, i] = default_val
+            # print(j,'ref_pos',self.reference_dof_pos[j])
 
         #randomize kp, kd, motor strength
         self.Kp_factors = torch.ones(self.num_envs, self.num_dofs, dtype=torch.float, device=self.device, requires_grad=False)

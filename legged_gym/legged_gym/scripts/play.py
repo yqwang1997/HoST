@@ -18,7 +18,7 @@ from multiprocessing import Process, Value
 
 def play(args):
     env_cfg, train_cfg = task_registry.get_cfgs(name=args.task)
-    env_cfg.env.num_envs = min(env_cfg.env.num_envs, 1)
+    env_cfg.env.num_envs = min(env_cfg.env.num_envs, 100)
     env_cfg.terrain.num_rows = 4
     env_cfg.terrain.num_cols = 4
     env_cfg.terrain.curriculum = False
@@ -26,6 +26,7 @@ def play(args):
     env_cfg.control.action_scale = 0.25
     env_cfg.curriculum.pull_force = False
     env_cfg.env.test = True
+    env_cfg.init_state.train_pos = False
 
     # prepare environment
     env, _ = task_registry.make_env(name=args.task, args=args, env_cfg=env_cfg)

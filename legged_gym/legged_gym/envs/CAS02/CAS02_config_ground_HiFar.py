@@ -3,8 +3,8 @@ from legged_gym.envs.base.legged_robot_config import LeggedRobotCfg, LeggedRobot
 
 class CAS02Cfg( LeggedRobotCfg ):
     class init_state( LeggedRobotCfg.init_state ):
-        pos = [0.0, 0.0, 0.5] # x,y,z [m]
-        rot = [0.0, -1, 0, 1.0] # x,y,z,w [quat]
+        pos = [0.0, 0.0, 1.0] # x,y,z [m]
+        rot = [0, 1, 0, 1] # x,y,z,w [quat]
         target_joint_angles = { # = target angles [rad] when action = 0.0
            'left_leg_pelvic_pitch_joint' : -0.185,   
            'left_leg_pelvic_roll_joint' : 0,               
@@ -56,10 +56,79 @@ class CAS02Cfg( LeggedRobotCfg ):
            'right_elbow_pitch_joint' : -0.,
            'right_wrist_yaw_joint' : 0.,
         }
+        reference_joint_angles_1 = {"pelvic_pitch_joint": -1.46,
+                                    "knee": 1.64, 
+                                    "ankle_pitch": -0.41, 
+                                    "shoulder_pitch": 0.2, 
+                                    "left_shoulder_roll": 0.09, 
+                                    "right_shoulder_roll": -0.09, 
+                                    "elbow": -0.5, 
+                                    "default": 0.}
+        reference_joint_angles_2 = {"pelvic_pitch_joint": -1.62, 
+                                    "knee": 1.24, 
+                                    "ankle_pitch": -0.49, 
+                                    "shoulder_pitch": -0.8, 
+                                    "left_shoulder_roll": 0.09, 
+                                    "right_shoulder_roll": -0.09, 
+                                    "elbow": -2., 
+                                    "default": 0.}
+        reference_joint_angles_3 = {"pelvic_pitch_joint": -1.58, 
+                                    "knee": 1.27, 
+                                    "ankle_pitch": -0.5, 
+                                    "shoulder_pitch": -1.63, 
+                                    "left_shoulder_roll": 0.09, 
+                                    "right_shoulder_roll": -0.09, 
+                                    "elbow": -0.7, 
+                                    "default": 0.}
+        reference_joint_angles_4 = {"pelvic_pitch_joint": 1.3, 
+                                    "knee": 0.93, 
+                                    "ankle_pitch": -0.7, 
+                                    "shoulder_pitch": 0.2, 
+                                    "left_shoulder_roll": 0.09, 
+                                    "right_shoulder_roll": -0.09, 
+                                    "elbow": -0.5, 
+                                    "default": 0.}
+        reference_joint_angles_5 = {"pelvic_pitch_joint": -0.6, 
+                                    "knee": 0.7, 
+                                    "ankle_pitch": -0.4, 
+                                    "shoulder_pitch": 0.0, 
+                                    "left_shoulder_roll": 0.09, 
+                                    "right_shoulder_roll": -0.09, 
+                                    "elbow": -0.5, 
+                                    "default": 0.}
+        pos_num = 1
+        reference_num = 5
+        
+        dof_pos_mapping = {
+                    0: 4,
+                    # 0: 4,
+                    # 0: 4,
+                    #  0: 0,
+                    # 0: 0,
+                    # 0: 1,
+                    # 0: 2,
+                    # 0: None,
+                    # 0: 3,
+                    # 0: None
+                    }
+        pos_height_mapping = {
+            0: {'height': 0.75, 'pitch': 0.35},
+            # 0: {'height': 0.75, 'pitch': 0.35},
+            # 0: {'height': 0.75, 'pitch': 0.35},
+            #  0: {'height': 0.68, 'pitch': 0.24},
+            # 0: {'height': 0.68, 'pitch': 0.24},
+            # 0: {'height': 1.0, 'pitch': 1.27, 'roll': -3.14159},
+            # 0: {'height': 0.9, 'pitch': 1.47, 'roll': -3.14159},
+            # 0: {'height': 0.3, 'pitch': 1.5708},
+            # 0: {'height': 0.8, 'pitch': -1.5708},
+            # 0: {'height': 0.5, 'pitch': -1.5708},
+        }
+        train_pos = True
+
 
     class env(LeggedRobotCfg.env):
-        num_one_step_observations= 64 # 76
-        num_actions = 19 #23
+        num_one_step_observations= 37 # 76
+        num_actions = 10 #23
         num_dofs = 23 # 23
         num_actor_history = 6
         num_observations = num_actor_history * num_one_step_observations
@@ -69,7 +138,15 @@ class CAS02Cfg( LeggedRobotCfg ):
     class control( LeggedRobotCfg.control ):
         # PD Drive parameters:
         control_type = 'P'
-        stiffness = {'pelvic': 350,
+        stiffness = {
+                    # 'pelvic': 0,
+                    #  'knee': 0,
+                    #  'ankle': 0,
+                    #  'shoulder': 0,
+                    #  'elbow': 0,
+                    #  'waist': 0,
+                    #  'wrist': 0,
+                     'pelvic': 350,
                      'knee': 350,
                      'ankle': 100,
                      'shoulder': 200,
@@ -77,7 +154,15 @@ class CAS02Cfg( LeggedRobotCfg ):
                      'waist': 200,
                      'wrist': 200,
                      }  # [N*m/rad]
-        damping = {  'pelvic': 4,
+        damping = {  
+                    #  'pelvic': 0,
+                    #  'knee': 0,
+                    #  'ankle': 0,
+                    #  'shoulder': 0,
+                    #  'elbow': 0,
+                    #  'waist': 0,
+                    #  'wrist': 0,
+                     'pelvic': 4,
                      'knee': 4,
                      'ankle': 2,
                      'shoulder': 4,
@@ -244,7 +329,7 @@ class CAS02Cfg( LeggedRobotCfg ):
             target_ang_vel_xy = 10.0
             target_lin_vel_xy = 10.0
             target_feet_height_var = 2.5
-            target_target_upper_dof_pos = 10
+            # target_target_upper_dof_pos = 10
             target_target_orientation = 10
             target_target_base_height = 10
 
@@ -290,8 +375,8 @@ class CAS02Cfg( LeggedRobotCfg ):
         max_delay_timesteps = 5
     
     class curriculum:
-        pull_force = True
-        force = 400 # 100*2=200 is the actuatl force because of a extra keyframe torso link
+        pull_force = False
+        force = 100 # 100*2=200 is the actuatl force because of a extra keyframe torso link
         dof_vel_limit = 300
         base_vel_limit = 20
         threshold_height = 0.9
