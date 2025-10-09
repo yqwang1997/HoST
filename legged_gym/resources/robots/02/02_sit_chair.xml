@@ -68,13 +68,13 @@
     <body name="torso" pos="0 0 0.8" euler="0 0 0">
       <freejoint name="root" />
       <inertial pos="0.15071297 2.31e-05 -0.065761" quat="0.707071 0.707142 0.000946903 0.000931489" mass="4.4711" diaginertia="0.013383 0.011047 0.00875277" />
-      <geom type="mesh" contype="15" conaffinity="1" group="1" density="0" rgba="0.79216 0.81961 0.93333 1" mesh="base_link" class="collision" />
+      <geom type="mesh" contype="0" conaffinity="0" group="1" density="0" rgba="0.79216 0.81961 0.93333 1" mesh="base_link" class="collision" />
       <geom type="mesh" class="visual" mesh="base_link" />
       <geom size="0.05 0.05 0.05" contype="0" conaffinity="0" group="1" pos="0 0 0" type="box" mass="0.013191021" rgba="1.75294 0.75294 0.75294 1" />
       <site name="imu" size="0.01" pos="0.0 0 0.0" />
 
       <body name="leg_l1_link" pos="0 0.061 -0.070239">
-        <inertial pos="0.107411 0.073782 -0.047759" quat="0.405457 0.911334 -0.0612639 0.0363621" mass="2.1606" diaginertia="0.00386287 0.00324431 0.00186522" />
+        <inertial pos="0.007411 0.073782 -0.047759" quat="0.405457 0.911334 -0.0612639 0.0363621" mass="2.1606" diaginertia="0.00386287 0.00324431 0.00186522" />
         <joint name="leg_l1_joint" pos="0 0 0" axis="0 1 0" range="-1.9199 1.5708" class="leg_joint_param" />
         <geom type="mesh" contype="0" conaffinity="0" group="1" density="0" rgba="0.792157 0.819608 0.933333 1" mesh="left_leg_pelvic_pitch_link" />
         <body name="leg_l2_link" pos="-0.0028 0.0815 -0.055">
@@ -212,7 +212,7 @@
       </body>
     </body>
     
-  <geom pos="0.0 0.0 0.2" type="box" size="0.15 0.6 0.2" quat="1.0 0.0 0.0 0.0" /><geom pos="-0.3 0.0 0.6000000000000001" type="box" size="0.15 0.6 0.2" quat="1.0 0.0 0.0 0.0" /><geom pos="-0.5999999999999999 0.0 1.0" type="box" size="0.15 0.6 0.2" quat="1.0 0.0 0.0 0.0" /></worldbody>
+  <geom pos="-0.09999999999999998 0.0 0.2" type="box" size="0.15 0.25 0.2" quat="1.0 0.0 0.0 0.0" /><geom pos="-0.39999999999999997 0.0 0.6000000000000001" type="box" size="0.15 0.25 0.2" quat="1.0 0.0 0.0 0.0" /></worldbody>
   
   <actuator>
 		<motor name="leg_l1_joint" joint="leg_l1_joint" />

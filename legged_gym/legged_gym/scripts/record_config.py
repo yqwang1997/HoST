@@ -21,6 +21,9 @@ def record_config(log_root, name="a1_amp"):
     elif name == "CAS02_ground_prone":
         root_path1 = os.path.join(LEGGED_GYM_ENVS_DIR, root1, 'CAS02_config_ground_prone.py')
         root_path2 = os.path.join(LEGGED_GYM_ENVS_DIR, 'base', 'host_ground_prone.py')
+    elif name == "CAS02_ground_dunqi":
+        root_path1 = os.path.join(LEGGED_GYM_ENVS_DIR, root1, 'CAS02_config_ground_dunqi.py')
+        root_path2 = os.path.join(LEGGED_GYM_ENVS_DIR, 'base', 'host_ground_dunqi.py')
 
     with open(root_path1, 'r', encoding='utf-8') as file:
         content = file.read()

@@ -119,9 +119,9 @@ class TerrainGenerator:
                   init_pos=[0.0, 0.0, 0.0],
                   yaw=0.0,
                   width=0.3,
-                  height=0.4,
-                  length=1.2,
-                  stair_nums=3):
+                  height=0.40,
+                  length=0.5,
+                  stair_nums=2):
 
         local_pos = [0.0, 0.0, -0.5 * height]
         for i in range(stair_nums):
@@ -278,7 +278,7 @@ if __name__ == "__main__":
     #           size=[3, 1.5, 0.1])
 
     # Stairs
-    tg.AddStairs(init_pos=[0.3, 0.0, 0.0], yaw=0.0)
+    tg.AddStairs(init_pos=[0.23, 0.0, 0.0], yaw=0.0)
 
     # Suspend stairs
     #tg.AddSuspendStairs(init_pos=[1.0, 6.0, 0.0], yaw=0.0)

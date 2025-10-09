@@ -64,7 +64,7 @@ class LeggedRobot(BaseTask):
         self.init_done = False
         self._parse_cfg(self.cfg)
         self.num_real_dofs = cfg.env.num_dofs
-        self.actuated_indices = [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,16,18,19,21]
+        self.actuated_indices = [0,1,2,3,4,5,6,7,8,9,10,11]
         #self.actuated_indices = list(range(23)) 
 
         super().__init__(self.cfg, sim_params, physics_engine, sim_device, headless)
@@ -285,9 +285,9 @@ class LeggedRobot(BaseTask):
         current_obs = torch.cat(( 
                                 self.base_ang_vel  * self.obs_scales.ang_vel, # 3
                                 self.projected_gravity, # 3
-                                self.dof_pos[:,self.actuated_indices] * self.obs_scales.dof_pos, # 19
-                                self.dof_vel[:,self.actuated_indices] * self.obs_scales.dof_vel, # 19 
-                                self.actions, #19
+                                self.dof_pos[:,self.actuated_indices] * self.obs_scales.dof_pos, # 12
+                                self.dof_vel[:,self.actuated_indices] * self.obs_scales.dof_vel, # 12 
+                                self.actions, #12
                                 self.action_rescale + (torch.rand_like(self.action_rescale) - 0.5) * 0.05, # 1
                                 ),dim=-1)
         

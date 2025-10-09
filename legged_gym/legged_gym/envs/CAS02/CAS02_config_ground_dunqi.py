@@ -3,19 +3,19 @@ from legged_gym.envs.base.legged_robot_config import LeggedRobotCfg, LeggedRobot
 
 class CAS02Cfg( LeggedRobotCfg ):
     class init_state( LeggedRobotCfg.init_state ):
-        pos = [0.0, 0.0, 0.5] # x,y,z [m]
-        rot = [0.0, -1, 0, 1.0] # x,y,z,w [quat]
+        pos = [0.0, 0.0, 0.45] # x,y,z [m]
+        rot = [0.0, 0.0, 0, 1.0] # x,y,z,w [quat]
         target_joint_angles = { # = target angles [rad] when action = 0.0
-           'left_leg_pelvic_pitch_joint' : -0.185,   
+           'left_leg_pelvic_pitch_joint' : -1.6,   
            'left_leg_pelvic_roll_joint' : 0,               
            'left_leg_pelvic_yaw_joint' : 0,         
-           'left_leg_knee_pitch_joint' : 0.36,       
-           'left_leg_ankle_pitch_joint' : -0.175,
+           'left_leg_knee_pitch_joint' : 1.78,       
+           'left_leg_ankle_pitch_joint' : -0.2,
            'left_leg_ankle_roll_joint' : 0,          
-           'right_leg_pelvic_pitch_joint' : -0.185, 
+           'right_leg_pelvic_pitch_joint' : -1.6, 
            'right_leg_pelvic_roll_joint' : 0, 
            'right_leg_pelvic_yaw_joint' : 0,                                       
-           'right_leg_knee_pitch_joint' : 0.36,                                             
+           'right_leg_knee_pitch_joint' : 1.78,                                             
            'right_leg_ankle_pitch_joint' : -0.0,   
            'right_leg_ankle_roll_joint' : 0,                                                                       
            'waist_yaw_joint' : 0., 
@@ -32,17 +32,17 @@ class CAS02Cfg( LeggedRobotCfg ):
         }
 
         default_joint_angles = { 
-           'left_leg_pelvic_pitch_joint' : -0.185,   
+           'left_leg_pelvic_pitch_joint' : -1.6,   
            'left_leg_pelvic_roll_joint' : 0,               
            'left_leg_pelvic_yaw_joint' : 0,         
-           'left_leg_knee_pitch_joint' : 0.36,       
-           'left_leg_ankle_pitch_joint' : -0.175,
+           'left_leg_knee_pitch_joint' : 1.78,       
+           'left_leg_ankle_pitch_joint' : -0.2,
            'left_leg_ankle_roll_joint' : 0,          
-           'right_leg_pelvic_pitch_joint' : -0.185, 
+           'right_leg_pelvic_pitch_joint' : -1.6, 
            'right_leg_pelvic_roll_joint' : 0, 
            'right_leg_pelvic_yaw_joint' : 0,                                       
-           'right_leg_knee_pitch_joint' : 0.36,                                             
-           'right_leg_ankle_pitch_joint' : -0.175,   
+           'right_leg_knee_pitch_joint' : 1.78,                                             
+           'right_leg_ankle_pitch_joint' : -0.2,   
            'right_leg_ankle_roll_joint' : 0,                                                                       
            'waist_yaw_joint' : 0., 
            'left_shoulder_pitch_joint' : 0., 
@@ -58,13 +58,13 @@ class CAS02Cfg( LeggedRobotCfg ):
         }
 
     class env(LeggedRobotCfg.env):
-        num_one_step_observations= 64 # 76
-        num_actions = 19 #23
-        num_dofs = 23 # 23
+        num_one_step_observations= 43 # 76
+        num_actions = 12 #12
+        num_dofs = 23 # 12
         num_actor_history = 6
         num_observations = num_actor_history * num_one_step_observations
         episode_length_s = 10 # episode length in seconds
-        unactuated_timesteps = 30
+        unactuated_timesteps = 10
 
     class control( LeggedRobotCfg.control ):
         # PD Drive parameters:
@@ -167,8 +167,8 @@ class CAS02Cfg( LeggedRobotCfg ):
         density = 0.001
         angular_damping = 0.01
         linear_damping = 0.01
-        max_angular_velocity = 1000.
-        max_linear_velocity = 1000.
+        max_angular_velocity = 200.
+        max_linear_velocity = 200.
         armature = 0.01
         thickness = 0.01
         self_collisions = 0 # 1 to disable, 0 to enable...bitwise filter
@@ -226,7 +226,7 @@ class CAS02Cfg( LeggedRobotCfg ):
             regu_dof_vel_limits = -1 
 
             # style reward
-            style_waist_deviation = -10
+            # style_waist_deviation = -10
             style_hip_yaw_deviation = -10
             style_hip_roll_deviation = -10
             #style_shoulder_roll_deviation = -5
@@ -244,7 +244,7 @@ class CAS02Cfg( LeggedRobotCfg ):
             target_ang_vel_xy = 10.0
             target_lin_vel_xy = 10.0
             target_feet_height_var = 2.5
-            target_target_upper_dof_pos = 5
+            # target_target_upper_dof_pos = 5
             target_target_orientation = 10
             target_target_base_height = 10
             # target_ground_parallel2 = 5

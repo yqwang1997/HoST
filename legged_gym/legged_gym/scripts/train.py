@@ -10,7 +10,7 @@ import torch
 from record_config import record_config
 
 
-# python legged_gym/legged_gym/scripts/train.py --task CAS02_ground --headless
+# python legged_gym/legged_gym/scripts/train.py --task CAS02_ground_19dof --headless
 # tensorboard --logdir /home/casbot/ZHZ_ws/HoST/legged_gym/logs
 
 

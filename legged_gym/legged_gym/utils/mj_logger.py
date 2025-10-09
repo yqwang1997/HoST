@@ -65,7 +65,7 @@ class MjLogger:
         self._plot()
 
     def _plot(self,save_path = None):
-        nb_rows = 5
+        nb_rows = 6
         nb_cols = 10
         fig, axs = plt.subplots(nb_rows, nb_cols, figsize=(30, 10))
         for key, value in self.state_log.items():

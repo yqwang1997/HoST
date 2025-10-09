@@ -37,7 +37,7 @@ from tqdm import tqdm
 from collections import deque
 from scipy.spatial.transform import Rotation as R
 from legged_gym import LEGGED_GYM_ROOT_DIR
-from legged_gym.envs import CAS02CfgGround19
+from legged_gym.envs import CAS02CfgGroundDunqi
 from legged_gym.utils.mj_logger import MjLogger
 import torch
 
@@ -48,7 +48,7 @@ import csv
 from threading import Thread
 
 
-# python legged_gym/legged_gym/scripts/mujoco_scripts/sim2sim_19dof.py --load_model /home/casbot/ZHZ_ws/HoST/legged_gym/logs/CAS02_ground/test/policies/policy_1.pt
+# python legged_gym/legged_gym/scripts/mujoco_scripts/sim2sim_dunqi.py --load_model /home/casbot/ZHZ_ws/HoST/legged_gym/logs/CAS02_ground/0_exported/policies/policy_1.pt
 joystick_use = True
 joystick_opened = False
 
@@ -163,7 +163,7 @@ ts_buffer = []
 
 
 
-def run_mujoco(policy, cfg, pos):
+def run_mujoco(policy, cfg):
     """
     Run the Mujoco simulation using the provided policy and configuration.
 
@@ -177,28 +177,27 @@ def run_mujoco(policy, cfg, pos):
     model = mujoco.MjModel.from_xml_path(cfg.sim_config.mujoco_model_path)
     model.opt.timestep = cfg.sim_config.dt
     data = mujoco.MjData(model)
-    # if pose == "sit":
-    #     init_pose = {
-    #     # 左腿
-    #         "leg_l1_joint": -1.3,  # 髋关节弯曲
-    #         #"leg_l2_joint": 0.3,   # 侧摆
-    #         #"leg_l3_joint": 0.1,   # 旋转
-    #         "leg_l4_joint": 1.5,   # 膝关节
-    #         #"leg_l5_joint": -0.5,  # 踝关节
-    #         # 右腿（对称）
-    #         "leg_r1_joint": -1.3,
-    #         #"leg_r2_joint": -0.3,
-    #         #"leg_r3_joint": -0.1,
-    #         "leg_r4_joint": 1.5,
-    #         #"leg_r5_joint": -0.5,
-    #         # 手臂
-    #         #"upper_left_1_joint": 0.5,
-    #         #"upper_right_1_joint": 0.5
-    #     }
-    #     # 应用初始姿态
-    #     for joint_name, angle in init_pose.items():
-    #         joint_id = mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_JOINT, joint_name)
-    #         data.qpos[model.jnt_qposadr[joint_id]] = angle
+    init_pose = {
+    # 左腿
+        "left_leg_pelvic_pitch_joint": -1.6,  # 髋关节弯曲
+        #"left_leg_pelvic_roll_joint": 0.3,   # 侧摆
+        #"left_leg_pelvic_yaw_joint": 0.1,   # 旋转
+        "left_leg_knee_pitch_joint": 2.0,   # 膝关节
+        "left_leg_ankle_pitch_joint": -0.4,  # 踝关节
+        # 右腿（对称）
+        "right_leg_pelvic_pitch_joint": -1.6,
+        #"right_leg_pelvic_roll_joint": -0.3,
+        #"right_leg_pelvic_yaw_joint": -0.1,
+        "right_leg_knee_pitch_joint": 2.0,
+        "right_leg_ankle_pitch_joint": -0.4,
+        # 手臂
+        #"upper_left_1_joint": 0.5,
+        #"upper_right_1_joint": 0.5
+    }
+    # 应用初始姿态
+    for joint_name, angle in init_pose.items():
+        joint_id = mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_JOINT, joint_name)
+        data.qpos[model.jnt_qposadr[joint_id]] = angle
     mujoco.mj_step(model, data)
 
     # mujoco.set_mjcb_control(my_controller)
@@ -237,7 +236,7 @@ def run_mujoco(policy, cfg, pos):
 
     logger = MjLogger(cfg.sim_config.dt)
     stop_state_log = int(cfg.sim_config.sim_duration / cfg.sim_config.dt)
-    actuated_indices = [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,16,18,19,21]
+    actuated_indices = [0,1,2,3,4,5,6,7,8,9,10,11]
 
     for _ in tqdm(range(int(cfg.sim_config.sim_duration / cfg.sim_config.dt)), desc="Simulating..."):
 
@@ -249,7 +248,6 @@ def run_mujoco(policy, cfg, pos):
         q = np.array(data.actuator_length)
         dq = np.array(data.actuator_velocity)
         
-        print("脚位置", foot_positions)
         base_z = base_pos[2]
         foot_z = foot_positions
         foot_force_z = foot_forces
@@ -264,10 +262,10 @@ def run_mujoco(policy, cfg, pos):
             eu_ang[eu_ang > math.pi] -= 2 * math.pi 
             obs[0, 0:3] = omega * cfg.normalization.obs_scales.ang_vel
             obs[0, 3:6] = gvec
-            obs[0, 6:25] = q[actuated_indices] * cfg.normalization.obs_scales.dof_pos
-            obs[0, 25:44] = dq[actuated_indices] * cfg.normalization.obs_scales.dof_vel
-            obs[0, 44:63] = action[:cfg.env.num_actions]
-            obs[0, 63] = 0.25  # action_scale
+            obs[0, 6:18] = q[actuated_indices] * cfg.normalization.obs_scales.dof_pos
+            obs[0, 18:30] = dq[actuated_indices] * cfg.normalization.obs_scales.dof_vel
+            obs[0, 30:42] = action[:cfg.env.num_actions]
+            obs[0, 42] = 0.25  # action_scale
             # obs *= count_lowlevel > 30
             # print(obs)
 
@@ -283,7 +281,7 @@ def run_mujoco(policy, cfg, pos):
                 policy_input[0, i * cfg.env.num_one_step_observations : (i + 1) * cfg.env.num_one_step_observations] = hist_obs[i][0, :]
             action[:cfg.env.num_actions] = policy(torch.tensor(policy_input))[0].detach().numpy()
             action = np.clip(action, -cfg.normalization.clip_actions, cfg.normalization.clip_actions)
-            if count_lowlevel < 400:
+            if count_lowlevel < 250:
                 target_q *= 0
             else:
                 target_q[actuated_indices] = action * action_rescale 
@@ -463,19 +461,15 @@ if __name__ == '__main__':
                         help='Run to load from.')
     parser.add_argument('--terrain', action='store_true', help='terrain or plane')
     args = parser.parse_args()
-    if args.terrain:
-        pose = "sit"
-    else:
-        pose = "sit"
 
-    class Sim2simCfg(CAS02CfgGround19):
+    class Sim2simCfg(CAS02CfgGroundDunqi):
 
         class sim_config:
             if args.terrain:
-                mujoco_model_path = f'{LEGGED_GYM_ROOT_DIR}/resources/robots/02/mjmodel02fb.xml'
+                mujoco_model_path = f'{LEGGED_GYM_ROOT_DIR}/resources/robots/02_encos/Serial/xml/mjmodel_sit.xml'
             else:
-                mujoco_model_path = f'{LEGGED_GYM_ROOT_DIR}/resources/robots/02_encos/Serial/xml/mjmodel.xml'
-            sim_duration = 10.0
+                mujoco_model_path = f'{LEGGED_GYM_ROOT_DIR}/resources/robots/02_encos/Serial/xml/mjmodel_sit.xml'
+            sim_duration = 6
             # low level control frequency (In sim 200Hz, in real robot 500Hz)
             dt = 0.002
             # policy inference frequency 50Hz
@@ -501,4 +495,4 @@ if __name__ == '__main__':
                                   65., 65., 16., 65., 16.,
                                   65., 65., 16., 65., 16.], dtype=np.double)
     policy = torch.jit.load(args.load_model)
-    run_mujoco(policy, Sim2simCfg(), pose)
+    run_mujoco(policy, Sim2simCfg())

@@ -87,7 +87,6 @@
             <inertial pos="-0.0075776 0.0023653 -0.16535" quat="0.592768 -0.034467 -0.0133335 0.804525" mass="3.7187" diaginertia="0.0556745 0.054595 0.00441927"/>
             <joint name="leg_l3_joint" pos="0 0 0" axis="0 0 1" range="-1.5708 1.5708" class="leg_joint_param"/>
             <geom type="mesh" contype="0" conaffinity="0" group="1" density="0" rgba="0.792157 0.819608 0.933333 1" mesh="left_leg_pelvic_yaw_link"/>
-            <geom type="mesh" rgba="0.792157 0.819608 0.933333 1" mesh="left_leg_pelvic_yaw_link"/>
             <body name="leg_l4_link" pos="-0.02 0 -0.2735">
               <inertial pos="0.0035038 -0.0031863 -0.19378" quat="0.682186 -0.030617 0.00358462 0.730528" mass="3.785" diaginertia="0.0453652 0.04524 0.00391496"/>
               <joint name="leg_l4_joint" pos="0 0 0" axis="0 1 0" range="0 2.53073" class="leg_joint_param"/>
