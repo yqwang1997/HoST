@@ -1113,7 +1113,8 @@ class LeggedRobot(BaseTask):
 
     def _reward_hip_yaw_deviation(self):
         hip_yaw_dof = self.dof_pos[:, self.hip_joint_indices]
-        reward = (torch.max(torch.abs(self.dof_pos[:, self.hip_joint_indices]), dim=-1)[0] > 1.0) | (torch.min(torch.abs(self.dof_pos[:, self.hip_joint_indices]), dim=-1)[0] > 0.5)
+        # reward = (torch.max(torch.abs(self.dof_pos[:, self.hip_joint_indices]), dim=-1)[0] > 1.0) | (torch.min(torch.abs(self.dof_pos[:, self.hip_joint_indices]), dim=-1)[0] > 0.5)
+        reward = (torch.max(self.dof_pos[:, self.hip_joint_indices], dim=-1)[0] > 0.7) | (torch.min(self.dof_pos[:, self.hip_joint_indices], dim=-1)[0] < -0.7)
         return reward
 
     def _reward_hip_roll_deviation(self):

@@ -222,7 +222,7 @@ def recordActions(file_name, ts_buffer, action_buffer ):
 
     return
 
-target_pos = np.zeros((12), dtype=np.double)
+target_pos = np.zeros((23), dtype=np.double)
 
 def my_controller(model, data):
     target_dq = np.zeros((12), dtype=np.double)
@@ -364,7 +364,9 @@ def run_mujoco(policy, cfg):
             if count_lowlevel < 500:
                 target_q *= 0
             else:
-                target_q = action * action_rescale
+                target_q = action * action_rescale 
+            target_q *= 0 
+            target_q[13] = -0.785
             # target_q = default_dof_pos #np.zeros((cfg.env.num_actions), dtype=np.double)
             target_pos = target_q + default_dof_pos
 
@@ -388,7 +390,7 @@ def run_mujoco(policy, cfg):
         # target_q_filter[15] = -0.26175
         # target_q_filter[17] = -target_q_filter[3] * 0.5 + 0.2 
         # target_q_filter[20] = -0.26175
-        tau = pd_control(target_q + q, q, cfg.robot_config.kps,
+        tau = pd_control(target_q, q, cfg.robot_config.kps,
                         target_dq, dq, cfg.robot_config.kds)  # Calc torques
 
         tau = np.clip(tau, -cfg.robot_config.tau_limit, cfg.robot_config.tau_limit) # Clamp torques
@@ -516,7 +518,7 @@ if __name__ == '__main__':
                 mujoco_model_path = f'{LEGGED_GYM_ROOT_DIR}/resources/robots/02/mjmodel02fb.xml'
             sim_duration = 150.0
             # low level control frequency (In sim 200Hz, in real robot 500Hz)
-            dt = 0.005
+            dt = 0.002
             # policy inference frequency 50Hz
             decimation = 4
 

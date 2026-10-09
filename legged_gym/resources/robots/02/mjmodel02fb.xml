@@ -67,8 +67,8 @@
     <light directional="true" diffuse=".6 .6 .6" specular="0.2 0.2 0.2" pos="0 0 4" dir="0 0 -1"/>
     <geom name="ground" type="plane" size="0 0 1" pos="0.001 0 0" quat="1 0 0 0" material="matplane" condim="1" conaffinity='15'/>
 
-    <body name="torso" pos="0 0 0.55" euler="0 -1.57 0" >
-      <freejoint name="root" />
+    <body name="torso" pos="0 0 1.55" euler="0 0 0" >
+      <!-- <freejoint name="root" /> -->
       <inertial pos="0.00071297 2.31e-05 -0.065761" quat="0.707071 0.707142 0.000946903 0.000931489" mass="4.4711" diaginertia="0.013383 0.011047 0.00875277"/>
       <geom type="mesh" contype="0" conaffinity="0" group="1" density="0" rgba="0.79216 0.81961 0.93333 1" mesh="base_link" class="collision"/>
       <geom type="mesh" class="visual" mesh="base_link"/>
@@ -85,7 +85,7 @@
           <geom type="mesh" contype="0" conaffinity="0" group="1" density="0" rgba="0.792157 0.819608 0.933333 1" mesh="left_leg_pelvic_roll_link"/>
           <body name="leg_l3_link" pos="0 0 -0.0975">
             <inertial pos="-0.0075776 0.0023653 -0.16535" quat="0.592768 -0.034467 -0.0133335 0.804525" mass="3.7187" diaginertia="0.0556745 0.054595 0.00441927"/>
-            <joint name="leg_l3_joint" pos="0 0 0" axis="0 0 1" range="-1.5708 1.5708" class="leg_joint_param"/>
+            <joint name="leg_l3_joint" pos="0 0 0" axis="0 0 1" range="-0.5 1.5708" class="leg_joint_param"/>
             <geom type="mesh" contype="0" conaffinity="0" group="1" density="0" rgba="0.792157 0.819608 0.933333 1" mesh="left_leg_pelvic_yaw_link"/>
             <geom type="mesh" rgba="0.792157 0.819608 0.933333 1" mesh="left_leg_pelvic_yaw_link"/>
             <body name="leg_l4_link" pos="-0.02 0 -0.2735">
@@ -118,7 +118,7 @@
           <geom type="mesh" contype="0" conaffinity="0" group="1" density="0" rgba="0.792157 0.819608 0.933333 1" mesh="right_leg_pelvic_roll_link"/>
           <body name="leg_r3_link" pos="0 0 -0.0975">
             <inertial pos="-0.0075862 -0.002279 -0.16532" quat="0.802863 -0.0130825 -0.03468 0.59501" mass="3.7181" diaginertia="0.0556798 0.0546124 0.00442044"/>
-            <joint name="leg_r3_joint" pos="0 0 0" axis="0 0 1" range="-1.5708 1.5708" class="leg_joint_param"/>
+            <joint name="leg_r3_joint" pos="0 0 0" axis="0 0 1" range="-1.5708 0.5" class="leg_joint_param"/>
             <geom type="mesh" contype="0" conaffinity="0" group="1" density="0" rgba="0.792157 0.819608 0.933333 1" mesh="right_leg_pelvic_yaw_link"/>
             <geom type="mesh" rgba="0.792157 0.819608 0.933333 1" mesh="right_leg_pelvic_yaw_link"/>
             <body name="leg_r4_link" pos="-0.02 0 -0.2735">
